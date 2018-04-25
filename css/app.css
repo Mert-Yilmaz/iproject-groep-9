@@ -1,0 +1,7 @@
+@import "settings";
+@import "foundation";
+
+html {
+  font-family: serif;
+  line-height: 4;
+}
