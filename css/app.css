@@ -1,7 +1,10 @@
-@import "settings";
-@import "foundation";
+@import "foundation.css";
 
 html {
   font-family: serif;
   line-height: 4;
+}
+
+li {
+    list-style-type: none;
 }
