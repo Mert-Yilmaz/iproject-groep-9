@@ -14,6 +14,9 @@ DROP FUNCTION fCKMaxAfbeeldingen
 
 IF OBJECT_ID ('fCKBodEnMinimaleVerhoging') IS NOT NULL
 DROP FUNCTION fCKBodEnMinimaleVerhoging
+
+IF OBJECT_ID ('fCKWachtwoord') IS NOT NULL
+DROP FUNCTION fCKWachtwoord
 ---------------------------------
 GO
 CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker CHAR(10))
@@ -74,12 +77,37 @@ BEGIN
 END
 GO
 
+/* HOOFDLETTERS CHECKEN! */
+/*GO
+CREATE FUNCTION fCKWachtwoord(@wachtwoord CHAR(16))
+RETURNS BIT
+AS
+BEGIN
+	IF((SELECT * FROM Gebruiker WHERE @wachtwoord LIKE '%[A-Z]%' COLLATE Latin1_General_CS_AS
+	/*SELECT
+		CASE
+			WHEN @wachtwoord LIKE '%[A-Z]%' COLLATE Latin1_General_CS_AI AND
+				 @wachtwoord LIKE '%[a-z]%' COLLATE Latin1_General_CS_AI AND
+				 @wachtwoord LIKE '%[0-9]%' AND
+				 LEN(@wachtwoord) >= 7
+					THEN 1
+			ELSE 0
+		END*/
+	/*IF (@wachtwoord LIKE '%[0-9]%' AND @wachtwoord LIKE '%[a-z]%' COLLATE Latin1_General_CS_AI AND @wachtwoord LIKE '%[A-Z]%' COLLATE Latin1_General_CS_AI AND LEN(@wachtwoord) >= 7)
+		RETURN 1
+	ELSE
+		RETURN 0
+	RETURN 0*/
+END
+GO*/
+---------------------------------
+
 ----- ----- ----- -----
 -- Creëren  tabellen --
 ----- ----- ----- -----
 CREATE TABLE Vraag (
 	vraagnummer	INTEGER		NOT NULL,	-- 1
-	tekstvraag	CHAR(21)	NOT NULL,
+	tekstvraag	CHAR(40)	NOT NULL,	-- WAS 21
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVraag PRIMARY KEY (vraagnummer)
@@ -87,18 +115,18 @@ CREATE TABLE Vraag (
 
 CREATE TABLE Gebruiker (
 	gebruikersnaam		CHAR(10)	NOT NULL,
-	voornaam			CHAR(5)		NOT NULL,
+	voornaam			CHAR(15)	NOT NULL,	-- WAS 5
 	achternaam			CHAR(8)		NOT NULL,
 	adresregel1			CHAR(15)	NOT NULL,
 	adresregel2			CHAR(15)		NULL,
 	postcode			CHAR(7)		NOT NULL,
 	plaatsnaam			CHAR(12)	NOT NULL,
 	land				CHAR(9)		NOT NULL,
-	geboortedatum		CHAR(10)	NOT NULL,
+	geboortedatum		DATE		NOT NULL,	-- WAS CHAR(10)
 	mailbox				CHAR(18)	NOT NULL,
-	wachtwoord			CHAR(9)		NOT NULL,
+	wachtwoord			CHAR(16)	NOT NULL,	-- WAS 9
 	vraag				INTEGER		NOT NULL,	-- 1
-	antwoordtekst		CHAR(6)		NOT NULL,
+	antwoordtekst		CHAR(20)	NOT NULL,	-- WAS 6
 	verkoper			BIT			NOT NULL,	-- WAS CHAR(3)
 
 	/*--- Constraints Appendix D ---*/
@@ -113,7 +141,9 @@ CREATE TABLE Gebruiker (
 	/*--- Constraint Appendix B - Unieke gebruikersnaam ---*/
 	CONSTRAINT akGebruikersnaam UNIQUE (gebruikersnaam),
 	/*--- Constraint Appendix B - Wachtwoord minimaal 7 tekens, bestaande uit letters, cijfers en hoofdlettergevoelig ---*/
-	CONSTRAINT ckWachtwoord CHECK (wachtwoord LIKE '%[0-9]%' AND wachtwoord LIKE '%[A-Z]%' AND LEN(wachtwoord) >= 7),
+	------------------WACHTWOORD HOOFDLETTER GEVOELIG M.B.V. FUNCTIE----------------------
+		--CONSTRAINT ckWachtwoord CHECK (dbo.fCKWachtwoord(wachtwoord) = 1),
+		CONSTRAINT ckWachtwoord CHECK (wachtwoord LIKE '%[0-9]%' AND wachtwoord LIKE '%[A-Z]%' AND LEN(wachtwoord) >= 7),
 	/*--- Eigen constraint - Geboortedatum <= vandaag ---*/
 	CONSTRAINT ckGeboortedatum CHECK (geboortedatum <= CURRENT_TIMESTAMP)
 )
@@ -132,13 +162,13 @@ CREATE TABLE Gebruikerstelefoon (
 
 CREATE TABLE Rubriek (
 	rubrieknummer	INTEGER		NOT NULL,	-- 3
-	rubrieknaam		CHAR(24)	NOT NULL,
+	rubrieknaam		CHAR(40)	NOT NULL,	-- WAS 24
 	rubriek			INTEGER			NULL,	-- 2
-	volgnr			INTEGER		NOT NULL,	-- 2
+	volgnr			INTEGER			NULL,	-- 2	-- WAS NOT NULL
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkRubriek PRIMARY KEY (rubrieknummer),
-	CONSTRAINT fkRubriekRubriek FOREIGN KEY (rubriek) REFERENCES Rubriek(rubrieknummer)
+	--CONSTRAINT fkRubriekRubriek FOREIGN KEY (rubriek) REFERENCES Rubriek(rubrieknummer)
 		--ON UPDATE,
 		--ON DELETE
 )
@@ -170,19 +200,19 @@ CREATE TABLE Voorwerp (
 	titel					CHAR(18)			NOT NULL,
 	beschrijving			CHAR(22)			NOT NULL,
 	startprijs				CHAR(5)				NOT NULL,
-	betalingswijze			CHAR(9)				NOT NULL,
+	betalingswijze			CHAR(15)			NOT NULL,	-- WAS 9
 	betalingsinstructie		CHAR(23)				NULL,
 	plaatsnaam				CHAR(12)			NOT NULL,
 	land					CHAR(9)				NOT NULL,
 	looptijd				INTEGER	DEFAULT 7	NOT NULL,	-- 1
-	looptijdBeginDag		CHAR(10)			NOT NULL,
-	looptijdBeginTijdstip	CHAR(8)				NOT NULL,
+	looptijdBeginDag		DATE				NOT NULL,	-- WAS CHAR(10)
+	looptijdBeginTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
 	verzendkosten			CHAR(5)					NULL,
-	verzendinstructies		CHAR(27)				NULL,
+	verzendinstructies		CHAR(30)				NULL,	-- WAS 27
 	verkoper				CHAR(10)			NOT NULL,	-- Gebruikersnaam
 	koper					CHAR(10)				NULL,	-- Gebruikersnaam
-	looptijdEindeDag		CHAR(10)			NOT NULL,
-	looptijdEindeTijdstip	CHAR(8)				NOT NULL,
+	looptijdEindeDag		DATE				NOT NULL,	-- WAS CHAR(10)
+	looptijdEindeTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
 	veilingGesloten			BIT					NOT NULL,	-- WAS CHAR(3)
 	verkoopprijs			CHAR(5)					NULL,
 
@@ -201,11 +231,13 @@ CREATE TABLE Voorwerp (
 	CONSTRAINT ckEigenBod CHECK (verkoper NOT LIKE koper),
 	/*--- Constraint Appendix B - Looptijd ---*/
 	CONSTRAINT ckLooptijd CHECK (looptijd = 1 OR looptijd = 3 OR looptijd = 5 OR looptijd = 7 OR looptijd = 10),
+
 	/*--- Constraint Appendix B - Hogere bieding ---
 		--CONSTRAINT ckHogereBieding CHECK (verkoopprijs > startprijs), STAAT IN FUNCTIE (IN COMMENTAAR BIJ BOD?)*/
 	/*--- Constraint Appendix B - Veiling sluiten ---
 		if looptijd voorbij
 			verander veilingGesloten = 1*/
+
 	/*--- Eigen constraint - Looptijd dag en tijd niet groter dan vandaag ---*/
 	CONSTRAINT ckLooptijdDagEnTijd CHECK (looptijdBeginDag <= (CONVERT (DATE, GETDATE())) AND looptijdBeginTijdstip <= (CONVERT (TIME, GETDATE()))),
 	/*--- Eigen constraint - Looptijd begin < eind ---*/
@@ -216,8 +248,8 @@ CREATE TABLE Feedback (
 	voorwerp			NUMERIC(10)	NOT NULL,
 	soortgebruiker		CHAR(8)		NOT NULL,
 	feedbacksoort		CHAR(8)		NOT NULL,
-	dag					CHAR(10)	NOT NULL,
-	tijdstip			CHAR(8)		NOT NULL,
+	dag					DATE		NOT NULL,	-- WAS CHAR(10)
+	tijdstip			TIME		NOT NULL,	-- WAS CHAR(8)
 	commentaar			CHAR(12)		NULL,
 
 	/*--- Constraints Appendix D ---*/
@@ -235,8 +267,8 @@ CREATE TABLE Bod (
 	voorwerp		NUMERIC(10)	NOT NULL,
 	bodbedrag		CHAR(5)		NOT NULL,
 	gebruiker		CHAR(10)	NOT NULL,	-- Gebruikersnaam
-	boddag			CHAR(10)	NOT NULL,
-	bodtijdstip		CHAR(8)		NOT NULL,
+	boddag			DATE		NOT NULL,	-- WAS CHAR(10)
+	bodtijdstip		TIME		NOT NULL,	-- WAS CHAR(8)
 	
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkBod PRIMARY KEY (voorwerp, bodbedrag),
@@ -267,7 +299,7 @@ CREATE TABLE VoorwerpInRubriek (
 	voorwerp				NUMERIC(10)		NOT NULL,
 	rubriekOpLaagsteNiveau	INTEGER			NOT NULL,	-- 3
 
-	-- Constraints Appendix D
+	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerpInRubriek PRIMARY KEY (voorwerp, rubriekOpLaagsteNiveau),
 	CONSTRAINT fkVoorwerpInRubriekVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer),
 		--ON UPDATE,
