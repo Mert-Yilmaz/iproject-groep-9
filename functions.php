@@ -1,11 +1,10 @@
 <?php
-
 //Database Connection
 function get_database_connection() {
 $hostname = "mssql.iproject.icasites.nl";
 $username = "iproject9";
 $password = "PXDDupJ2bw";
-$dbname = "iproject9";
+$dbname   = "iproject9";
 
 try {$dbh = new PDO ("sqlsrv:Server=$hostname;
     Database=$dbname;
@@ -13,8 +12,7 @@ try {$dbh = new PDO ("sqlsrv:Server=$hostname;
     "$username", "$password");
     // set the PDO error mode to exception
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo 'De Connectie is gelegd!' . "<br>";
-    get_test($dbh);
+    return $dbh;
     }
 catch(PDOException $e)
     {
@@ -22,15 +20,34 @@ catch(PDOException $e)
     }
 }
 
-
+$output;
 //Haal gegevens uit 'Vraag'
-function get_test($dbh) {
-  $sth = $dbh->prepare("SELECT vraagnummer, tekstvraag FROM Vraag");
-  $sth->execute();
-  foreach ($sth as $row) {
-       print $row['vraagnummer'] . "\t";
-       print $row['tekstvraag'] . "\t";
-   }
+function search_item($dbh, $input){
+
+    $query;
+
+    if ($input == "*"){
+        $query = "SELECT * FROM Vraag";
+    } else {
+        $query = "SELECT top 50 * FROM Vraag WHERE [tekstvraag] LIKE '%$input%'" ;
+    }
+
+    $output = "";
+    $input = preg_replace('#[^0-9a-z]#i','',$input);
+
+    $sqlexe = $dbh -> prepare($query);
+    $sqlexe -> execute();
+
+    while ($row = $sqlexe -> fetch()){
+        $vraagnr = $row['vraagnummer'];
+        $tekstvraag = $row['tekstvraag'];
+
+        $output .=
+        '<div><strong>Vraagnummer: ' . $vraagnr . '</strong></div>
+        <div><strong>Tekstvraag: ' . $tekstvraag . '</strong></div>'
+        ;
+    }
+    echo $output;
 }
 
 

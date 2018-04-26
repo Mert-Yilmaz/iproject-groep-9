@@ -16,7 +16,22 @@
         <div class="cell large-4 text-center">
           <div class="grid-y">
             <div class="cell small-6 medium-8 large-2">
-              <h3>Rubrieken</h3>
+              <form action="index.php" method="get">
+              <input type="text" name="search" placeholder="Zoek naar items"/>
+              <button class="succes button">Zoek</button>
+              </form>
+              <?php
+
+              $allitems = "*";
+              $dbh = get_database_connection();
+
+              if(isset($_GET['search'])){
+                  search_item($dbh, $_GET['search']);
+              } else {
+                  search_item($dbh, $allitems);
+              }
+              ?>
+                <h2>Rubrieken</h2>
                 <ul>
                   <li><a href="#">Auto's, motoren en boten</a></li>
                   <li><a href="#">Muziekwaren</a></li>
@@ -36,7 +51,6 @@
             </div>
             <div class="cell small-6 medium-4 large-10">
               <p>Hier komt nog wat tekst!</p>
-              <?php get_database_connection(); ?>
             </div>
           </div>
         </div>
