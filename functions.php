@@ -1,13 +1,11 @@
 <?php
 //Database Connection
 include_once 'db.php';
-
 function get_database_connection() {
 $hostname = "mssql.iproject.icasites.nl";
 $username = "iproject9";
 $password = "PXDDupJ2bw";
 $dbname   = "iproject9";
-
 try {$dbh = new PDO ("sqlsrv:Server=$hostname;
     Database=$dbname;
     ConnectionPooling=0",
@@ -21,29 +19,22 @@ catch(PDOException $e)
     echo "Error: " . $e->getMessage();
     }
 }
-
 $output;
 //Haal gegevens uit 'Vraag'
 function search_item($dbh, $input){
-
     $query;
-
     if ($input == "*"){
         $query = "SELECT * FROM Vraag";
     } else {
         $query = "SELECT top 50 * FROM Vraag WHERE [tekstvraag] LIKE '%$input%'" ;
     }
-
     $output = "";
     $input = preg_replace('#[^0-9a-z]#i','',$input);
-
     $sqlexe = $dbh -> prepare($query);
     $sqlexe -> execute();
-
     while ($row = $sqlexe -> fetch()){
         $vraagnr = $row['vraagnummer'];
         $tekstvraag = $row['tekstvraag'];
-
         $output .=
         '<div><strong>Vraagnummer: ' . $vraagnr . '</strong></div>
         <div><strong>Tekstvraag: ' . $tekstvraag . '</strong></div>'
@@ -51,28 +42,21 @@ function search_item($dbh, $input){
     }
     echo $output;
 }
-
-
 //Hot Items (Is nog een oude/WebTech versie!)
 $output;
 function hot_items($dbh){
-
     $output="";
-
     for ($i=0; $i <3 ; $i++) {
         $nummer = (rand(1,30));
-
         $sql = "SELECT * FROM movie WHERE movie_id = ?";
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array($nummer));
         $row = $stmt->fetch();
-
         $mname = $row['title'];
         $poster = $row['poster_link'];
         $desc = $row['description'];
         $year = $row['publication_year'];
         $dur = $row['duration'];
-
         $output .=
         '<div class = "result">
         <img class="poster-result" src = ../img/poster/'.$poster.' </img>
@@ -90,9 +74,7 @@ function hot_items($dbh){
     }
     echo $output;
 }
-
 function zoekRubriek($dbh, $zoekWoord) {
-
     if(isset($_POST['zoeken'])) {
         echo "<div class='$zoekWoord'>";
         echo "U heeft gezocht op: " . $zoekWoord . "</div>";
@@ -117,7 +99,4 @@ function zoekRubriek($dbh, $zoekWoord) {
         echo "Er is iets mis gegaan. De foutmelding is: $e";
     }
 }
-
-
-
 ?>
