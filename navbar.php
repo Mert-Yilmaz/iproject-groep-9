@@ -1,7 +1,7 @@
 <div class="grid-container">
   <div class="grid-x grid-padding-x">
     <div class="large-6 text-center cell">
-      <a><font size= "30px">EenmaalAndermaal</font></a>
+      <a href="index.php"><font size= "30px">EenmaalAndermaal</font></a>
     </div>
 
     <div class="large-6 text-center cell">
@@ -30,7 +30,7 @@
         <div class="large-3 medium-3 cell">
           <div class="grid-y grid-padding-y">
             <div class="cell small-6">
-              <a href="login.php" class="menuu">Over EA</a>
+              <a href="about.php" class="menuu">Over EA</a>
             </div>
           </div>
         </div>

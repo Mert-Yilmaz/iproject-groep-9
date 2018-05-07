@@ -19,8 +19,9 @@ catch(PDOException $e)
     echo "Error: " . $e->getMessage();
     }
 }
-$output;
+
 //Haal gegevens uit 'Vraag'
+$output;
 function search_item($dbh, $input){
     $query;
     if ($input == "*"){
@@ -42,6 +43,7 @@ function search_item($dbh, $input){
     }
     echo $output;
 }
+
 //Hot Items (Is nog een oude/WebTech versie!)
 $output;
 function hot_items($dbh){
@@ -74,6 +76,8 @@ function hot_items($dbh){
     }
     echo $output;
 }
+
+// Zoek naar Rubrieken
 function zoekRubriek($dbh, $zoekWoord) {
     if(isset($_POST['zoeken'])) {
         echo "<div class='$zoekWoord'>";
@@ -99,4 +103,22 @@ function zoekRubriek($dbh, $zoekWoord) {
         echo "Er is iets mis gegaan. De foutmelding is: $e";
     }
 }
+
+// Toon Items
+function toonItems($dbh) {
+  try{
+      $query = $dbh->query("SELECT *
+                                                          FROM	 Voorwerp
+                                                          ORDER BY looptijdEindeTijdstip ASC");
+      $query->execute();
+      while($row = $query->fetch()) {
+          echo '<li>'. $row['titel'] . ':
+               '. $row['beschrijving'] . '</li>';
+      }
+    }
+    catch(PDOException $e) {
+      echo "Er is iets mis gegaan. De foutmelding is: $e";
+  }
+}
+
 ?>
