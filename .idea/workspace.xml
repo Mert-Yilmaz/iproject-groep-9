@@ -14,11 +14,6 @@
       <change afterPath="$PROJECT_DIR$/../EenmaalAndermaalServer/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../EenmaalAndermaalServer/.idea/webServers.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../EenmaalAndermaalServer/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/functions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -100,7 +95,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="1485" />
     <option name="y" value="-50" />
     <option name="width" value="3500" />
@@ -192,12 +187,12 @@
       <updated>1524643243413</updated>
       <workItem from="1524643245247" duration="86000" />
       <workItem from="1524643357200" duration="10269000" />
-      <workItem from="1525680128912" duration="639000" />
+      <workItem from="1525680128912" duration="1239000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10994000" />
+    <option name="totallyTimeSpent" value="11594000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />

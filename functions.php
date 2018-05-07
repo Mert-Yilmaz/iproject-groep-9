@@ -1,8 +1,7 @@
 <?php
-
-include_once "db.php";
-
 //Database Connection
+include_once 'db.php';
+
 function get_database_connection() {
 $hostname = "mssql.iproject.icasites.nl";
 $username = "iproject9";
@@ -90,6 +89,33 @@ function hot_items($dbh){
         </div></div>';
     }
     echo $output;
+}
+
+function zoekRubriek($dbh, $zoekWoord) {
+
+    if(isset($_POST['zoeken'])) {
+        echo "<div class='$zoekWoord'>";
+        echo "U heeft gezocht op: " . $zoekWoord . "</div>";
+    }
+    try{
+        $query = $dbh->query("SELECT rubrieknaam
+                                                            FROM	 Rubriek
+                                                            WHERE rubriek = -1
+                                                            ORDER BY rubrieknaam ASC");
+        if(isset($_POST['zoeken'])) {
+            $query = $dbh->query("SELECT rubrieknaam
+                                                            FROM	 Rubriek
+                                                            WHERE rubriek = -1
+                                                            AND rubrieknaam LIKE '%$zoekWoord%'
+                                                            ORDER BY rubrieknaam ASC");
+        }
+        $query->execute();
+        while($row = $query->fetch()) {
+            echo '<li><a href="#">'. $row['rubrieknaam'] . '</a></li>';
+        }
+    } catch(PDOException $e) {
+        echo "Er is iets mis gegaan. De foutmelding is: $e";
+    }
 }
 
 
