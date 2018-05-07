@@ -1,4 +1,7 @@
 <?php
+
+include_once "db.php";
+
 //Database Connection
 function get_database_connection() {
 $hostname = "mssql.iproject.icasites.nl";

@@ -1,6 +1,10 @@
 <!doctype html>
-<?php include 'navbar.php';
-      include 'functions.php'; ?>
+<?php
+    include 'navbar.php';
+    include 'functions.php';
+    include_once 'db.php';
+    error_reporting(E_ALL ^ E_NOTICE);
+?>
 <html class="no-js" lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -16,38 +20,22 @@
         <div class="cell large-4 text-center">
           <div class="grid-y">
             <div class="cell small-6 medium-8 large-2">
-              <form action="index.php" method="get">
-              <input type="text" name="search" placeholder="Zoek naar items"/>
-              <button class="succes button">Zoek</button>
-              </form>
-              <?php
 
-              $allitems = "*";
-              $dbh = get_database_connection();
 
-              if(isset($_GET['search'])){
-                  search_item($dbh, $_GET['search']);
-              } else {
-                  search_item($dbh, $allitems);
-              }
-              ?>
-                <h2>Rubrieken</h2>
-                <ul>
-                  <li><a href="#">Auto's, motoren en boten</a></li>
-                  <li><a href="#">Muziekwaren</a></li>
-                  <li><a href="#">Verzamelen</a></li>
-                  <li><a href="#">Computers</a></li>
-                  <li><a href="#">Speelgoed & spellen</a></li>
-                  <li><a href="#">Postzegels</a></li>
-                  <li><a href="#">Boeken & strips</a></li>
-                  <li><a href="#">Sieraden & horloges</a></li>
-                  <li><a href="#">Consuentenelektronica</a></li>
-                  <li><a href="#">Kunst, antiek & design</a></li>
-                  <li><a href="#">Sport, fietsen & vakantie</a></li>
-                  <li><a href="#">Modelbouw & miniatuur</a></li>
-                  <li><a href="#">Hobby's & handwerken</a></li>
-                  <li><a href="#">Munten & bankbiljetten</a></li>
-                </ul>
+
+                <form method="post" action="">
+                    <input type="text" name="zoekterm"/>
+                    <input type="submit" name="zoeken" />
+                </form
+
+                    <?php
+                    echo '<ul>';
+
+                        zoekRubriek($dbh, $_POST['zoekterm']);
+
+                    echo '</ul>';
+                    ?>
+
             </div>
             <div class="cell small-6 medium-4 large-10">
               <p>Hier komt nog wat tekst!</p>
