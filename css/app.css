@@ -5,6 +5,6 @@ html {
   line-height: 4;
 }
 
-li {
+.ulNone {
     list-style-type: none;
 }

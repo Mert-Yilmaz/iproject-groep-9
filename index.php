@@ -24,7 +24,7 @@
                     <input type="submit" name="zoeken" />
               </form>
               <?php
-                echo '<ul>';
+                echo '<ul class="ulNone">';
                     zoekRubriek($dbh, $_POST['zoekterm']);
                 echo '</ul>';
               ?>
