@@ -44,40 +44,37 @@ function search_item($dbh, $input){
     echo $output;
 }
 
-//Hot Items (Is nog een oude/WebTech versie!)
+//Hot Items (Werkt inmiddels BIJNA!!!)
 $output;
 function hot_items($dbh){
     $output="";
-    for ($i=0; $i <3 ; $i++) {
-        $nummer = (rand(1,30));
-        $sql = "SELECT * FROM movie WHERE movie_id = ?";
+        $sql = "SELECT * FROM Voorwerp v INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer ORDER BY bodtijdstip ASC";
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array($nummer));
-        $row = $stmt->fetch();
-        $mname = $row['title'];
-        $poster = $row['poster_link'];
-        $desc = $row['description'];
-        $year = $row['publication_year'];
-        $dur = $row['duration'];
-        $output .=
-        '<div class = "result">
-        <img class="poster-result" src = ../img/poster/'.$poster.' </img>
-        <div class = "result-text">
-        <div><strong>' .$mname. '</strong></div>
-        <div> <strong>Publication Year:</strong>   ' .$year. '</div>
-        <br>
-        <div class="result-text">
-        <form action="Description-page.php" class="Filmoptie">
-        <input type="hidden" name="defilm" value='. ($row['title']) .'>
-        <input type="submit" name="mybtn" class="btn" value="Filmpagina"/>
-        </form>
-        </div>
-        </div></div>';
-    }
+        while ($row = $stmt->fetch()) {
+            $title = $row['titel'];
+            $desc = $row['beschrijving'];
+            $day = $row['looptijdBeginDag'];
+            $output .=
+            '<div class="grid-x grid-padding-x">
+              <div class="small-12 cell">
+                <div class="callout">
+                  <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
+                  <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
+                  <div class="grid-x grid-padding-x">
+                    <div class="large-4 medium-4 small-12 cell">
+                      <p><a href="#" class="success button">' . $title . '</a>
+                      <br />' . $desc . '</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>';
+            }
     echo $output;
 }
 
-// Zoek naar Rubrieken
+// Zoek naar Rubrieken op hoofdpagina
 function zoekRubriek($dbh, $zoekWoord) {
     if(isset($_POST['zoeken'])) {
         echo "<div class='$zoekWoord'>";
@@ -85,15 +82,15 @@ function zoekRubriek($dbh, $zoekWoord) {
     }
     try{
         $query = $dbh->query("SELECT rubrieknaam
-                                                            FROM	 Rubriek
-                                                            WHERE rubriek = -1
-                                                            ORDER BY rubrieknaam ASC");
+                                                      FROM	 Rubriek
+                                                      WHERE rubriek = -1
+                                                      ORDER BY rubrieknaam ASC");
         if(isset($_POST['zoeken'])) {
             $query = $dbh->query("SELECT rubrieknaam
-                                                            FROM	 Rubriek
-                                                            WHERE rubriek = -1
-                                                            AND rubrieknaam LIKE '%$zoekWoord%'
-                                                            ORDER BY rubrieknaam ASC");
+                                                      FROM	 Rubriek
+                                                      WHERE rubriek = -1
+                                                      AND rubrieknaam LIKE '%$zoekWoord%'
+                                                      ORDER BY rubrieknaam ASC");
         }
         $query->execute();
         $rubriek = $row['rubrieknaam'];
@@ -106,28 +103,27 @@ function zoekRubriek($dbh, $zoekWoord) {
     }
 }
 
-// Toon Items
+// Toont Items op producten.php
 function toonItems($dbh, $zoekWoord) {
-  if(isset($_GET['rubriek'])) {
-      echo "Categorie: " . $zoekWoord . "</div>";
-  }
-  try{
-      $query = $dbh->query("SELECT *
-                                                          FROM	 Voorwerp
-                                                          WHERE EXISTS (SELECT voorwerp
-                                                                        FROM VoorwerpInRubriek
-                                                                        WHERE rubriekopLaagsteNiveau
-                                                                        LIKE '%$zoekWoord%')
-                                                          ORDER BY looptijdEindeTijdstip ASC");
-      $query->execute();
-      while($row = $query->fetch()) {
-          echo '<li>'. $row['titel'] . ':
-               '. $row['beschrijving'] . '</li>';
-      }
+    if(isset($_GET['rubriek'])) {
+        echo "Categorie: " . $zoekWoord . "</div>";
     }
-    catch(PDOException $e) {
-      echo "Er is iets mis gegaan. De foutmelding is: $e";
-  }
+    try{
+        $query = $dbh->query("SELECT *
+                                              FROM	Voorwerp v
+                                              INNER JOIN VoorwerpInRubriek vi
+                                              ON v.voorwerpnummer = vi.voorwerp INNER JOIN Rubriek r on r.rubrieknummer = vi.rubriekOpHoogsteNiveau
+                                              WHERE r.rubrieknaam
+                                              LIKE '%$zoekWoord%'
+                                              ORDER BY v.looptijdEindeTijdstip ASC");
+        $query->execute();
+        while($row = $query->fetch()) {
+            echo '<li>'. $row['titel'] . ':
+                 '. $row['beschrijving'] . '</li>';
+        }
+    } catch(PDOException $e) {
+        echo "Er is iets mis gegaan. De foutmelding is: $e";
+    }
 }
 
 ?>
