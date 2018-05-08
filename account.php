@@ -16,15 +16,15 @@
 
 <body>
 <div class="grid-x">
-  <div class="small-3"></div>
-    <div class="small-6 text-center">
+  <div class="medium-3"></div>
+    <div class="medium-6 text-center">
       <h1>Accountregistratie</h1>
     </div>
-  <div class="small-3"></div>
+  <div class="medium-3"></div>
 </div>
   <div class="grid-x">
-  <div class="small-4"></div>
-  <div class="small-4">
+  <div class="large-4 medium-3"></div>
+  <div class="medium-6 small-12 large-4">
   <form method="POST" action="Registreren.php">
 		<div>
   	  <label>Naam</label>
@@ -93,6 +93,6 @@
   	</p>
 	</form>
 </div>
-<div class="small-4"></div>
+<div class="medium-3 large-4"></div>
 
 </body>
