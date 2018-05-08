@@ -14,4 +14,4 @@
     <link rel="stylesheet" href="css/app.csss">
   </head>
 
-    <?php toonitems($dbh); ?>
+    <?php toonItems($dbh, $_GET['rubriek']); ?>

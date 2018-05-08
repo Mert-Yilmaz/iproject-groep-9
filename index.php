@@ -1,3 +1,4 @@
+
 <!doctype html>
 <?php include 'navbar.php';
       include 'functions.php';

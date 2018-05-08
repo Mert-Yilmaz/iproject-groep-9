@@ -96,8 +96,10 @@ function zoekRubriek($dbh, $zoekWoord) {
                                                             ORDER BY rubrieknaam ASC");
         }
         $query->execute();
+        $rubriek = $row['rubrieknaam'];
         while($row = $query->fetch()) {
-            echo '<li><a href="#">'. $row['rubrieknaam'] . '</a></li>';
+            echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '">
+                 ' . $row['rubrieknaam'] . '</a></li>';
         }
     } catch(PDOException $e) {
         echo "Er is iets mis gegaan. De foutmelding is: $e";
@@ -105,10 +107,17 @@ function zoekRubriek($dbh, $zoekWoord) {
 }
 
 // Toon Items
-function toonItems($dbh) {
+function toonItems($dbh, $zoekWoord) {
+  if(isset($_GET['rubriek'])) {
+      echo "Categorie: " . $zoekWoord . "</div>";
+  }
   try{
       $query = $dbh->query("SELECT *
                                                           FROM	 Voorwerp
+                                                          WHERE EXISTS (SELECT voorwerp
+                                                                        FROM VoorwerpInRubriek
+                                                                        WHERE rubriekopLaagsteNiveau
+                                                                        LIKE '%$zoekWoord%')
                                                           ORDER BY looptijdEindeTijdstip ASC");
       $query->execute();
       while($row = $query->fetch()) {
