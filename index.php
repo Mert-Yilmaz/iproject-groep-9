@@ -1,3 +1,4 @@
+
 <!doctype html>
 <?php include 'navbar.php';
       include 'functions.php';
@@ -55,5 +56,10 @@
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
+        
+      <?php
+      include("footer.html");
+    ?>    
+        
   </body>
 </html>
