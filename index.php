@@ -1,4 +1,3 @@
-
 <!doctype html>
 <?php include 'navbar.php';
       include 'functions.php';
@@ -31,7 +30,7 @@
               ?>
             </div>
             <div class="cell small-6 medium-4 large-10">
-              <p>Hier komt nog wat tekst!</p>
+              <p>Hier komt waarschijnlijk geen tekst!</p>
             </div>
           </div>
         </div>
@@ -43,7 +42,7 @@
         <div class="small-12 cell">
           <div class="callout">
             <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
-            <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
+            <p class="text-center">Bekijk hieronder populaire items of klik op een rubriek voor nog meer leuke koopjes!</p>
             <div class="grid-x grid-padding-x">
               <?php hot_items($dbh); ?>
             </div>
