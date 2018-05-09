@@ -5,11 +5,6 @@ html {
   line-height: 4;
 }
 
-.ulNone {
-    list-style-type: none;
-}
-
-
 body {
   margin-top: 10%; /* Add a top margin to avoid content overlay */
   background-color: white;
@@ -27,7 +22,7 @@ li {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(242, 85, 44, 0.9); rgba(40, 10, 0, 0.8);
   overflow: hidden;
 }
 
@@ -35,13 +30,17 @@ li {
   color: white;
 }
 
-.navbar a:hover{
-  color:darkgrey;
+.backtotop a {
+  color:#F2552C;
+}
+
+.navbar a:hover, .backtotop a:hover {
+  color:black; #F2552C;
   transition: 0.4s;
 }
 
 footer {
-  background-color: #b0b1b2;
+  background-color: #cccccc;
   color: black;
 }
 
