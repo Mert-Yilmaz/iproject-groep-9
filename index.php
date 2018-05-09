@@ -39,7 +39,17 @@
           <?php include 'orbit-slider.php'; ?>
         </div>
       </div>
-      <?php hot_items($dbh); ?>
+      <div class="grid-x grid-padding-x">
+        <div class="small-12 cell">
+          <div class="callout">
+            <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
+            <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
+            <div class="grid-x grid-padding-x">
+              <?php hot_items($dbh); ?>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="js/vendor/jquery.js"></script>

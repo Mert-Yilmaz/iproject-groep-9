@@ -44,32 +44,23 @@ function search_item($dbh, $input){
     echo $output;
 }
 
-//Hot Items (Werkt inmiddels BIJNA!!!)
+//Hot Items (Selecteer 3 items met de meest recente biedingen
 $output;
 function hot_items($dbh){
-    $output="";
-        $sql = "SELECT * FROM Voorwerp v INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer ORDER BY bodtijdstip ASC";
+        $output="";
+        $sql = "SELECT TOP (3) * FROM Voorwerp v
+                INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
+                ORDER BY boddag DESC";
         $stmt = $dbh->prepare($sql);
-        $stmt->execute(array($nummer));
+        $stmt->execute();
         while ($row = $stmt->fetch()) {
             $title = $row['titel'];
             $desc = $row['beschrijving'];
-            $day = $row['looptijdBeginDag'];
             $output .=
-            '<div class="grid-x grid-padding-x">
-              <div class="small-12 cell">
-                <div class="callout">
-                  <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
-                  <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
-                  <div class="grid-x grid-padding-x">
-                    <div class="large-4 medium-4 small-12 cell">
-                      <p><a href="#" class="success button">' . $title . '</a>
-                      <br />' . $desc . '</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>';
+            '<div class="large-4 medium-4 small-12 cell">
+                <p><a href="#" class="success button">' . $title . '</a>
+                <br />' . $desc . '</p>
+             </div>';
             }
     echo $output;
 }
