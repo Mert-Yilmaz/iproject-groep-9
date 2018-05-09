@@ -19,7 +19,7 @@ IF OBJECT_ID ('fCKWachtwoord') IS NOT NULL
 DROP FUNCTION fCKWachtwoord
 ---------------------------------
 GO
-CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker CHAR(10))
+CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker VARCHAR(10))
 RETURNS BIT
 AS
 BEGIN
@@ -44,7 +44,7 @@ END
 GO*/
 
 GO
-CREATE FUNCTION fCKMaxAfbeeldingen(@filenaam CHAR(13))
+CREATE FUNCTION fCKMaxAfbeeldingen(@filenaam CHAR(25))
 RETURNS BIT
 AS
 BEGIN
@@ -57,21 +57,23 @@ END
 GO
 
 GO
-CREATE FUNCTION fCKBodEnMinimaleVerhoging(@bodbedrag CHAR(5), @voorwerp NUMERIC(10))
+CREATE FUNCTION fCKBodEnMinimaleVerhoging(@bodbedrag NUMERIC(5), @voorwerp NUMERIC(10))
 RETURNS BIT
 AS
 BEGIN
-	IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 49.99) AND @bodbedrag -(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 0.50)
+	IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 49.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 0.50)
 		RETURN 1 -- true
-	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 50.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 499.99) AND @bodbedrag -(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00)
+	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 50.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 499.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00)
 		RETURN 1 -- true
-	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 500.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 999.99) AND @bodbedrag -(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 5.00)
+	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 500.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 999.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 5.00)
 		RETURN 1 -- true
-	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1000.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 4999.99) AND @bodbedrag -(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 10.00)
+	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1000.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 4999.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 10.00)
 		RETURN 1 -- true
 	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 5000.00 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 50.00)
 		RETURN 1 -- true
-	ELSE 
+	ELSE IF ((SELECT bodbedrag FROM Bod WHERE voorwerp = @voorwerp) = NULL AND @bodbedrag >= 0.01 AND @bodbedrag > (SELECT startprijs FROM Voorwerp WHERE voorwerpnummer = @voorwerp))
+		RETURN 1 -- true
+	ELSE
 		RETURN 0 -- false
 	RETURN 0
 END
@@ -114,7 +116,7 @@ CREATE TABLE Vraag (
 )
 
 CREATE TABLE Gebruiker (
-	gebruikersnaam		CHAR(10)	NOT NULL,
+	gebruikersnaam		VARCHAR(10)	NOT NULL,	-- WAS CHAR(10)
 	voornaam			CHAR(15)	NOT NULL,	-- WAS 5
 	achternaam			CHAR(8)		NOT NULL,
 	adresregel1			CHAR(15)	NOT NULL,
@@ -123,7 +125,7 @@ CREATE TABLE Gebruiker (
 	plaatsnaam			CHAR(12)	NOT NULL,
 	land				CHAR(9)		NOT NULL,
 	geboortedatum		DATE		NOT NULL,	-- WAS CHAR(10)
-	mailbox				CHAR(18)	NOT NULL,
+	mailbox				CHAR(25)	NOT NULL,	-- WAS CHAR(18)
 	wachtwoord			CHAR(16)	NOT NULL,	-- WAS 9
 	vraag				INTEGER		NOT NULL,	-- 1
 	antwoordtekst		CHAR(20)	NOT NULL,	-- WAS 6
@@ -150,7 +152,7 @@ CREATE TABLE Gebruiker (
 
 CREATE TABLE Gebruikerstelefoon (
 	volgnr			INTEGER		NOT NULL,	-- 2
-	gebruiker		CHAR(10)	NOT NULL,	-- Gebruikersnaam
+	gebruiker		VARCHAR(10)	NOT NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
 	telefoon		CHAR(11)	NOT NULL,
 
 	/*--- Constraints Appendix D ---*/
@@ -174,7 +176,7 @@ CREATE TABLE Rubriek (
 )
 
 CREATE TABLE Verkoper (
-	gebruiker			CHAR(10)	NOT NULL,	-- Gebruikersnaam
+	gebruiker			VARCHAR(10)	NOT NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
 	bank				CHAR(8)			NULL,
 	bankrekening		INTEGER			NULL,	-- 7
 	controleoptie		CHAR(10)	NOT NULL,
@@ -199,22 +201,22 @@ CREATE TABLE Voorwerp (
 	voorwerpnummer			NUMERIC(10)			NOT NULL,
 	titel					CHAR(18)			NOT NULL,
 	beschrijving			CHAR(22)			NOT NULL,
-	startprijs				CHAR(5)				NOT NULL,
+	startprijs				NUMERIC(8)			NOT NULL,	-- WAS CHAR(5)
 	betalingswijze			CHAR(15)			NOT NULL,	-- WAS 9
-	betalingsinstructie		CHAR(23)				NULL,
+	betalingsinstructie		CHAR(30)				NULL,	-- WAS 23
 	plaatsnaam				CHAR(12)			NOT NULL,
 	land					CHAR(9)				NOT NULL,
 	looptijd				INTEGER	DEFAULT 7	NOT NULL,	-- 1
 	looptijdBeginDag		DATE				NOT NULL,	-- WAS CHAR(10)
 	looptijdBeginTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
-	verzendkosten			CHAR(5)					NULL,
+	verzendkosten			NUMERIC(5)				NULL,	-- WAS CHAR(5)
 	verzendinstructies		CHAR(30)				NULL,	-- WAS 27
-	verkoper				CHAR(10)			NOT NULL,	-- Gebruikersnaam
-	koper					CHAR(10)				NULL,	-- Gebruikersnaam
+	verkoper				VARCHAR(10)			NOT NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
+	koper					VARCHAR(10)				NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
 	looptijdEindeDag		DATE				NOT NULL,	-- WAS CHAR(10)
 	looptijdEindeTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
 	veilingGesloten			BIT					NOT NULL,	-- WAS CHAR(3)
-	verkoopprijs			CHAR(5)					NULL,
+	verkoopprijs			NUMERIC(8)				NULL,	-- WAS CHAR(5)
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerp PRIMARY KEY (voorwerpnummer),
@@ -238,8 +240,8 @@ CREATE TABLE Voorwerp (
 		if looptijd voorbij
 			verander veilingGesloten = 1*/
 
-	/*--- Eigen constraint - Looptijd dag en tijd niet groter dan vandaag ---*/
-	CONSTRAINT ckLooptijdDagEnTijd CHECK (looptijdBeginDag <= (CONVERT (DATE, GETDATE())) AND looptijdBeginTijdstip <= (CONVERT (TIME, GETDATE()))),
+	/*--- Eigen constraint - Looptijd dag en tijd niet groter dan vandaag ---*/						-- Aparte functie voor if(looptijdbegindag == today) check tijdstip <= nu
+	CONSTRAINT ckLooptijdDagEnTijd CHECK (looptijdBeginDag <= (CONVERT (DATE, GETDATE())) /*AND looptijdBeginTijdstip <= (CONVERT (TIME, GETDATE()))*/),
 	/*--- Eigen constraint - Looptijd begin < eind ---*/
 	CONSTRAINT ckLooptijdBeginEind CHECK (looptijdEindeDag >= looptijdBeginDag AND looptijdEindeTijdstip > looptijdBeginTijdstip)
 )
@@ -260,13 +262,13 @@ CREATE TABLE Feedback (
 	CONSTRAINT ckFeedbacksoort CHECK (feedbacksoort IN ('Negatief', 'Neutraal', 'Positief')),
 	CONSTRAINT ckSoortgebruiker CHECK (soortgebruiker IN ('Koper', 'Verkoper')),
 	/*--- Eigen constraint - Dag en tijd niet groter dan vandaag ---*/
-	CONSTRAINT ckDagEnTijdstip CHECK (dag <= (CONVERT (DATE, GETDATE())) AND tijdstip < (CONVERT (TIME, GETDATE())))
+	CONSTRAINT ckDagEnTijdstip CHECK (dag <= (CONVERT (DATE, GETDATE()))/* AND tijdstip < (CONVERT (TIME, GETDATE()))*/)
 )
 
 CREATE TABLE Bod (
 	voorwerp		NUMERIC(10)	NOT NULL,
-	bodbedrag		CHAR(5)		NOT NULL,
-	gebruiker		CHAR(10)	NOT NULL,	-- Gebruikersnaam
+	bodbedrag		NUMERIC(8)	NOT NULL,	-- WAS CHAR(5)
+	gebruiker		VARCHAR(10)	NOT NULL,	-- Gebruikersnaam, WAS CHAR(10)
 	boddag			DATE		NOT NULL,	-- WAS CHAR(10)
 	bodtijdstip		TIME		NOT NULL,	-- WAS CHAR(8)
 	
@@ -276,13 +278,13 @@ CREATE TABLE Bod (
 		--ON UPDATE,
 		--ON DELETE,
 	CONSTRAINT fkBodGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam),
-	CONSTRAINT ckBod CHECK (dbo.fCKBodEnMinimaleVerhoging(bodbedrag, voorwerp) = 1),
+	/*CONSTRAINT ckBod CHECK (dbo.fCKBodEnMinimaleVerhoging(bodbedrag, voorwerp) = 1),*/
 	/*--- Eigen constraint - Bod dag en tijd niet groter dan vandaag ---*/
-	CONSTRAINT ckBodDagEnTijd CHECK (boddag <= (CONVERT (DATE, GETDATE())) AND bodtijdstip < (CONVERT (TIME, GETDATE())))
+	CONSTRAINT ckBodDagEnTijd CHECK (boddag <= (CONVERT (DATE, GETDATE())) /*AND bodtijdstip < (CONVERT (TIME, GETDATE()))*/)
 )
 
 CREATE TABLE Bestand (
-	filenaam	CHAR(13)		NOT NULL,
+	filenaam	CHAR(25)		NOT NULL,	-- WAS CHAR(13)
 	voorwerp	NUMERIC(10)		NOT NULL,
 
 	/*--- Constraints Appendix D ---*/
@@ -298,13 +300,17 @@ CREATE TABLE Bestand (
 CREATE TABLE VoorwerpInRubriek (
 	voorwerp				NUMERIC(10)		NOT NULL,
 	rubriekOpLaagsteNiveau	INTEGER			NOT NULL,	-- 3
+	rubriekOpHoogsteNiveau	INTEGER			NOT NULL,	-- Zelf bij gemaakt
 
 	/*--- Constraints Appendix D ---*/
-	CONSTRAINT pkVoorwerpInRubriek PRIMARY KEY (voorwerp, rubriekOpLaagsteNiveau),
+	CONSTRAINT pkVoorwerpInRubriek PRIMARY KEY (voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau),
 	CONSTRAINT fkVoorwerpInRubriekVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer),
 		--ON UPDATE,
 		--ON DELETE,
-	CONSTRAINT fkVoorwerpInRubriekRubriek FOREIGN KEY (rubriekOpLaagsteNiveau) REFERENCES Rubriek(rubrieknummer)
+	CONSTRAINT fkVoorwerpInRubriekRubriekLaagst FOREIGN KEY (rubriekOpLaagsteNiveau) REFERENCES Rubriek(rubrieknummer),
+		--ON UPDATE,
+		--ON DELETE
+	CONSTRAINT fkVoorwerpInRubriekRubriekHoogst	FOREIGN KEY (rubriekOpHoogsteNiveau) REFERENCES Rubriek(rubrieknummer)
 		--ON UPDATE,
 		--ON DELETE
 )
