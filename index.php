@@ -30,7 +30,7 @@
               ?>
             </div>
             <div class="cell small-6 medium-4 large-10">
-              <p>Hier komt waarschijnlijk geen tekst!</p>
+              <p>Hier komt waarschijnlijk(!) geen tekst!</p>
             </div>
           </div>
         </div>

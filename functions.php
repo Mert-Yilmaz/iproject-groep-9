@@ -99,11 +99,16 @@ function toonItems($dbh, $zoekWoord) {
     if(isset($_GET['rubriek'])) {
         echo "Categorie: " . $zoekWoord . "</div>";
     }
+    else {
+        echo "Alle items van EenmaalAndermaal: ";
+    }
     try{
         $query = $dbh->query("SELECT *
                                               FROM	Voorwerp v
                                               INNER JOIN VoorwerpInRubriek vi
-                                              ON v.voorwerpnummer = vi.voorwerp INNER JOIN Rubriek r on r.rubrieknummer = vi.rubriekOpHoogsteNiveau
+                                              ON v.voorwerpnummer = vi.voorwerp
+                                              INNER JOIN Rubriek r
+                                              ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
                                               WHERE r.rubrieknaam
                                               LIKE '%$zoekWoord%'
                                               ORDER BY v.looptijdEindeTijdstip ASC");
