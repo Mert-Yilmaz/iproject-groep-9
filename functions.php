@@ -44,7 +44,7 @@ function search_item($dbh, $input){
     echo $output;
 }
 
-//Hot Items (Selecteer 3 items met de meest recente biedingen
+//Hot Items (Selecteert 3 items met de meest recente biedingen)
 $output;
 function hot_items($dbh){
         $output="";
@@ -65,7 +65,7 @@ function hot_items($dbh){
     echo $output;
 }
 
-// Zoek naar Rubrieken op hoofdpagina
+// Zoek naar RUBRIEKEN op hoofdpagina
 function zoekRubriek($dbh, $zoekWoord) {
     if(isset($_POST['zoeken'])) {
         echo "<div class='$zoekWoord'>";
@@ -94,14 +94,8 @@ function zoekRubriek($dbh, $zoekWoord) {
     }
 }
 
-// Toont Items op producten.php
+// Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
-    if(isset($_GET['rubriek'])) {
-        echo "Categorie: " . $zoekWoord . "</div>";
-    }
-    else {
-        echo "Alle items van EenmaalAndermaal: ";
-    }
     try{
         $query = $dbh->query("SELECT *
                                               FROM	Voorwerp v
@@ -114,12 +108,66 @@ function toonItems($dbh, $zoekWoord) {
                                               ORDER BY v.looptijdEindeTijdstip ASC");
         $query->execute();
         while($row = $query->fetch()) {
-            echo '<li>'. $row['titel'] . ':
-                 '. $row['beschrijving'] . '</li>';
+            echo "<li>". $row['titel'] . ":
+                 ". $row['beschrijving'] . "</li>";
         }
     } catch(PDOException $e) {
         echo "Er is iets mis gegaan. De foutmelding is: $e";
     }
 }
+
+//Toont BREADCRUMBS voor Producten
+function productBreadCrumbs($dbh, $zoekWoord) {
+  if(isset($_GET['rubriek'])) {
+      echo '<nav aria-label="You are here: "role="navigation">
+            <ul class="breadcrumbs">
+            <li><a href="index.php">Home</a></li>
+            <li><a href="producten.php">Producten</a></li>
+              <li>' . $_GET['rubriek'] . '</li>
+            </ul>
+            </nav';
+      echo subCategory($dbh, $zoekWoord);
+  }
+  else { echo '<nav aria-label="You are here: "role="navigation">
+              <ul class="breadcrumbs">
+              <li><a href="index.php">Home</a></li>
+              <li>Producten</li>
+              </ul>
+              </nav';}
+}
+
+//Toont BREADCRUMBS voor de website
+function breadCrumbs($dbh, $zoekWoord) {
+    echo '<nav aria-label="You are here: "role="navigation">
+          <ul class="breadcrumbs">
+          <li><a href="index.php">Home</a></li>
+          <li>' . $zoekWoord . '</li>
+          </ul>
+          </nav';
+
+}
+
+// Haalt SUBRUBRIEKEN op de Database
+function subCategory($dbh, $zoekWoord) {
+  $query = $dbh->query("SELECT *
+                            FROM	 Rubriek
+                            WHERE rubrieknaam = '$zoekWoord'");
+  $query->execute();
+  while($row = $query->fetch()) {
+    $rubrieknummer = $row['rubrieknummer'];
+    subsubCategory($dbh, $rubrieknummer);
+  }
+}
+// Haalt subSUBRUBRIEKEN op de Database
+function subsubCategory($dbh, $rubrieknummer) {
+  $query = $dbh->query("SELECT *
+                            FROM	 Rubriek
+                            WHERE rubriek = $rubrieknummer");
+  $query->execute();
+  while($row = $query->fetch()) {
+    echo $row['rubrieknaam'] . "<br>";
+  }
+}
+
 
 ?>

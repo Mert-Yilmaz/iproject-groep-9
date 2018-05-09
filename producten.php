@@ -13,5 +13,7 @@
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.csss">
   </head>
+<body>
 
-    <?php toonItems($dbh, $_GET['rubriek']); ?>
+    <?php productBreadCrumbs($dbh, $_GET['rubriek']);
+          toonItems($dbh, $_GET['rubriek']); ?>
