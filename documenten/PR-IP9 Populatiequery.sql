@@ -1,6 +1,6 @@
 USE iproject9
 
-DELETE FROM VoorwerpInRubriek;
+/*DELETE FROM VoorwerpInRubriek;
 DELETE FROM Bestand;
 DELETE FROM Bod;
 DELETE FROM Feedback;
@@ -9,7 +9,7 @@ DELETE FROM Verkoper;
 DELETE FROM Rubriek;
 DELETE FROM Gebruikerstelefoon;
 DELETE FROM Gebruiker;
-DELETE FROM Vraag;
+DELETE FROM Vraag;*/
 
 Insert into Vraag
 Values	(5,'Wat is je huisdier, man?'),

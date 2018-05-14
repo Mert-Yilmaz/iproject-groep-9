@@ -1,5 +1,5 @@
 USE iproject9
-
+/*
 ----- ----- ----- -----
 --- Droppen tables ---
 ---- ----- ----- -----
@@ -39,7 +39,7 @@ DROP FUNCTION fCKMaxAfbeeldingen
 IF OBJECT_ID ('fCKBodEnMinimaleVerhoging') IS NOT NULL	-- WERKT NIET!
 DROP FUNCTION fCKBodEnMinimaleVerhoging
 ---------------------------------
-
+*/
 GO
 CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker VARCHAR(10))
 RETURNS BIT
