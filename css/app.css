@@ -22,12 +22,12 @@ li {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: rgba(242, 85, 44, 0.9); rgba(40, 10, 0, 0.8);
+  background-color: rgb(242, 85, 44); rgba(0, 0, 0, 0.8);
   overflow: hidden;
 }
 
 .navbar a {
-  color: white;
+  color: white; rgb(242, 85, 44);
 }
 
 .backtotop a {
@@ -35,12 +35,12 @@ li {
 }
 
 .navbar a:hover, .backtotop a:hover {
-  color:black; #F2552C;
+  color: black; rgb(242, 85, 44);
   transition: 0.4s;
 }
 
 footer {
-  background-color: #cccccc;
+  background-color:  #cccccc; rgb(242, 85, 44);
   color: black;
 }
 
