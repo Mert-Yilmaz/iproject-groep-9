@@ -44,18 +44,9 @@
                 <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
                 <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
                 <div class="grid-x grid-padding-x">
-                  <div class="large-4 medium-4 small-12 cell">
-                    <p><a href="#" class="success button">Veilingitem 1</a>
-                    <br />Hier staat de beschrijving van product 1</p>
-                  </div>
-                  <div class="large-4 medium-4 small-12 cell">
-                    <p><a href="#" class="success button">Veilingitem 2</a>
-                    <br />Hier staat de beschrijving van product 2</p>
-                  </div>
-                  <div class="large-4 medium-4 small-12 cell">
-                    <p><a href="#" class="success button">Veilingitem 3</a>
-                    <br />Hier staat de beschrijving van product 3</p>
-                  </div>
+                    <?php
+                        hot_items($dbh);
+                    ?>
                 </div>
               </div>
             </div>
