@@ -1,4 +1,3 @@
-
 <!doctype html>
 <?php include 'navbar.php';
       include 'functions.php';
@@ -12,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>De beste veilingsite van Nederland!</title>
     <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/app.csss">
+    <link rel="stylesheet" href="css/app.css">
+      <link rel="icon" href="img/logo2.PNG">
   </head>
   <body>
     <div class="grid-container fluid">
@@ -20,32 +20,44 @@
         <div class="cell large-4 text-center">
           <div class="grid-y">
             <div class="cell small-6 medium-8 large-2">
+                <br>
               <form method="post" action="">
                     <input type="text" name="zoekterm"/>
-                    <input type="submit" name="zoeken" />
+                    <input type="submit" name="zoeken" value="Zoek" />
               </form>
+                <br>
               <?php
                 echo '<ul class="ulNone">';
                     zoekRubriek($dbh, $_POST['zoekterm']);
                 echo '</ul>';
               ?>
             </div>
-            <div class="cell small-6 medium-4 large-10">
-              <p>Hier komt waarschijnlijk(!) geen tekst!</p>
-            </div>
           </div>
         </div>
         <div class="cell large-8 text-center">
+            <br>
           <?php include 'orbit-slider.php'; ?>
         </div>
       </div>
+
       <div class="grid-x grid-padding-x">
         <div class="small-12 cell">
           <div class="callout">
             <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
-            <p class="text-center">Bekijk hieronder populaire items of klik op een rubriek voor nog meer leuke koopjes!</p>
+            <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
             <div class="grid-x grid-padding-x">
-              <?php hot_items($dbh); ?>
+              <div class="large-4 medium-4 small-12 cell">
+                <p><a href="#" class="success button">Veilingitem 1</a>
+                <br />Hier staat de beschrijving van product 1</p>
+              </div>
+              <div class="large-4 medium-4 small-12 cell">
+                <p><a href="#" class="success button">Veilingitem 2</a>
+                <br />Hier staat de beschrijving van product 2</p>
+              </div>
+              <div class="large-4 medium-4 small-12 cell">
+                <p><a href="#" class="success button">Veilingitem 3</a>
+                <br />Hier staat de beschrijving van product 3</p>
+              </div>
             </div>
           </div>
         </div>
@@ -56,10 +68,8 @@
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
-        
-      <?php
-      include("footer.html");
-    ?>    
-        
+    <?php
+    include_once 'footer.html';
+    ?>
   </body>
 </html>
