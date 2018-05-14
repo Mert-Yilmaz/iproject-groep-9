@@ -1,23 +1,45 @@
 USE iproject9
 
+----- ----- ----- -----
+--- Droppen tables ---
+---- ----- ----- -----
+IF OBJECT_ID('dbo.VoorwerpInRubriek') IS NOT NULL
+	DROP TABLE VoorwerpInRubriek;
+IF OBJECT_ID('dbo.Bestand') IS NOT NULL
+	DROP TABLE Bestand;
+IF OBJECT_ID('dbo.Bod') IS NOT NULL
+	DROP TABLE Bod;
+IF OBJECT_ID('dbo.Feedback') IS NOT NULL
+	DROP TABLE Feedback;
+IF OBJECT_ID('dbo.Voorwerp') IS NOT NULL
+	DROP TABLE Voorwerp;
+IF OBJECT_ID('dbo.Verkoper') IS NOT NULL
+	DROP TABLE Verkoper;
+IF OBJECT_ID('dbo.Rubriek') IS NOT NULL
+	DROP TABLE Rubriek;
+IF OBJECT_ID('dbo.Gebruikerstelefoon') IS NOT NULL
+	DROP TABLE Gebruikerstelefoon;
+IF OBJECT_ID('dbo.Gebruiker') IS NOT NULL
+	DROP TABLE Gebruiker;
+IF OBJECT_ID('dbo.Vraag') IS NOT NULL
+	DROP TABLE Vraag;
+
 ---- ----- ----- ----- ----- ----
 -- Creëren en droppen functies --
 ---- ----- ----- ----- ----- ----
 IF OBJECT_ID ('fControleerGebruikerIsVerkoper') IS NOT NULL
 DROP FUNCTION fControleerGebruikerIsVerkoper
 
-IF OBJECT_ID ('fControleoptieCreditcard') IS NOT NULL
-DROP FUNCTION fControleoptieCreditcard
+/*IF OBJECT_ID ('fControleoptieCreditcard') IS NOT NULL
+DROP FUNCTION fControleoptieCreditcard*/
 
 IF OBJECT_ID ('fCKMaxAfbeeldingen') IS NOT NULL
 DROP FUNCTION fCKMaxAfbeeldingen
 
-IF OBJECT_ID ('fCKBodEnMinimaleVerhoging') IS NOT NULL
+IF OBJECT_ID ('fCKBodEnMinimaleVerhoging') IS NOT NULL	-- WERKT NIET!
 DROP FUNCTION fCKBodEnMinimaleVerhoging
-
-IF OBJECT_ID ('fCKWachtwoord') IS NOT NULL
-DROP FUNCTION fCKWachtwoord
 ---------------------------------
+
 GO
 CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker VARCHAR(10))
 RETURNS BIT
@@ -78,30 +100,6 @@ BEGIN
 	RETURN 0
 END
 GO
-
-/* HOOFDLETTERS CHECKEN! */
-/*GO
-CREATE FUNCTION fCKWachtwoord(@wachtwoord CHAR(16))
-RETURNS BIT
-AS
-BEGIN
-	IF((SELECT * FROM Gebruiker WHERE @wachtwoord LIKE '%[A-Z]%' COLLATE Latin1_General_CS_AS
-	/*SELECT
-		CASE
-			WHEN @wachtwoord LIKE '%[A-Z]%' COLLATE Latin1_General_CS_AI AND
-				 @wachtwoord LIKE '%[a-z]%' COLLATE Latin1_General_CS_AI AND
-				 @wachtwoord LIKE '%[0-9]%' AND
-				 LEN(@wachtwoord) >= 7
-					THEN 1
-			ELSE 0
-		END*/
-	/*IF (@wachtwoord LIKE '%[0-9]%' AND @wachtwoord LIKE '%[a-z]%' COLLATE Latin1_General_CS_AI AND @wachtwoord LIKE '%[A-Z]%' COLLATE Latin1_General_CS_AI AND LEN(@wachtwoord) >= 7)
-		RETURN 1
-	ELSE
-		RETURN 0
-	RETURN 0*/
-END
-GO*/
 ---------------------------------
 
 ----- ----- ----- -----
@@ -133,19 +131,19 @@ CREATE TABLE Gebruiker (
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkGebruiker PRIMARY KEY (gebruikersnaam),
-	CONSTRAINT fkGebruikerVraag FOREIGN KEY (vraag) REFERENCES Vraag(vraagnummer),
+	CONSTRAINT fkGebruikerVraag FOREIGN KEY (vraag) REFERENCES Vraag(vraagnummer)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
 	-- Subset Constraint!!!
 		/*CONSTRAINT fkGebruikerGebruikerstelefoon FOREIGN KEY (gebruikersnaam) REFERENCES Gebruikerstelefoon(gebruiker)
-		--ON UPDATE,
-		--ON DELETE*/
+		--ON UPDATE
+		--ON DELETE,*/
 	/*--- Constraint Appendix B - Geldig emailadres ---*/
 	CONSTRAINT ckEmail CHECK (mailbox LIKE '%_@__%.__%'),
 	/*--- Constraint Appendix B - Unieke gebruikersnaam ---*/
 	CONSTRAINT akGebruikersnaam UNIQUE (gebruikersnaam),
-	/*--- Constraint Appendix B - Wachtwoord minimaal 7 tekens, bestaande uit letters, cijfers en hoofdlettergevoelig ---*/
-	------------------WACHTWOORD HOOFDLETTER GEVOELIG M.B.V. FUNCTIE----------------------
-		--CONSTRAINT ckWachtwoord CHECK (dbo.fCKWachtwoord(wachtwoord) = 1),
-		CONSTRAINT ckWachtwoord CHECK (wachtwoord LIKE '%[0-9]%' AND wachtwoord LIKE '%[A-Z]%' AND LEN(wachtwoord) >= 7),
+	/*--- Constraint Appendix B - Wachtwoord minimaal 7 tekens, bestaande uit letters, cijfers en hoofdlettergevoelig --> Hoofdletters via site ---*/
+	CONSTRAINT ckWachtwoord CHECK (wachtwoord LIKE '%[0-9]%' AND wachtwoord LIKE '%[A-Z]%' AND LEN(wachtwoord) >= 7),
 	/*--- Eigen constraint - Geboortedatum <= vandaag ---*/
 	CONSTRAINT ckGeboortedatum CHECK (geboortedatum <= CURRENT_TIMESTAMP)
 )
@@ -158,21 +156,21 @@ CREATE TABLE Gebruikerstelefoon (
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkGebruikerstelefoon PRIMARY KEY (volgnr, gebruiker),
 	CONSTRAINT fkGebruikerstelefoonGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam)
-		--ON UPDATE,
-		--ON DELETE
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION
 )
 
 CREATE TABLE Rubriek (
 	rubrieknummer	INTEGER		NOT NULL,	-- 3
-	rubrieknaam		CHAR(40)	NOT NULL,	-- WAS 24
+	rubrieknaam		VARCHAR(40)	NOT NULL,	-- WAS CHAR(24)
 	rubriek			INTEGER			NULL,	-- 2
 	volgnr			INTEGER			NULL,	-- 2	-- WAS NOT NULL
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkRubriek PRIMARY KEY (rubrieknummer),
-	--CONSTRAINT fkRubriekRubriek FOREIGN KEY (rubriek) REFERENCES Rubriek(rubrieknummer)
-		--ON UPDATE,
-		--ON DELETE
+	CONSTRAINT fkRubriekRubriek FOREIGN KEY (rubriek) REFERENCES Rubriek(rubrieknummer)
+		ON UPDATE NO ACTION
+		ON DELETE NO ACTION
 )
 
 CREATE TABLE Verkoper (
@@ -184,16 +182,16 @@ CREATE TABLE Verkoper (
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVerkoper PRIMARY KEY (gebruiker),
-	CONSTRAINT fkVerkoperGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam),
-		--ON UPDATE,
-		--ON DELETE,
-	CONSTRAINT ckGebruikerIsVerkoper CHECK (dbo.fControleerGebruikerIsVerkoper(gebruiker) = 1),
-	CONSTRAINT ckKaartgebruik CHECK (bankrekening IS NOT NULL AND creditcard IS NOT NULL),
-	CONSTRAINT ckControleOptie CHECK (controleoptie IN ('Creditcard', 'Post'))
-		-- Subset Constraint!!!
+	CONSTRAINT fkVerkoperGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
+		-- Subset Constraint?!!!
 		/*CONSTRAINT fkVerkoperVoorwerp FOREIGN KEY (gebruiker) REFERENCES Voorwerp(verkoper)
 			--ON UPDATE,
 			--ON DELETE*/
+	CONSTRAINT ckGebruikerIsVerkoper CHECK (dbo.fControleerGebruikerIsVerkoper(gebruiker) = 1),
+	CONSTRAINT ckKaartgebruik CHECK (bankrekening IS NOT NULL AND creditcard IS NOT NULL),
+	CONSTRAINT ckControleOptie CHECK (controleoptie IN ('Creditcard', 'Post'))
 	--CONSTRAINT ckControleOptie CHECK (dbo.fControleoptieCreditcard(controleoptie)),
 )
 
@@ -220,9 +218,9 @@ CREATE TABLE Voorwerp (
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerp PRIMARY KEY (voorwerpnummer),
-	CONSTRAINT fkVoorwerpVerkoper FOREIGN KEY (verkoper) REFERENCES Verkoper(gebruiker),
-		--ON UPDATE,
-		--ON DELETE,
+	CONSTRAINT fkVoorwerpVerkoper FOREIGN KEY (verkoper) REFERENCES Verkoper(gebruiker)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
 	CONSTRAINT fkVoorwerpGebruiker FOREIGN KEY (koper) REFERENCES Gebruiker(gebruikersnaam),
 		--ON UPDATE,
 		--ON DELETE,
@@ -233,15 +231,8 @@ CREATE TABLE Voorwerp (
 	CONSTRAINT ckEigenBod CHECK (verkoper NOT LIKE koper),
 	/*--- Constraint Appendix B - Looptijd ---*/
 	CONSTRAINT ckLooptijd CHECK (looptijd = 1 OR looptijd = 3 OR looptijd = 5 OR looptijd = 7 OR looptijd = 10),
-
-	/*--- Constraint Appendix B - Hogere bieding ---
-		--CONSTRAINT ckHogereBieding CHECK (verkoopprijs > startprijs), STAAT IN FUNCTIE (IN COMMENTAAR BIJ BOD?)*/
-	/*--- Constraint Appendix B - Veiling sluiten ---
-		if looptijd voorbij
-			verander veilingGesloten = 1*/
-
-	/*--- Eigen constraint - Looptijd dag en tijd niet groter dan vandaag ---*/						-- Aparte functie voor if(looptijdbegindag == today) check tijdstip <= nu
-	CONSTRAINT ckLooptijdDagEnTijd CHECK (looptijdBeginDag <= (CONVERT (DATE, GETDATE())) /*AND looptijdBeginTijdstip <= (CONVERT (TIME, GETDATE()))*/),
+	/*--- Constraint Appendix B - Hogere bieding ---*/
+	CONSTRAINT ckHogereBieding CHECK (verkoopprijs >= startprijs),
 	/*--- Eigen constraint - Looptijd begin < eind ---*/
 	CONSTRAINT ckLooptijdBeginEind CHECK (looptijdEindeDag >= looptijdBeginDag AND looptijdEindeTijdstip > looptijdBeginTijdstip)
 )
@@ -256,13 +247,11 @@ CREATE TABLE Feedback (
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkFeedback PRIMARY KEY (voorwerp, soortgebruiker),
-	CONSTRAINT fkFeedbackVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer),
-		--ON UPDATE,
-		--ON DELETE
+	CONSTRAINT fkFeedbackVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
 	CONSTRAINT ckFeedbacksoort CHECK (feedbacksoort IN ('Negatief', 'Neutraal', 'Positief')),
-	CONSTRAINT ckSoortgebruiker CHECK (soortgebruiker IN ('Koper', 'Verkoper')),
-	/*--- Eigen constraint - Dag en tijd niet groter dan vandaag ---*/
-	CONSTRAINT ckDagEnTijdstip CHECK (dag <= (CONVERT (DATE, GETDATE()))/* AND tijdstip < (CONVERT (TIME, GETDATE()))*/)
+	CONSTRAINT ckSoortgebruiker CHECK (soortgebruiker IN ('Koper', 'Verkoper'))
 )
 
 CREATE TABLE Bod (
@@ -274,13 +263,11 @@ CREATE TABLE Bod (
 	
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkBod PRIMARY KEY (voorwerp, bodbedrag),
-	CONSTRAINT fkBodVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer),
-		--ON UPDATE,
-		--ON DELETE,
+	CONSTRAINT fkBodVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
 	CONSTRAINT fkBodGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam),
 	/*CONSTRAINT ckBod CHECK (dbo.fCKBodEnMinimaleVerhoging(bodbedrag, voorwerp) = 1),*/
-	/*--- Eigen constraint - Bod dag en tijd niet groter dan vandaag ---*/
-	CONSTRAINT ckBodDagEnTijd CHECK (boddag <= (CONVERT (DATE, GETDATE())) /*AND bodtijdstip < (CONVERT (TIME, GETDATE()))*/)
 )
 
 CREATE TABLE Bestand (
@@ -289,10 +276,10 @@ CREATE TABLE Bestand (
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkBestand PRIMARY KEY (filenaam),
-	CONSTRAINT fkBestandVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer),
-		--ON UPDATE,
-		--ON DELETE
-	CONSTRAINT ckMaxAfbeeldingen CHECK (dbo.fCKMaxAfbeeldingen(filenaam) = 1),	-- Maximaal 4 afbeeldingen, minimaal 1
+	CONSTRAINT fkBestandVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
+	CONSTRAINT ckMaxAfbeeldingen CHECK (dbo.fCKMaxAfbeeldingen(filenaam) = 1),
 	/*--- Eigen constraint - Bestandtypes: jpg, png, jpeg en bmp ---*/
 	CONSTRAINT ckBestandtype CHECK (filenaam LIKE '%.jpg' OR filenaam LIKE '%.png' OR filenaam LIKE '%.jpeg' OR filenaam LIKE '%.bmp')
 )
@@ -304,15 +291,15 @@ CREATE TABLE VoorwerpInRubriek (
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerpInRubriek PRIMARY KEY (voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau),
-	CONSTRAINT fkVoorwerpInRubriekVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer),
-		--ON UPDATE,
-		--ON DELETE,
-	CONSTRAINT fkVoorwerpInRubriekRubriekLaagst FOREIGN KEY (rubriekOpLaagsteNiveau) REFERENCES Rubriek(rubrieknummer),
-		--ON UPDATE,
-		--ON DELETE
+	CONSTRAINT fkVoorwerpInRubriekVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
+	CONSTRAINT fkVoorwerpInRubriekRubriekLaagst FOREIGN KEY (rubriekOpLaagsteNiveau) REFERENCES Rubriek(rubrieknummer)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
 	CONSTRAINT fkVoorwerpInRubriekRubriekHoogst	FOREIGN KEY (rubriekOpHoogsteNiveau) REFERENCES Rubriek(rubrieknummer)
-		--ON UPDATE,
-		--ON DELETE
+		ON UPDATE NO ACTION
+		ON DELETE NO ACTION
 )
 
 PRINT('Tables in iproject9 have been created')

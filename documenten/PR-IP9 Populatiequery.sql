@@ -1,5 +1,16 @@
 USE iproject9
 
+DELETE FROM VoorwerpInRubriek;
+DELETE FROM Bestand;
+DELETE FROM Bod;
+DELETE FROM Feedback;
+DELETE FROM Voorwerp;
+DELETE FROM Verkoper;
+DELETE FROM Rubriek;
+DELETE FROM Gebruikerstelefoon;
+DELETE FROM Gebruiker;
+DELETE FROM Vraag;
+
 Insert into Vraag
 Values	(5,'Wat is je huisdier, man?'),
 		(1,'Hoe oud is je zevende hond geworden?'),
@@ -3493,12 +3504,12 @@ Values	('Gebruiker1','Rabobank',3966701,'Creditcard','1234-5678-9012-3456'),
 
 Insert into Voorwerp
 (voorwerpnummer,titel,beschrijving,startprijs,betalingswijze,betalingsinstructie,plaatsnaam,land,looptijd,looptijdBeginDag,looptijdBeginTijdstip,verzendkosten,verzendinstructies,verkoper,koper,looptijdEindeDag,looptijdEindeTijdstip,veilingGesloten,verkoopprijs)
-Values	(0000000001,'BMW 340i',	'Mooie BMW',			50.00,	'IDeal/PayPal',	'Gewoon overmaken',				'Arnhem',	'Nederland',	7,	'15-may-1999',	'09:20:20',	null,	null,	'Gebruiker7',	'Gebruiker1',	'22-may-1999',	'20:20:21',	1,	200.00),	-- Verkoopprijs berekenen
-		(0000000002,'Cake',		'Zo goed als nieuw',	90.00,	'IDeal/PayPal',	'Je mag het geld zelf houden',	'Zevenaar',	'Polen',		3,	'20-feb-2018',	'09:20:20', null,	null,	'Gebruiker1',	null,			'22-feb-2018',	'20:20:21',	0,	null);
+Values	(0000000001,'BMW 340i',	'Mooie BMW',			50.00,	'IDeal/PayPal',	'Gewoon overmaken',				'Arnhem',	'Nederland',	7,	'15-may-1999',	'09:20:20.0000000',	null,	null,	'Gebruiker7',	'Gebruiker1',	'22-may-1999',	'20:20:21',	1,	200.00),	-- Verkoopprijs berekenen
+		(0000000002,'Cake',		'Zo goed als nieuw',	90.00,	'IDeal/PayPal',	'Je mag het geld zelf houden',	'Zevenaar',	'Polen',		3,	'20-feb-2018',	'09:20:20.0000000', null,	null,	'Gebruiker1',	null,			'22-feb-2018',	'20:20:21',	0,	null);
 
 insert into Feedback
 (voorwerp,soortgebruiker,feedbacksoort,dag,tijdstip,commentaar)
-Values	(0000000001,'koper','positief','22-apr-2018','10:44:21','Bedankt!')/*,
+Values	(0000000001,'koper','positief','22-apr-2018','10:44:21.0000000','Bedankt!')/*,
 		(0000000002,'verkoper','negatief','22-apr-2018','10:47:30','Slecht'),
 		(7324474820,'verkoper','positief','24-apr-2018','10:48:17','Super goed!'),
 		(8143029863,'koper','positief','24-apr-2018','14:28:17','Erg blij mee'),
@@ -3509,7 +3520,7 @@ Values	(0000000001,'koper','positief','22-apr-2018','10:44:21','Bedankt!')/*,
 
 insert into Bod
 (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-Values	(0000000001,	150.00,	'Gebruiker1','21-apr-2018','12:00:00')/*,
+Values	(0000000001,	150.00,	'Gebruiker1','21-apr-2018','12:00:00.0000000')/*,
 		(0000000002,	200.00,	'Gebruiker2','21-apr-2018','14:21:34'),
 		(7324474820,	42.10,	'Gebruiker3','24-apr-2018','09:12:07'),
 		(8143029863,	1.40,	'Gebruiker4','12-aug-2006','16:32:57'),
