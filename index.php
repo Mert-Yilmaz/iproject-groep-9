@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>De beste veilingsite van Nederland!</title>
     <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/app.csss">
+    <link rel="stylesheet" href="css/app.css">
   </head>
   <body>
     <div class="grid-container fluid">
@@ -31,7 +31,7 @@
               ?>
             </div>
             <div class="cell small-6 medium-4 large-10">
-              <p>Hier komt waarschijnlijk(!) geen tekst!</p>
+              <p>Hier komt geen tekst.</p>
             </div>
           </div>
         </div>
@@ -56,10 +56,10 @@
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
-        
+
       <?php
       include("footer.html");
-    ?>    
-        
+    ?>
+
   </body>
 </html>
