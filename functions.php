@@ -118,15 +118,18 @@ function toonItems($dbh, $zoekWoord) {
 
 //Toont BREADCRUMBS voor Producten
 function productBreadCrumbs($dbh, $zoekWoord) {
+  $breadcrumb;
   if(isset($_GET['rubriek'])) {
-      echo '<nav aria-label="You are here: "role="navigation">
+      $breadcrumb .= '<nav aria-label="You are here: "role="navigation">
             <ul class="breadcrumbs">
-            <li><a href="index.php">Home</a></li>
-            <li><a href="producten.php">Producten</a></li>
-              <li>' . $_GET['rubriek'] . '</li>
-            </ul>
-            </nav';
-      echo subCategory($dbh, $zoekWoord);
+            <li><a href="index.php">Home</a></li>';
+            if(isset($_GET['rubriek2'])) {
+            $breadcrumb .= '<li><a href="producten.php?rubriek=' . $_GET['rubriek2'] . '">' . $_GET['rubriek2'] . '</a></li>';
+            }
+            $breadcrumb .= '<li>' . $_GET['rubriek'] . '</li>
+                            </ul></nav';
+      echo $breadcrumb;
+      echo Category($dbh, $zoekWoord);
   }
   else { echo '<nav aria-label="You are here: "role="navigation">
               <ul class="breadcrumbs">
@@ -147,25 +150,27 @@ function breadCrumbs($dbh, $zoekWoord) {
 
 }
 
-// Haalt SUBRUBRIEKEN op de Database
-function subCategory($dbh, $zoekWoord) {
+// Haalt RUBRIEKEN op de Database
+function Category($dbh, $zoekWoord) {
   $query = $dbh->query("SELECT *
                             FROM	 Rubriek
                             WHERE rubrieknaam = '$zoekWoord'");
   $query->execute();
   while($row = $query->fetch()) {
     $rubrieknummer = $row['rubrieknummer'];
-    subsubCategory($dbh, $rubrieknummer);
+    $rubrieknaam = $row['rubrieknaam'];
+    subCategory($dbh, $rubrieknummer, $rubrieknaam);
   }
 }
-// Haalt subSUBRUBRIEKEN op de Database
-function subsubCategory($dbh, $rubrieknummer) {
+// Haalt SUBRUBRIEKEN op de Database
+function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   $query = $dbh->query("SELECT *
                             FROM	 Rubriek
                             WHERE rubriek = $rubrieknummer");
   $query->execute();
   while($row = $query->fetch()) {
-    echo $row['rubrieknaam'] . "<br>";
+    echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '&rubriek2=' . $rubrieknaam . '">
+         ' . $row['rubrieknaam'] . '</a></li>';
   }
 }
 
