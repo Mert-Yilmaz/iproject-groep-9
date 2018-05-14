@@ -6,9 +6,7 @@ html {
 }
 
 body {
-  margin-top: 10%; /* Add a top margin to avoid content overlay */
   background-color: white;
-  font-family: "open sans";
   color: grey;
 }
 
@@ -19,11 +17,8 @@ li {
 /*navigatiebalk */
 
 .navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: rgb(242, 85, 44); rgba(0, 0, 0, 0.8);
-  overflow: hidden;
+  background-color: rgb(242, 85, 44);
+  margin-bottom: 5px;
 }
 
 .navbar a {
@@ -35,12 +30,12 @@ li {
 }
 
 .navbar a:hover, .backtotop a:hover {
-  color: black; rgb(242, 85, 44);
+  color: black;
   transition: 0.4s;
 }
 
 footer {
-  background-color:  #cccccc; rgb(242, 85, 44);
+  background-color:  #cccccc;
   color: black;
   padding: 5px;
 }
