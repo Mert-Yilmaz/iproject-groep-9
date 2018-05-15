@@ -11,9 +11,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>De beste veilingsite van Nederland!</title>
     <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/app.csss">
+    <link rel="stylesheet" href="css/app.css">
   </head>
 <body>
 
     <?php productBreadCrumbs($dbh, $_GET['rubriek']);
-          toonItems($dbh, $_GET['rubriek']); ?>
+          toonItems($dbh, $_GET['rubriek']);
+
+include_once 'footer.html';
+?>
+
+</body>
+</html>

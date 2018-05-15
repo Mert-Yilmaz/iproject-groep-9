@@ -9,10 +9,10 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>De beste veilingsite van Nederland!</title>
+    <title>EenmaalAndermaal - De beste veilingsite van Nederland!</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
-      <link rel="icon" href="img/logo2.PNG">
+    <link rel="icon" href="img/logo2.PNG">
   </head>
   <body>
     <div class="grid-container fluid">
@@ -21,12 +21,12 @@
           <div class="grid-y">
             <div class="cell small-6 medium-8 large-2">
                 <br>
-              <h1>Groepen</h1>
               <form method="post" action="">
                     <input type="text" name="zoekterm" placeholder="Zoeken..."/>
-                    <input type="submit" name="zoeken" value="Zoek" />
+                    <input type="submit" name="zoeken" value="Zoek..." />
               </form>
                 <br>
+                <h1>Groepen</h1>
               <?php
                 echo '<ul class="ulNone">';
                     zoekRubriek($dbh, $_POST['zoekterm']);
@@ -44,21 +44,25 @@
                 <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
                 <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
                 <div class="grid-x grid-padding-x">
-                    <?php
-                        hot_items($dbh);
-                    ?>
+                  <div class="large-4 medium-4 small-12 cell">
+                    <p><a href="#" class="success button">Veilingitem 1</a>
+                    <br />Hier staat de beschrijving van product 1</p>
+                  </div>
+                  <div class="large-4 medium-4 small-12 cell">
+                    <p><a href="#" class="success button">Veilingitem 2</a>
+                    <br />Hier staat de beschrijving van product 2</p>
+                  </div>
+                  <div class="large-4 medium-4 small-12 cell">
+                    <p><a href="#" class="success button">Veilingitem 3</a>
+                    <br />Hier staat de beschrijving van product 3</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
           <?php include 'orbit-slider.php'; ?>
-
-
         </div>
       </div>
-
-
     </div>
 
     <script src="js/vendor/jquery.js"></script>
