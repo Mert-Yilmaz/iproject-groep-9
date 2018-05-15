@@ -23,7 +23,7 @@
                 <br>
               <form method="post" action="">
                     <input type="text" name="zoekterm" placeholder="Zoeken..."/>
-                    <input type="submit" name="zoeken" value="Zoek..." />
+                    <input type="submit" name="zoeken" value="Zoek..." class="btn"/>
               </form>
                 <br>
                 <h1>Groepen</h1>
