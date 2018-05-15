@@ -15,7 +15,7 @@
   </head>
   <body>
 
-  <p class='text-center'>Deze pagina wordt nog gemaakt</p>
+  <p class='text-center'>Deze pagina wordt nog gemaakt.</p>
 
     <?php
       for ($i = 1; $i < 20; $i++){
