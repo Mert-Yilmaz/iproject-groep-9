@@ -6,12 +6,20 @@ html {
 }
 
 body {
-  background-color: white;
+  background-color: #e8eaed;
   color: grey;
 }
 
 li {
     list-style-type: none;
+}
+
+a {
+  color:black;
+}
+
+a:hover {
+  color: rgb(242, 85, 44);
 }
 
 /*navigatiebalk */
@@ -22,7 +30,7 @@ li {
 }
 
 .navbar a {
-  color: white; rgb(242, 85, 44);
+  color: white;
 }
 
 .backtotop a {
@@ -34,10 +42,13 @@ li {
   transition: 0.4s;
 }
 
+/* footer */
+
 footer {
   background-color:  #cccccc;
   color: black;
   padding: 5px;
+  margin-top: 5px;
 }
 
 
