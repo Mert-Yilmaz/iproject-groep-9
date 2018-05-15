@@ -14,12 +14,29 @@ li {
     list-style-type: none;
 }
 
+ul {
+  margin-left: 0;
+}
+
 a {
   color:black;
 }
 
 a:hover {
   color: rgb(242, 85, 44);
+}
+
+.knop {
+    padding: 10px;
+    font-size: 15px;
+    color: white;
+    background-color:  #cccccc;
+    border: none;
+    border-radius: 5px;
+}
+
+.knop:hover {
+    background: rgb(242, 85, 44);
 }
 
 /*navigatiebalk */
@@ -55,10 +72,4 @@ footer {
 div.footerl, div.footerr{
   color:#666666;
   width: 100%;
-}
-
-/* adminformulier */
-
-.adminformulier {
-  margin-top:10px;
 }
