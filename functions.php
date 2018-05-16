@@ -148,7 +148,6 @@ function breadCrumbs($dbh, $zoekWoord) {
           <li>' . $zoekWoord . '</li>
           </ul>
           </nav';
-
 }
 
 // Haalt RUBRIEKEN op de Database
@@ -164,17 +163,18 @@ function Category($dbh, $zoekWoord) {
     subCategory($dbh, $rubrieknummer, $rubrieknaam);
   }
 }
+
 // Haalt SUBRUBRIEKEN op de Database
 function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
-  $query = $dbh->query("SELECT *
+  $query = $dbh->prepare("SELECT *
                             FROM	 Rubriek
-                            WHERE rubriek = $rubrieknummer");
+                            WHERE rubriek = :rubrieknummer");
+  $query->bindParam(':rubrieknummer', $rubrieknummer);
   $query->execute();
   while($row = $query->fetch()) {
     echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '&rubriek2=' . $rubrieknaam . '">
          ' . $row['rubrieknaam'] . '</a></li>';
   }
 }
-
 
 ?>
