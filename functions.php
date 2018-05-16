@@ -45,22 +45,82 @@ function search_item($dbh, $input){
 }
 
 //Hot Items (Selecteert 3 items met de meest recente biedingen)
-$output;
 function hot_items($dbh){
         $output="";
         $sql = "SELECT TOP (3) * FROM Voorwerp v
                 INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
+                INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
                 ORDER BY boddag DESC";
         $stmt = $dbh->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
-            $title = $row['titel'];
-            $desc = $row['beschrijving'];
-            $output .=
-            '<div class="large-4 medium-4 small-12 cell">
-                <p><a href="#" class="success button">' . $title . '</a>
-                <br />' . $desc . '</p>
-             </div>';
+          $title = $row['titel'];
+          $desc = $row['beschrijving'];
+          $number = $row['voorwerpnummer'];
+          $file = $row['filenaam'];
+          $endtime = $row['looptijdEindeTijdstip'];
+          $endday = $row['looptijdEindeDag'];
+          $output .=
+          '<div class="large-4 medium-4 small-12 cell">
+              <p><a href="producten.php?item=' . $number . '" class="success button">' . $title . '</a>
+              <br />' . $desc . '</p>
+              <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>' . $endday . '</strong><p>
+              <img src=' . $file . '>
+           </div>';
+            }
+    echo $output;
+}
+
+//Aflopende Items (Selecteert 3 items die het snelst aflopen)
+function ending_items($dbh){
+        $output="";
+        $sql = "SELECT TOP (3) * FROM Voorwerp v
+                INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
+                INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
+                ORDER BY looptijdEindeDag, looptijdEindeTijdstip ASC";
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+          $title = $row['titel'];
+          $desc = $row['beschrijving'];
+          $number = $row['voorwerpnummer'];
+          $file = $row['filenaam'];
+          $endtime = $row['looptijdEindeTijdstip'];
+          $endday = $row['looptijdEindeDag'];
+          $output .=
+          '<div class="large-4 medium-4 small-12 cell">
+              <p><a href="producten.php?item=' . $number . '" class="success button">' . $title . '</a>
+              <br />' . $desc . '</p>
+              <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>' . $endday . '</strong><p>
+              <img src=' . $file . '>
+           </div>';
+            }
+    echo $output;
+}
+
+//Laaggeboden Items (Selecteert 3 items met de laagste biedingen)
+function cheap_items($dbh){
+        $output="";
+        $sql = "SELECT TOP (3) * FROM Voorwerp v
+                INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
+                INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
+                ORDER BY startprijs-bodbedrag DESC";
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+          $title = $row['titel'];
+          $desc = $row['beschrijving'];
+          $number = $row['voorwerpnummer'];
+          $file = $row['filenaam'];
+          $endtime = $row['looptijdEindeTijdstip'];
+          $endday = $row['looptijdEindeDag'];
+          $output .=
+          '<div class="large-4 medium-4 small-12 cell">
+              <p><a href="producten.php?item=' . $number . '" class="success button">' . $title . '</a>
+              <br />' . $desc . '</p>
+              <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>' . $endday . '</strong><p>
+              <img src=' . $file . '>
+           </div>';
             }
     echo $output;
 }
@@ -73,14 +133,14 @@ function zoekRubriek($dbh, $zoekWoord) {
     }
     try{
         $query = $dbh->query("SELECT rubrieknaam
-                                                      FROM	 Rubriek
+                                                      FROM	Rubriek
                                                       WHERE rubriek = -1
                                                       ORDER BY rubrieknaam ASC");
         if(isset($_POST['zoeken'])) {
             $query = $dbh->query("SELECT rubrieknaam
-                                                      FROM	 Rubriek
+                                                      FROM	Rubriek
                                                       WHERE rubriek = -1
-                                                      AND rubrieknaam LIKE '%$zoekWoord%'
+                                                      AND   rubrieknaam LIKE '%$zoekWoord%'
                                                       ORDER BY rubrieknaam ASC");
         }
         $query->execute();
@@ -148,7 +208,6 @@ function breadCrumbs($dbh, $zoekWoord) {
           <li>' . $zoekWoord . '</li>
           </ul>
           </nav';
-
 }
 
 // Haalt RUBRIEKEN op de Database
@@ -164,17 +223,18 @@ function Category($dbh, $zoekWoord) {
     subCategory($dbh, $rubrieknummer, $rubrieknaam);
   }
 }
+
 // Haalt SUBRUBRIEKEN op de Database
 function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
-  $query = $dbh->query("SELECT *
+  $query = $dbh->prepare("SELECT *
                             FROM	 Rubriek
-                            WHERE rubriek = $rubrieknummer");
+                            WHERE rubriek = :rubrieknummer");
+  $query->bindParam(':rubrieknummer', $rubrieknummer);
   $query->execute();
   while($row = $query->fetch()) {
     echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '&rubriek2=' . $rubrieknaam . '">
          ' . $row['rubrieknaam'] . '</a></li>';
   }
 }
-
 
 ?>
