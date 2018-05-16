@@ -73,3 +73,27 @@ div.footerl, div.footerr{
   color:#666666;
   width: 100%;
 }
+
+
+
+/* Styling login */
+
+        .login-container {
+            width: 50%;
+            margin: 2% auto 0 auto;
+        }
+
+        .login-container img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .login-container input[type=submit] {
+            width: 75%;
+            margin: 0 12.5%;
+        }
+
+        .login-container p {
+            text-align: center;
+            margin-top: 1%;
+        }
