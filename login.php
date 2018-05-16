@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: demiv
- * Date: 16-5-2018
- * Time: 10:55
- */
 
 session_start();
 require ('db.php'); //DB connection

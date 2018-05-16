@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: demiv
- * Date: 16-5-2018
- * Time: 10:06
- */
 
 session_start();
 
@@ -28,29 +22,6 @@ if(isset($_SESSION['login_token'])) {
         <link rel="stylesheet" href="css/app.css">
         <link rel="icon" href="img/logo2.PNG">
     </head>
-
-    <!-- DIT IN STYLESHEET -->
-    <style>
-        .login-container {
-            width: 50%;
-            margin: 2% auto 0 auto;
-        }
-
-        .login-container img {
-            display: block;
-            margin: 0 auto;
-        }
-
-        .login-container input[type=submit] {
-            width: 75%;
-            margin: 0 12.5%;
-        }
-
-        .login-container p {
-            text-align: center;
-            margin-top: 1%;
-        }
-    </style>
 
     <body>
     <?php include 'navbar.php'; ?>
