@@ -19,7 +19,6 @@ catch(PDOException $e)
     echo "Error: " . $e->getMessage();
     }
 }
-
 //Haal gegevens uit 'Vraag'
 $output;
 function search_item($dbh, $input){
@@ -43,7 +42,6 @@ function search_item($dbh, $input){
     }
     echo $output;
 }
-
 //Hot Items (Selecteert 3 items met de meest recente biedingen)
 $output;
 function hot_items($dbh){
@@ -64,7 +62,6 @@ function hot_items($dbh){
             }
     echo $output;
 }
-
 // Zoek naar RUBRIEKEN op hoofdpagina
 function zoekRubriek($dbh, $zoekWoord) {
     if(isset($_POST['zoeken'])) {
@@ -93,19 +90,19 @@ function zoekRubriek($dbh, $zoekWoord) {
         echo "Er is iets mis gegaan. De foutmelding is: $e";
     }
 }
-
 // Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
     try{
-        $query = $dbh->query("SELECT *
+        $query = $dbh->prepare("SELECT *
                                               FROM	Voorwerp v
                                               INNER JOIN VoorwerpInRubriek vi
                                               ON v.voorwerpnummer = vi.voorwerp
                                               INNER JOIN Rubriek r
                                               ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
                                               WHERE r.rubrieknaam
-                                              LIKE '%$zoekWoord%'
+                                              LIKE :zoekwoord
                                               ORDER BY v.looptijdEindeTijdstip ASC");
+        $query->bindParam(':zoekwoord', $zoekWoord);
         $query->execute();
         while($row = $query->fetch()) {
             echo "<li>". $row['titel'] . ":
@@ -115,7 +112,6 @@ function toonItems($dbh, $zoekWoord) {
         echo "Er is iets mis gegaan. De foutmelding is: $e";
     }
 }
-
 //Toont BREADCRUMBS voor Producten
 function productBreadCrumbs($dbh, $zoekWoord) {
   $breadcrumb;
@@ -124,12 +120,13 @@ function productBreadCrumbs($dbh, $zoekWoord) {
             <ul class="breadcrumbs">
             <li><a href="index.php">Home</a></li>';
             if(isset($_GET['rubriek2'])) {
-            $breadcrumb .= '<li><a href="producten.php?rubriek=' . $_GET['rubriek2'] . '">' . $_GET['rubriek2'] . '</a></li>';
+            $breadcrumb .= '<li><a href="producten.php?rubriek=' . $_GET['rubriek2'] . '&rubriek2=
+                                        '. $_GET['rubriek'] . '
+            ">' . $_GET['rubriek2'] . '</a></li>';
             }
             $breadcrumb .= '<li>' . $_GET['rubriek'] . '</li>
                             </ul></nav';
       echo $breadcrumb;
-      echo Category($dbh, $zoekWoord);
   }
   else { echo '<nav aria-label="You are here: "role="navigation">
               <ul class="breadcrumbs">
@@ -138,7 +135,6 @@ function productBreadCrumbs($dbh, $zoekWoord) {
               </ul>
               </nav';}
 }
-
 //Toont BREADCRUMBS voor de website
 function breadCrumbs($dbh, $zoekWoord) {
     echo '<nav aria-label="You are here: "role="navigation">
@@ -147,14 +143,13 @@ function breadCrumbs($dbh, $zoekWoord) {
           <li>' . $zoekWoord . '</li>
           </ul>
           </nav';
-
 }
-
 // Haalt RUBRIEKEN op de Database
 function Category($dbh, $zoekWoord) {
-  $query = $dbh->query("SELECT *
+  $query = $dbh->prepare("SELECT *
                             FROM	 Rubriek
-                            WHERE rubrieknaam = '$zoekWoord'");
+                            WHERE rubrieknaam = :zoekwoord");
+  $query->bindParam(':zoekwoord', $zoekWoord);
   $query->execute();
   while($row = $query->fetch()) {
     $rubrieknummer = $row['rubrieknummer'];
@@ -169,10 +164,9 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
                             WHERE rubriek = $rubrieknummer");
   $query->execute();
   while($row = $query->fetch()) {
-    echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '&rubriek2=' . $rubrieknaam . '">
+    echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '&rubriek2=' . $rubrieknaam .'">
          ' . $row['rubrieknaam'] . '</a></li>';
   }
 }
-
 
 ?>
