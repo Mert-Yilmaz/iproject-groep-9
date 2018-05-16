@@ -55,13 +55,18 @@ GO
 
 /*GO
 CREATE FUNCTION fControleoptieCreditcard(@controleoptie CHAR(10))
+AS
 BEGIN
 	IF (@controleoptie LIKE 'Creditcard')
-		ALTER TABLE Verkoper
-		ALTER COLUMN creditcard CHAR(19) NOT NULL
+		BEGIN
+			ALTER TABLE Verkoper
+			ALTER COLUMN creditcard CHAR(19) NOT NULL
+		END
 	ELSE
-		ALTER TABLE Verkoper
-		ALTER COLUMN creditcar CHAR(19) NULL
+		BEGIN
+			ALTER TABLE Verkoper
+			ALTER COLUMN creditcard CHAR(19) NULL
+		END
 END
 GO*/
 
@@ -192,7 +197,7 @@ CREATE TABLE Verkoper (
 	CONSTRAINT ckGebruikerIsVerkoper CHECK (dbo.fControleerGebruikerIsVerkoper(gebruiker) = 1),
 	CONSTRAINT ckKaartgebruik CHECK (bankrekening IS NOT NULL AND creditcard IS NOT NULL),
 	CONSTRAINT ckControleOptie CHECK (controleoptie IN ('Creditcard', 'Post'))
-	--CONSTRAINT ckControleOptie CHECK (dbo.fControleoptieCreditcard(controleoptie)),
+	--CONSTRAINT ckControleOptie CHECK (dbo.fControleoptieCreditcard(controleoptie))
 )
 
 CREATE TABLE Voorwerp (

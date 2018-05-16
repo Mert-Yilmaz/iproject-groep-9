@@ -1,6 +1,6 @@
 USE iproject9
 
-/*DELETE FROM VoorwerpInRubriek;
+DELETE FROM VoorwerpInRubriek;
 DELETE FROM Bestand;
 DELETE FROM Bod;
 DELETE FROM Feedback;
@@ -9,7 +9,7 @@ DELETE FROM Verkoper;
 DELETE FROM Rubriek;
 DELETE FROM Gebruikerstelefoon;
 DELETE FROM Gebruiker;
-DELETE FROM Vraag;*/
+DELETE FROM Vraag;
 
 Insert into Vraag
 Values	(5,'Wat is je huisdier, man?'),
@@ -3504,36 +3504,28 @@ Values	('Gebruiker1','Rabobank',3966701,'Creditcard','1234-5678-9012-3456'),
 
 Insert into Voorwerp
 (voorwerpnummer,titel,beschrijving,startprijs,betalingswijze,betalingsinstructie,plaatsnaam,land,looptijd,looptijdBeginDag,looptijdBeginTijdstip,verzendkosten,verzendinstructies,verkoper,koper,looptijdEindeDag,looptijdEindeTijdstip,veilingGesloten,verkoopprijs)
-Values	(0000000001,'BMW 340i',	'Mooie BMW',			50.00,	'IDeal/PayPal',	'Gewoon overmaken',				'Arnhem',	'Nederland',	7,	'15-may-1999',	'09:20:20.0000000',	null,	null,	'Gebruiker7',	'Gebruiker1',	'22-may-1999',	'20:20:21',	1,	200.00),	-- Verkoopprijs berekenen
-		(0000000002,'Cake',		'Zo goed als nieuw',	90.00,	'IDeal/PayPal',	'Je mag het geld zelf houden',	'Zevenaar',	'Polen',		3,	'20-feb-2018',	'09:20:20.0000000', null,	null,	'Gebruiker1',	null,			'22-feb-2018',	'20:20:21',	0,	null);
+Values	(0000000001,'BMW 340i',		'Mooie BMW',			50.00,	'IDeal/PayPal',	'Gewoon overmaken',				'Arnhem',	'Nederland',	7,	'15-may-1999',	'09:20:20.0000000',	null,	null,	'Gebruiker7',	'Gebruiker1',	'22-may-1999',	'20:20:21',	1,	150.00),
+		(0000000002,'Cake',			'Zo goed als nieuw',	90.00,	'IDeal/PayPal',	'Je mag het geld zelf houden',	'Zevenaar',	'Polen',		3,	'20-feb-2018',	'09:20:20.0000000', null,	null,	'Gebruiker1',	'Gebruiker5',	'22-feb-2018',	'20:20:21',	1,	639.99),
+		(0000000003,'Reclamebord',	'5x5 meter',			60.00,	'IDeal/PayPal',	'Contant',						'Utrecht',	'Nederland',	5,	'08-may-2018',	'09:20:20.0000000',	null,	null,	'Gebruiker7',	'Gebruiker5',	'13-may-2018',	'20:20:21',	1,	75.00 );
 
 insert into Feedback
 (voorwerp,soortgebruiker,feedbacksoort,dag,tijdstip,commentaar)
-Values	(0000000001,'koper','positief','22-apr-2018','10:44:21.0000000','Bedankt!')/*,
-		(0000000002,'verkoper','negatief','22-apr-2018','10:47:30','Slecht'),
-		(7324474820,'verkoper','positief','24-apr-2018','10:48:17','Super goed!'),
-		(8143029863,'koper','positief','24-apr-2018','14:28:17','Erg blij mee'),
-		(3649201742,'koper','negatief','24-apr-2018','09:31:22','Niet snel'),
-		(1892503677,'koper','positief','24-apr-2018','23:05:42','Netjes afgehandeld'),
-		(6728893209,'verkoper','negatief','24-apr-2018','15:57:41','Geld niet ontvangen'),
-		(6289392054,'verkoper','positief','24-apr-2018','18:27:18','Simpel')*/;
+Values	(0000000001,'koper','positief','22-apr-2018','10:44:21.0000000','Bedankt!');
 
 insert into Bod
 (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-Values	(0000000001,	150.00,	'Gebruiker1','21-apr-2018','12:00:00.0000000')/*,
-		(0000000002,	200.00,	'Gebruiker2','21-apr-2018','14:21:34'),
-		(7324474820,	42.10,	'Gebruiker3','24-apr-2018','09:12:07'),
-		(8143029863,	1.40,	'Gebruiker4','12-aug-2006','16:32:57'),
-		(3649201742,	93.00,	'Gebruiker5','07-feb-2017','02:02:00'),
-		(1892503677,	23.12,	'Gebruiker6','24-apr-2018','22:46:21'),
-		(6728893209,	3.00,	'Gebruiker7','24-apr-2018','23:59:59'),
-		(6289392054,	24.75,	'Gebruiker8','24-apr-2018','00:00:01')*/;
+Values	(0000000001,	150.00,	'Gebruiker1','21-apr-2018','12:00:00.0000000'),
+		(0000000002,	639.99,	'Gebruiker5','21-feb-2018','15:45:06.0000000'),
+		(0000000003,	75.00,	'Gebruiker5','10-may-2018','05:04:03.0000000');
+
 
 insert into Bestand
 (filenaam,voorwerp)
 Values	('F:\Afb\001.jpg',	0000000001),
-		('F:\Afb\002.jpg',	0000000002);
+		('F:\Afb\002.jpg',	0000000002),
+		('F;\Afb\003.png',	0000000003);
 
-Insert into VoorwerpInRubriek (voorwerp,rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau)
-Values	(0000000001,9837, 9800),
-		(0000000002,1139, 267);
+Insert into VoorwerpInRubriek (voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau)
+Values	(0000000001,9837,	9800),
+		(0000000002,1139,	267),
+		(0000000003,62862,	1);	-- Of 62848?

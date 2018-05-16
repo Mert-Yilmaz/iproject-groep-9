@@ -6,9 +6,7 @@ html {
 }
 
 body {
-  margin-top: 10%; /* Add a top margin to avoid content overlay */
-  background-color: white;
-  font-family: "open sans";
+  background-color: #e8eaed;
   color: grey;
 }
 
@@ -16,18 +14,40 @@ li {
     list-style-type: none;
 }
 
+ul {
+  margin-left: 0;
+}
+
+a {
+  color:black;
+}
+
+a:hover {
+  color: rgb(242, 85, 44);
+}
+
+.knop {
+    padding: 10px;
+    font-size: 15px;
+    color: white;
+    background-color:  #cccccc;
+    border: none;
+    border-radius: 5px;
+}
+
+.knop:hover {
+    background: rgb(242, 85, 44);
+}
+
 /*navigatiebalk */
 
 .navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: rgb(242, 85, 44); rgba(0, 0, 0, 0.8);
-  overflow: hidden;
+  background-color: rgb(242, 85, 44);
+  margin-bottom: 5px;
 }
 
 .navbar a {
-  color: white; rgb(242, 85, 44);
+  color: white;
 }
 
 .backtotop a {
@@ -35,14 +55,17 @@ li {
 }
 
 .navbar a:hover, .backtotop a:hover {
-  color: black; rgb(242, 85, 44);
+  color: black;
   transition: 0.4s;
 }
 
+/* footer */
+
 footer {
-  background-color:  #cccccc; rgb(242, 85, 44);
+  background-color:  #cccccc;
   color: black;
   padding: 5px;
+  margin-top: 5px;
 }
 
 
