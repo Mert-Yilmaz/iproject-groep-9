@@ -10,28 +10,28 @@
           <div class="large-3 medium-3 cell">
             <div class="grid-y grid-padding-y">
               <div class="cell small-6">
-                <a href= "index.php">HOME</a>
+                <a href= "index.php">Home</a>
               </div>
             </div>
           </div>
           <div class="large-3 medium-3 cell">
             <div class="grid-y grid-padding-y">
               <div class="cell small-6">
-                <a href= "account.php">ACCOUNT</a>
+                <a href= "about.php">Over</a>
               </div>
             </div>
           </div>
           <div class="large-3 medium-3 cell">
             <div class="grid-y grid-padding-y">
               <div class="cell small-6 medium-8 large-2">
-                <a href="bod.php">VERKOPEN</a>
+                <a href="register.php">Aanmelden</a>
               </div>
             </div>
           </div>
           <div class="large-3 medium-3 cell">
             <div class="grid-y grid-padding-y">
               <div class="cell small-6">
-                <a href="about.php">OVER</a>
+                <a href="login.php">Inloggen</a>
               </div>
             </div>
           </div>
