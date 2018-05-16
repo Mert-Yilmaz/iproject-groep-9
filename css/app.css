@@ -11,7 +11,7 @@ body {
 }
 
 li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 ul {
@@ -27,16 +27,16 @@ a:hover {
 }
 
 .knop {
-    padding: 10px;
-    font-size: 15px;
-    color: white;
-    background-color:  #cccccc;
-    border: none;
-    border-radius: 5px;
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  background-color:  #cccccc;
+  border: none;
+  border-radius: 5px;
 }
 
 .knop:hover {
-    background: rgb(242, 85, 44);
+  background: rgb(242, 85, 44);
 }
 
 /*navigatiebalk */
@@ -73,3 +73,27 @@ div.footerl, div.footerr{
   color:#666666;
   width: 100%;
 }
+
+
+
+/* Styling login */
+
+        .login-container {
+            width: 50%;
+            margin: 2% auto 0 auto;
+        }
+
+        .login-container img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .login-container input[type=submit] {
+            width: 75%;
+            margin: 0 12.5%;
+        }
+
+        .login-container p {
+            text-align: center;
+            margin-top: 1%;
+        }
