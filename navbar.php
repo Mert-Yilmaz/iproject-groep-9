@@ -31,7 +31,7 @@
           <div class="large-3 medium-3 cell">
             <div class="grid-y grid-padding-y">
               <div class="cell small-6">
-                <a href="login.php">Inloggen</a>
+                <a href="login-page.php">Inloggen</a>
               </div>
             </div>
           </div>

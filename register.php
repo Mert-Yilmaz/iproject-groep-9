@@ -121,7 +121,7 @@ error_reporting(E_ALL ^ E_NOTICE);
                   <button type="submit" class="knop" name="reg_user">Registreer</button>
                 </div>
                 <p>
-                  Heb je al een account? <a href="login.php">Klik hier om in te logggen</a>
+                  Heb je al een account? <a href="login-page.php">Klik hier om in te logggen</a>
                 </p>
               </form>
             </div>

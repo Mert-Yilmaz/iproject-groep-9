@@ -7,8 +7,6 @@
  */
 
 session_start();
-
-include 'navbar.php';
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
@@ -31,13 +29,17 @@ if(isset($_SESSION['login_token'])) {
     </head>
 
     <body>
+      <?php
+
+      include 'navbar.php';
+        ?>
         <div class="login-container">
             <form method="POST" action="login.php">
                 <input type="text" name="username" id="username" placeholder="Gebruikersnaam (of email adres, nog niet!)" required>
                 <input type="password" name="password" id="password" placeholder="Wachtwoord" required>
-                <input type="submit" name="loginbtn" value="Log in">
+                <input type="submit" class="knop" name="loginbtn" value="Log in">
             </form>
-            <p>Heb je nog geen account? <a href="account.php">Maak een account aan en bied mee!</a></p>
+            <p>Heb je nog geen account? <a href="register.php">Maak een account aan en bied mee!</a></p>
         </div>
         <?php include_once 'footer.html' ?>
     </body>

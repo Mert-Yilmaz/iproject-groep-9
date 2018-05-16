@@ -15,7 +15,7 @@
   </head>
 
 <body>
-<div class="grid-x">
+<!--<div class="grid-x">
   <div class="medium-3"></div>
     <div class="medium-6 text-center">
       <h1>Accountregistratie</h1>
@@ -89,12 +89,14 @@
   	  <button type="submit" class="success button" name="reg_user">Registreer</button>
   	</div>
   	<p>
-  		Heeft u al een account? <a href="login.php" class="alert button">Log in</a>
+  		Heeft u al een account? <a href="login-page.php" class="alert button">Log in</a>
   	</p>
 	</form>
 </div>
 <div class="medium-3 large-4"></div>
 
+-->
+<p>Nog bezig</p>
 
 <?php
 include("footer.html");
