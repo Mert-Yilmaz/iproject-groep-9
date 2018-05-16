@@ -97,15 +97,16 @@ function zoekRubriek($dbh, $zoekWoord) {
 // Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
     try{
-        $query = $dbh->query("SELECT *
+        $query = $dbh->prepare("SELECT *
                                               FROM	Voorwerp v
                                               INNER JOIN VoorwerpInRubriek vi
                                               ON v.voorwerpnummer = vi.voorwerp
                                               INNER JOIN Rubriek r
                                               ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
                                               WHERE r.rubrieknaam
-                                              LIKE '%$zoekWoord%'
+                                              LIKE :zoekwoord
                                               ORDER BY v.looptijdEindeTijdstip ASC");
+        $query->bindParam(':zoekwoord', $zoekWoord);
         $query->execute();
         while($row = $query->fetch()) {
             echo "<li>". $row['titel'] . ":
@@ -152,9 +153,10 @@ function breadCrumbs($dbh, $zoekWoord) {
 
 // Haalt RUBRIEKEN op de Database
 function Category($dbh, $zoekWoord) {
-  $query = $dbh->query("SELECT *
+  $query = $dbh->prepare("SELECT *
                             FROM	 Rubriek
-                            WHERE rubrieknaam = '$zoekWoord'");
+                            WHERE rubrieknaam = :zoekwoord");
+  $query->bindParam(':zoekwoord', $zoekWoord);
   $query->execute();
   while($row = $query->fetch()) {
     $rubrieknummer = $row['rubrieknummer'];

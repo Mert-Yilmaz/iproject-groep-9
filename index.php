@@ -1,4 +1,3 @@
-<!doctype html>
 <?php include 'navbar.php';
       include 'functions.php';
       include_once 'db.php';

@@ -129,7 +129,7 @@ CREATE TABLE Gebruiker (
 	land				CHAR(9)		NOT NULL,
 	geboortedatum		DATE		NOT NULL,	-- WAS CHAR(10)
 	mailbox				CHAR(25)	NOT NULL,	-- WAS CHAR(18)
-	wachtwoord			CHAR(16)	NOT NULL,	-- WAS 9
+	wachtwoord			CHAR(60)	NOT NULL,	-- WAS 9
 	vraag				INTEGER		NOT NULL,	-- 1
 	antwoordtekst		CHAR(20)	NOT NULL,	-- WAS 6
 	verkoper			BIT			NOT NULL,	-- WAS CHAR(3)
