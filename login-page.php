@@ -58,7 +58,7 @@ if(isset($_SESSION['login_token'])) {
             <img src="img/Eennaalandermaaal.svg" alt="EenmaalAndermaal" width="45%">
             <form method="POST" action="login.php">
                 <input type="text" name="username" id="username" placeholder="Gebruikersnaam (of email adres, nog niet!)" required>
-                <input type="password" name="password" id="password" placeholder="Wachtwoord" required>
+                <input type="password" name="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" placeholder="Wachtwoord" required>
                 <input type="submit" name="loginbtn" value="Log in">
             </form>
             <p>Heb je nog geen account? <a href="account.php">Maak een account aan en bied mee!</a></p>
