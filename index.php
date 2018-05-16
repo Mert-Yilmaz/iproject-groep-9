@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<!doctype html>
+>>>>>>> 8ad06e8c7fa5473e3eb3614851eb01526efcd176
 <?php include 'navbar.php';
       include 'functions.php';
       include_once 'db.php';
