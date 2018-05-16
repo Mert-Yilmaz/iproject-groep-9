@@ -16,4 +16,5 @@
 <body>
 
     <?php productBreadCrumbs($dbh, $_GET['rubriek']);
+          Category($dbh, $_GET['rubriek']);
           toonItems($dbh, $_GET['rubriek']); ?>
