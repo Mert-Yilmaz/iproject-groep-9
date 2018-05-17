@@ -15,7 +15,7 @@ if(isset($_POST['username-mail']) AND isset($_POST['password'])) {
         $_SESSION['login-token'] = $usernamemail;
         header("Location: index.php");
     } else {
-        echo "U FAILED";
+        header("Location: login-page.php");
     }
 }
 
