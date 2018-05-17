@@ -86,8 +86,8 @@ error_reporting(E_ALL ^ E_NOTICE);
               <option value = "Djibouti"> Djibouti </option>
               <option value = "Dominica"> Dominica </option>
               <option value = "Dominicaanse Republiek"> Dominicaanse Republiek </option>
-              <option value = "Guatemala"> Guatemala </ option>
-                <option value = "Guinea"> Guinea </ option>
+              <option value = "Guatemala"> Guatemala </option>
+                <option value = "Guinea"> Guinea </option>
                   <option value = "Guinee-Bissau"> Guinee-Bissau </option>
                   <option value = "Guyana"> Guyana </option>
                   <option value = "Haiti"> Haïti </option>
