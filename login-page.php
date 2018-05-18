@@ -1,13 +1,13 @@
 <?php
 
 session_start();
-include 'functions.php';
-include_once 'db.php';
-error_reporting(E_ALL ^ E_NOTICE);
-
 if (isset($_SESSION['login_token'])) {
     header("Location: index.php");
 }
+
+include 'functions.php';
+include_once 'db.php';
+error_reporting(E_ALL ^ E_NOTICE);
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +26,7 @@ if (isset($_SESSION['login_token'])) {
 <?php include 'navbar.php'; ?>
 <div class="login-container">
     <form method="POST" action="login.php">
-        <input type="text" name="username" id="username" placeholder="Gebruikersnaam (of email adres, nog niet!)" required>
+        <input type="text" name="username-mail" id="username-mail" placeholder="Gebruikersnaam (of email adres, nog niet!)" required>
         <input type="password" name="password" id="password" placeholder="Wachtwoord" required>
         <input type="submit" class="knop" name="loginbtn" value="Log in">
     </form>
