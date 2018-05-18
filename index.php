@@ -1,9 +1,11 @@
-<!doctype html>
-<?php include 'navbar.php';
+<?php
+session_start();
+
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
 ?>
+<!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -15,6 +17,7 @@ error_reporting(E_ALL ^ E_NOTICE);
     <link rel="icon" href="img/logo2.PNG">
 </head>
 <body>
+<?php include 'navbar.php'; ?>
 <div class="grid-container fluid">
     <div class="grid-x grid-padding-x">
         <div class="cell large-2 text-center">
