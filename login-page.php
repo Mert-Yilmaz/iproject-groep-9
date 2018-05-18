@@ -26,7 +26,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 <?php include 'navbar.php'; ?>
 <div class="login-container">
     <form method="POST" action="login.php">
-        <input type="text" name="username-mail" id="username-mail" placeholder="Gebruikersnaam (of email adres, nog niet!)" required>
+        <input type="text" name="username-mail" id="username-mail" placeholder="Gebruikersnaam of email adres" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}">
         <input type="password" name="password" id="password" placeholder="Wachtwoord" required>
         <input type="submit" class="knop" name="loginbtn" value="Log in">
     </form>
