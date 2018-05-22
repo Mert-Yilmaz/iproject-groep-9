@@ -1,8 +1,14 @@
 <!doctype html>
-<?php include 'navbar.php';
+<?php
+session_start();
+include 'navbar.php';
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
+$usernamemail = $_SESSION['login-token'];
+$queryophalen = $dbh->prepare("SELECT * FROM Gebruiker WHERE gebruikersnaam = '$usernamemail' OR mailbox = '$usernamemail'");
+$queryophalen->setFetchMode(PDO::FETCH_ASSOC);
+$queryophalen->execute();
 ?>
 <html class="no-js" lang="en" dir="ltr">
 <head>
@@ -28,6 +34,21 @@ error_reporting(E_ALL ^ E_NOTICE);
         <p>Land</p>
         <p>gekozen beveiligingsvraag</p>
         <p>verkoper ja nee</p>
+
+
+        <?php while($row = $queryophalen->fetch()){?>
+
+        <p>emailadres <?= $row['mailbox']?></p>
+        <p>Wachtwoord</p>
+        <!--<p>telefoonnummer<p>-->
+        <p>adres <?= $row['adresregel1']?></p>
+        <p>plaats <?= $row['plaatsnaam']?><p>
+        <p>Postcode <?= $row['postcode']?><p>
+        <p>Land <?= $row['land']?></p>
+        <p>gekozen beveiligingsvraag<p>
+        <p>verkoper <?= if($row['verkoper'] = 0){echo nee;} else {echo ja;} ?><p>
+        <?php } ?>
+
       </div>
     </div>
     <div class="cell">
