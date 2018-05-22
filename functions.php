@@ -94,9 +94,9 @@ function ending_items($dbh){
     $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
-        <p><a href="producten.php?item=' . $number . '" class="success button">
-        ' . $title . '</a>
-        <br />' . $desc . '</p>
+        <h4 style="margin: 0;"><a href="producten.php?item=' . $number . '">
+        ' . $title . '</a></h4>
+        <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
@@ -125,8 +125,9 @@ function cheap_items($dbh){
     $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
-        <p><a href="producten.php?item=' . $number . ' " class="success button">
-        ' . $title . '</a>        <br />' . $desc . '</p>
+        <h4 style="margin: 0;"><a href="producten.php?item=' . $number . '">
+        ' . $title . '</a></h4>        
+        <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
