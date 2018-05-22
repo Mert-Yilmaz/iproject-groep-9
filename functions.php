@@ -58,7 +58,7 @@ function hot_items($dbh){
     $title = $row['titel'];
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
-    $file = "img/veilingen/" . $row['filenaam'];
+    $file = $row['filenaam'];
     $endtime = $row['looptijdEindeTijdstip'];
     $endday = $row['looptijdEindeDag'];
     $output .=
@@ -69,7 +69,7 @@ function hot_items($dbh){
         <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
         ' . $endday . '</strong><p>
         <div class="homepage-items-img">
-            <img src=' . $file . '>
+            <img src=img/veilingen/' . $file . '>
         </div>
      </div>';
   }
@@ -89,7 +89,7 @@ function ending_items($dbh){
     $title = $row['titel'];
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
-    $file = "img/veilingen/" . $row['filenaam'];
+    $file = $row['filenaam'];
     $endtime = $row['looptijdEindeTijdstip'];
     $endday = $row['looptijdEindeDag'];
     $output .=
@@ -100,7 +100,7 @@ function ending_items($dbh){
         <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
         ' . $endday . '</strong><p>
         <div class="homepage-items-img">
-            <img src=' . $file . '>
+            <img src=img/veilingen/' . $file . '>
         </div>
      </div>';
   }
@@ -120,7 +120,7 @@ function cheap_items($dbh){
     $title = $row['titel'];
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
-    $file = "img/veilingen/" . $row['filenaam'];
+    $file = $row['filenaam'];
     $endtime = $row['looptijdEindeTijdstip'];
     $endday = $row['looptijdEindeDag'];
     $output .=
@@ -130,7 +130,7 @@ function cheap_items($dbh){
         <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
         ' . $endday . '</strong><p>
         <div class="homepage-items-img">
-            <img src=' . $file . '>
+            <img src=img/veilingen/' . $file . '>
         </div>
      </div>';
   }
