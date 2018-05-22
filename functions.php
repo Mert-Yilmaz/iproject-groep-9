@@ -58,7 +58,7 @@ function hot_items($dbh){
     $title = $row['titel'];
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
-    $file = $row['filenaam'];
+    $file = "img/veilingen/" . $row['filenaam'];
     $endtime = $row['looptijdEindeTijdstip'];
     $endday = $row['looptijdEindeDag'];
     $output .=
@@ -68,7 +68,9 @@ function hot_items($dbh){
         <br />' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
         ' . $endday . '</strong><p>
-        <img src=' . $file . '>
+        <div class="homepage-items-img">
+            <img src=' . $file . '>
+        </div>
      </div>';
   }
   echo $output;
@@ -87,7 +89,7 @@ function ending_items($dbh){
     $title = $row['titel'];
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
-    $file = $row['filenaam'];
+    $file = "img/veilingen/" . $row['filenaam'];
     $endtime = $row['looptijdEindeTijdstip'];
     $endday = $row['looptijdEindeDag'];
     $output .=
@@ -97,7 +99,9 @@ function ending_items($dbh){
         <br />' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
         ' . $endday . '</strong><p>
-        <img src=' . $file . '>
+        <div class="homepage-items-img">
+            <img src=' . $file . '>
+        </div>
      </div>';
   }
 echo $output;
@@ -116,7 +120,7 @@ function cheap_items($dbh){
     $title = $row['titel'];
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
-    $file = $row['filenaam'];
+    $file = "img/veilingen/" . $row['filenaam'];
     $endtime = $row['looptijdEindeTijdstip'];
     $endday = $row['looptijdEindeDag'];
     $output .=
@@ -125,7 +129,9 @@ function cheap_items($dbh){
         ' . $title . '</a>        <br />' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
         ' . $endday . '</strong><p>
-        <img src=' . $file . '>
+        <div class="homepage-items-img">
+            <img src=' . $file . '>
+        </div>
      </div>';
   }
   echo $output;
