@@ -3,7 +3,7 @@
 session_start();
 require ('db.php'); //DB connection
 
-$_SESSION['errormessage'] = "<p style='color: red; text-align: center'>Combination of username/email and password is wrong.</p>";
+$_SESSION['errormessage'] = "<p style='color: red; text-align: center'>Combinatie van username/email en wachtwoord is fout. Probeer opnieuw.</p>";
 
 if(isset($_POST['username-mail']) AND isset($_POST['password'])) {
     $usernamemail = $_POST['username-mail'];
@@ -23,9 +23,4 @@ if(isset($_POST['username-mail']) AND isset($_POST['password'])) {
         }
     }
 }
-
-//if(isset($_SESSION['username-mail'])) {
-//    $usernamemail = $_SESSION['username-mail'];
-//    echo "Hi " . $usernamemail;
-//}
 ?>
