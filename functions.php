@@ -126,7 +126,7 @@ function cheap_items($dbh){
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
         <h4 style="margin: 0;"><a href="producten.php?item=' . $number . '">
-        ' . $title . '</a></h4>        
+        ' . $title . '</a></h4>
         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
@@ -138,35 +138,63 @@ function cheap_items($dbh){
   echo $output;
 }
 
+
 // Zoek naar RUBRIEKEN op hoofdpagina
-function zoekRubriek($dbh, $zoekWoord) {
-  if(isset($_POST['zoeken'])) {
-      echo "<div class='$zoekWoord'>";
-      echo "U heeft gezocht op: " . $zoekWoord . "</div>";
+function zoekRubriek($dbh, $zoekWoord, $order) {
+  if($order == "COUNT ASC") {
+      $order = 'SELECT *
+                          FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
+                          WHERE rubriek = -1
+                          GROUP BY rubrieknummer, rubrieknaam, rubriek, volgnr, voorwerp, rubriekOpHoogsteNiveau, rubriekOpLaagsteNiveau
+                          ORDER BY COUNT(rubrieknummer) ASC';
   }
-  try{
+  if($order == "COUNT DESC") {
+      $order = 'SELECT *
+                          FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
+                          WHERE rubriek = -1
+                          GROUP BY rubrieknummer, rubrieknaam, rubriek, volgnr, voorwerp, rubriekOpHoogsteNiveau, rubriekOpLaagsteNiveau
+                          ORDER BY COUNT(rubrieknummer) DESC';
+  }
+  if($order == "rubrieknaam ASC") {
+      $order = 'SELECT *
+                                FROM	Rubriek
+                                WHERE rubriek = -1
+                                ORDER BY rubrieknaam ASC';
+  }
+  if($order == "rubrieknaam DESC") {
+      $order = 'SELECT *
+                                FROM	Rubriek
+                                WHERE rubriek = -1
+                                ORDER BY rubrieknaam DESC';
+  }
+  if(isset($_POST['zoeken']) && $_POST['zoekterm'] !== "") {
+    echo "<div class='$zoekWoord'>";
+    echo "U heeft gezocht op: " . $zoekWoord . "</div>";
     $query = $dbh->query("SELECT *
-                              FROM	Rubriek
-                              WHERE rubriek = -1
-                              ORDER BY rubrieknaam ASC");
-    if(isset($_POST['zoeken'])) {
-        $query = $dbh->query("SELECT *
-                              FROM	Rubriek
-                              WHERE rubriek = -1
-                              AND   rubrieknaam LIKE '%$zoekWoord%'
-                              ORDER BY rubrieknaam ASC");
-    }
-    $query->execute();
-    $rubriek = $row['rubrieknaam'];
-    while($row = $query->fetch()) {
-        echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '">
-             ' . $row['rubrieknaam'] . ' (';
-        echo aantalItems($dbh, $row['rubrieknummer']);
-        echo ')</a></li>';
-    }
-  } catch(PDOException $e) {
-      echo "Er is iets mis gegaan. De foutmelding is: $e";
-  }
+                          FROM	Rubriek
+                          WHERE rubriek = -1
+                          AND   rubrieknaam LIKE '%$zoekWoord%'
+                          ORDER BY rubrieknaam ASC");
+   } else if(isset($_POST['order'])) {
+     $query = $dbh->query($order);
+   }
+   else { $query = $dbh->query('SELECT *
+                               FROM	Rubriek
+                               WHERE rubriek = -1
+                               ORDER BY rubrieknaam ASC');
+   }
+   try{
+     $query->execute();
+     $rubriek = $row['rubrieknaam'];
+     while($row = $query->fetch()) {
+         echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] . '">
+              ' . $row['rubrieknaam'] . ' (';
+         echo aantalItems($dbh, $row['rubrieknummer']);
+         echo ')</a></li>';
+     }
+   } catch(PDOException $e) {
+       echo "Er is iets mis gegaan. De foutmelding is: $e";
+   }
 }
 
 // Haalt het antal items op in een Rubriek
