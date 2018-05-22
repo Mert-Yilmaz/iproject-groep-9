@@ -3,6 +3,8 @@
 session_start();
 require ('db.php'); //DB connection
 
+$_SESSION['errormessage'] = "<p style='color: red; text-align: center'>Combination of username/email and password is wrong.</p>";
+
 if(isset($_POST['username-mail']) AND isset($_POST['password'])) {
     $usernamemail = $_POST['username-mail'];
     $passworduser = $_POST['password'];
