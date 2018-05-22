@@ -67,14 +67,6 @@ $queryophalen->execute();
                   </td>
               </tr>
           </table>
-
-        <p>Emailadres: <?= $row['mailbox']?></p>
-        <p>Wachtwoord</p>
-        <p>Adres:  <?= $row['adresregel1']?></p>
-        <p>Plaats <?= $row['plaatsnaam']?><p>
-        <p>Postcode <?= $row['postcode']?><p>
-        <p>Land <?= $row['land']?></p>
-        <p>verkoper <?php if($row['verkoper'] = 0){echo nee;} else {echo ja;} ?><p>
         <?php } ?>
 
       </div>
