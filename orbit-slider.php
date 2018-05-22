@@ -10,7 +10,7 @@
           <li class="is-active orbit-slide">
             <figure class="orbit-figure">
               <img class="orbit-image" src="img/5.jpg" alt="Boats">
-              <figcaption class="orbit-caption">Boten in het water</figcaption>
+              <figcaption class="orbit-caption">Water met boten</figcaption>
             </figure>
           </li>
           <li class="orbit-slide">

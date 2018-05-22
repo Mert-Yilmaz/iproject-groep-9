@@ -7,7 +7,7 @@ $_SESSION['errormessage'] = "<p style='color: red; text-align: center'>Combinati
 
 if(isset($_POST['username-mail']) AND isset($_POST['password'])) {
     $usernamemail = $_POST['username-mail'];
-    $passworduser = $_POST['password'];
+    $passworduser = md5($_POST['password']);
 
     if(isset($_POST['loginbtn'])) {
         $query_login = "SELECT * FROM Gebruiker WHERE (gebruikersnaam='$usernamemail' OR mailbox='$usernamemail') AND wachtwoord='$passworduser'";
@@ -19,6 +19,7 @@ if(isset($_POST['username-mail']) AND isset($_POST['password'])) {
             header("Location: index.php");
         } else {
             header("Location: login-page.php");
+            //echo $passworduser;
         }
     }
 }

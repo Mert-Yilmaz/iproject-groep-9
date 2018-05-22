@@ -129,7 +129,7 @@ error_reporting(E_ALL ^ E_NOTICE);
             <?php
               if (isset($_POST["Gebruikersnaam"],$_POST["Wachtwoord"],$_POST["Adresregel1"],$_POST["Naam"],$_POST["Achternaam"],$_POST["Land"],$_POST["Plaats"],$_POST["Postcode"],$_POST["Geboortedatum"],$_POST["Email"],$_POST["Vraag"],$_POST["Antwoord"])){
               $gebruikersnaam = $_POST["Gebruikersnaam"];
-              $wachtwoord = password_hash($_POST["Wachtwoord"], PASSWORD_DEFAULT);
+              $wachtwoord = md5($_POST["Wachtwoord"]);
               $adresregel1 = $_POST["Adresregel1"];
               $adresregel2 = $_POST["Adresregel2"];
               $voornaam = $_POST["Naam"];
@@ -140,7 +140,7 @@ error_reporting(E_ALL ^ E_NOTICE);
               $geboortedatum = $_POST["Geboortedatum"];
               $email = $_POST["Email"];
               $vraag = $_POST["Vraag"];
-              $antwoord = password_hash($_POST["Antwoord"], PASSWORD_DEFAULT);
+              $antwoord = md5($_POST["Antwoord"]);
               $verkoper = 0;
 
 

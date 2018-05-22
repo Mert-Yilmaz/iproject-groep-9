@@ -23,30 +23,58 @@ $queryophalen->execute();
   <div class="grid-container">
     <div class="grid-y">
       <div class="cell">
-        <h1 class="aboutkop text-center">Hallo,  {naam}</h1>
+          <?php while($row = $queryophalen->fetch()){?>
+        <h1 class="aboutkop text-center">Hallo, <?= $row['voornaam'] . ' ' . $row['achternaam'] ?></h1>
         <h2>Dit zijn uw NAW-gegevens</h2>
-        <p>emailadres $_POST['emailadres']</p>
+
+          <table>
+              <tr>
+                  <th>Emailadres</th>
+                  <td><?= $row['mailbox']?></td>
+                  <td><a href="edit.php?edit_id=<?= $row['rubrieknummer'] ?>">Wijzig</a></td>
+              </tr>
+              <tr>
+                  <th>Wachtwoord</th>
+                  <td></td>
+              </tr>
+              <tr>
+                  <th>Adres</th>
+                  <td><?= $row['adresregel1']?></td>
+              </tr>
+              <tr>
+                  <th>Plaats</th>
+                  <td><?= $row['plaatsnaam']?></td>
+              </tr>
+              <tr>
+                  <th>Postcode</th>
+                  <td><?= $row['postcode']?></td>
+              </tr>
+              <tr>
+                  <th>Land</th>
+                  <td><?= $row['land']?></td>
+              </tr>
+              <tr>
+                  <th>Verkoper?</th>
+                  <td>
+                      <?php
+                          if($row['verkoper'] = 0) {
+                              echo 'Nee';
+                          }
+                          else if($row['verkoper'] = 1) {
+                              echo 'Ja';
+                          }
+                      ?>
+                  </td>
+              </tr>
+          </table>
+
+        <p>Emailadres: <?= $row['mailbox']?></p>
         <p>Wachtwoord</p>
-        <p>telefoonnummer<p>
-        <p>adres</p>
-        <p>plaats<p>
-        <p>Postcode<p>
-        <p>Land</p>
-        <p>gekozen beveiligingsvraag</p>
-        <p>verkoper ja nee</p>
-
-
-        <?php while($row = $queryophalen->fetch()){?>
-
-        <p>emailadres <?= $row['mailbox']?></p>
-        <p>Wachtwoord</p>
-        <!--<p>telefoonnummer<p>-->
-        <p>adres <?= $row['adresregel1']?></p>
-        <p>plaats <?= $row['plaatsnaam']?><p>
+        <p>Adres:  <?= $row['adresregel1']?></p>
+        <p>Plaats <?= $row['plaatsnaam']?><p>
         <p>Postcode <?= $row['postcode']?><p>
         <p>Land <?= $row['land']?></p>
-        <p>gekozen beveiligingsvraag<p>
-        <p>verkoper <?= if($row['verkoper'] = 0){echo nee;} else {echo ja;} ?><p>
+        <p>verkoper <?php if($row['verkoper'] = 0){echo nee;} else {echo ja;} ?><p>
         <?php } ?>
 
       </div>
