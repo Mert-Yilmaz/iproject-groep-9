@@ -132,22 +132,50 @@ function cheap_items($dbh){
 }
 
 // Zoek naar RUBRIEKEN op hoofdpagina
-function zoekRubriek($dbh, $zoekWoord) {
-  if(isset($_POST['zoeken'])) {
-      echo "<div class='$zoekWoord'>";
-      echo "U heeft gezocht op: " . $zoekWoord . "</div>";
+function zoekRubriek($dbh, $zoekWoord, $order) {
+  if($order == "COUNT ASC") {
+      $order = 'SELECT *
+                          FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
+                          WHERE rubriek = -1
+                          GROUP BY rubrieknummer, rubrieknaam, rubriek, volgnr, voorwerp, rubriekOpHoogsteNiveau, rubriekOpLaagsteNiveau
+                          ORDER BY COUNT(rubrieknummer) ASC';
+  }
+  if($order == "COUNT DESC") {
+      $order = 'SELECT *
+                          FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
+                          WHERE rubriek = -1
+                          GROUP BY rubrieknummer, rubrieknaam, rubriek, volgnr, voorwerp, rubriekOpHoogsteNiveau, rubriekOpLaagsteNiveau
+                          ORDER BY COUNT(rubrieknummer) DESC';
+  }
+  if($order == "rubrieknaam ASC") {
+      $order = 'SELECT *
+                                FROM	Rubriek
+                                WHERE rubriek = -1
+                                ORDER BY rubrieknaam ASC';
+  }
+  if($order == "rubrieknaam DESC") {
+      $order = 'SELECT *
+                                FROM	Rubriek
+                                WHERE rubriek = -1
+                                ORDER BY rubrieknaam DESC';
   }
   try{
-    $query = $dbh->query("SELECT *
-                              FROM	Rubriek
-                              WHERE rubriek = -1
-                              ORDER BY rubrieknaam ASC");
-    if(isset($_POST['zoeken'])) {
-        $query = $dbh->query("SELECT *
-                              FROM	Rubriek
-                              WHERE rubriek = -1
-                              AND   rubrieknaam LIKE '%$zoekWoord%'
-                              ORDER BY rubrieknaam ASC");
+    if(isset($_POST['zoeken']) && $_POST['zoekterm'] !== "") {
+      echo "<div class='$zoekWoord'>";
+      echo "U heeft gezocht op: " . $zoekWoord . "</div>";
+      $query = $dbh->query("SELECT *
+                            FROM	Rubriek
+                            WHERE rubriek = -1
+                            AND   rubrieknaam LIKE '%$zoekWoord%'
+                            ORDER BY rubrieknaam ASC");
+    }
+    else if(isset($_POST['order'])) {
+      $query = $dbh->query($order);
+    }
+    else { $query = $dbh->query('SELECT *
+                                 FROM	Rubriek
+                                 WHERE rubriek = -1
+                                 ORDER BY rubrieknaam ASC');
     }
     $query->execute();
     $rubriek = $row['rubrieknaam'];
@@ -247,6 +275,7 @@ function Category($dbh, $zoekWoord) {
     subCategory($dbh, $rubrieknummer, $rubrieknaam);
   }
 }
+
 
 // Haalt SUBRUBRIEKEN op de Database
 function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
