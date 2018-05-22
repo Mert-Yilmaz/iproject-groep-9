@@ -27,7 +27,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 <div class="login-container">
     <form method="POST" action="login.php">
         <input type="text" name="username-mail" id="username-mail" placeholder="Gebruikersnaam of email adres" required>
-        <input type="password" name="password" id="password" placeholder="Wachtwoord" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}">
+        <input type="password" name="password" id="password" placeholder="Wachtwoord" required>
         <?php
         if (isset($_SESSION['errormessage'])) {
             echo $_SESSION['errormessage'];
