@@ -59,14 +59,14 @@ function hot_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     $file = $row['filenaam'];
-    $endtime = $row['looptijdEindeTijdstip'];
+    $endtime = date_create($row['looptijdEindeTijdstip']);
     $endday = $row['looptijdEindeDag'];
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
         <p><a href="producten.php?item=' . $number . '" class="success button">
         ' . $title . '</a>
         <br />' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
+        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . $endday . '</strong><p>
         <div class="homepage-items-img">
             <img src=img/veilingen/' . $file . '>
@@ -90,14 +90,14 @@ function ending_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     $file = $row['filenaam'];
-    $endtime = $row['looptijdEindeTijdstip'];
+    $endtime = date_create($row['looptijdEindeTijdstip']);
     $endday = $row['looptijdEindeDag'];
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
         <p><a href="producten.php?item=' . $number . '" class="success button">
         ' . $title . '</a>
         <br />' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
+        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . $endday . '</strong><p>
         <div class="homepage-items-img">
             <img src=img/veilingen/' . $file . '>
@@ -121,13 +121,13 @@ function cheap_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     $file = $row['filenaam'];
-    $endtime = $row['looptijdEindeTijdstip'];
+    $endtime = date_create($row['looptijdEindeTijdstip']);
     $endday = $row['looptijdEindeDag'];
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
         <p><a href="producten.php?item=' . $number . '" class="success button">
         ' . $title . '</a>        <br />' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
+        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . $endday . '</strong><p>
         <div class="homepage-items-img">
             <img src=img/veilingen/' . $file . '>
