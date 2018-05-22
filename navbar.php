@@ -5,7 +5,7 @@ if(isset($_SESSION['login-token'])) {
 }
 ?>
 
-<div class="navbar title-bar" data-sticky data-options="marginTop:0;" style="width:100%">
+<div class="navbar title-bar" data-sticky data-options="marginTop:0;" style="width:100%; z-index: 11;">
     <div class="grid-container">
         <div class="grid-x grid-y grid-padding-x">
             <div class="large-4 text-center cell">
