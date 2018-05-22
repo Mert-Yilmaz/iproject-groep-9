@@ -59,15 +59,15 @@ function hot_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     $file = "img/veilingen/" . $row['filenaam'];
-    $endtime = $row['looptijdEindeTijdstip'];
-    $endday = $row['looptijdEindeDag'];
+    $endtime = date_create($row['looptijdEindeTijdstip']);
+    $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
         <h4 style="margin: 0;"><a href="producten.php?item=' . $number . '">
         ' . $title . '</a></h4>
         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
-        ' . $endday . '</strong><p>
+        ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
             <img src=' . $file . '>
         </div>
@@ -90,15 +90,15 @@ function ending_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     $file = "img/veilingen/" . $row['filenaam'];
-    $endtime = $row['looptijdEindeTijdstip'];
-    $endday = $row['looptijdEindeDag'];
+    $endtime = date_create($row['looptijdEindeTijdstip']);
+    $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
         <p><a href="producten.php?item=' . $number . '" class="success button">
         ' . $title . '</a>
         <br />' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
-        ' . $endday . '</strong><p>
+        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
+        ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
             <img src=' . $file . '>
         </div>
@@ -121,14 +121,14 @@ function cheap_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     $file = "img/veilingen/" . $row['filenaam'];
-    $endtime = $row['looptijdEindeTijdstip'];
-    $endday = $row['looptijdEindeDag'];
+    $endtime = date_create($row['looptijdEindeTijdstip']);
+    $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
         <p><a href="producten.php?item=' . $number . ' " class="success button">
         ' . $title . '</a>        <br />' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . $endtime . '</strong> op: <strong>
-        ' . $endday . '</strong><p>
+        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
+        ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
             <img src=' . $file . '>
         </div>
