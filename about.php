@@ -1,11 +1,11 @@
-<!doctype html>
 <?php
 session_start();
-include 'navbar.php';
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
 ?>
+
+<!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
@@ -14,8 +14,10 @@ error_reporting(E_ALL ^ E_NOTICE);
   <title>EenmaalAndermaal - De beste veilingsite van Nederland!</title>
   <link rel="stylesheet" href="css/foundation.css">
   <link rel="stylesheet" href="css/app.css">
+  <link rel="icon" href="img/logo2.PNG">
 </head>
 <body>
+  <?php include 'navbar.php'; ?>
   <div class="grid-container">
     <div class="grid-y">
       <h1 class="aboutkop">Over ons</h1>
