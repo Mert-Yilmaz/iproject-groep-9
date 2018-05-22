@@ -1,5 +1,7 @@
 <!doctype html>
-<?php include 'navbar.php';
+<?php
+      session_start();
+      include 'navbar.php';
       include 'functions.php';
       include_once 'db.php';
       error_reporting(E_ALL ^ E_NOTICE);

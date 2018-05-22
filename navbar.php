@@ -33,7 +33,7 @@ if(isset($_SESSION['login-token'])) {
                             <div class="cell small-6 medium-8 large-2">
                                 <?php
                                 if($isLoggedIn) {
-                                    echo "<a href='account.php'>Account</a>";
+                                    echo "<a href='personpage.php'>Account</a>";
                                 } else {
                                     echo "<a href='register.php'>Aanmelden</a>";
                                 }
