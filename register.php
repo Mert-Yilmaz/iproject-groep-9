@@ -49,7 +49,7 @@ error_reporting(E_ALL ^ E_NOTICE);
         </div>
 
         <div>
-          <input type="password" name="Wachtwoord" placeholder="Wachtwoord (Minimaal 7 tekens, een hoofdletter en een getal)" maxlength="100" required>
+          <input type="password" name="Wachtwoord" placeholder="Wachtwoord (Minimaal 7 tekens, een hoofdletter en een getal)" maxlength="100" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
         </div>
 
         <div>
