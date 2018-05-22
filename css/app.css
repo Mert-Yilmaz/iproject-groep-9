@@ -1,109 +1,105 @@
 @import "foundation.css";
 
 html {
-    font-family: serif;
-    line-height: 4;
+  font-family: serif;
+  line-height: 4;
 }
 
 body {
-    background-color: #e8eaed;
-    color: grey;
+  background-color: #e8eaed;
+  color: grey;
 }
 
 li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 ul {
-    margin-left: 0;
+  margin-left: 0;
 }
 
 a {
-    color: black;
+  color:black;
 }
 
 a:hover {
-    color: rgb(242, 85, 44);
+  color: rgb(242, 85, 44);
 }
 
 .knop {
-    padding: 10px;
-    font-size: 15px;
-    color: white;
-    background-color: #cccccc;
-    border: none;
-    border-radius: 5px;
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  background-color:  #cccccc;
+  border: none;
+  border-radius: 5px;
 }
 
 .knop:hover {
-    background: rgb(242, 85, 44);
+  background: rgb(242, 85, 44);
 }
 
 /*navigatiebalk */
 
 .navbar {
-    background-color: rgb(242, 85, 44);
-    margin-bottom: 5px;
+  background-color: rgb(242, 85, 44);
+  margin-bottom: 5px;
 }
 
 .navbar a {
-    color: white;
-}
-
-.navbar img {
-    width: 40%;
-    height: 30%;
+  color: white;
 }
 
 .backtotop a {
-    color: #F2552C;
+  color:#F2552C;
 }
 
 .navbar a:hover, .backtotop a:hover {
-    color: black;
-    transition: 0.4s;
+  color: black;
+  transition: 0.4s;
 }
 
 /* footer */
 
 footer {
-    background-color: #cccccc;
-    color: black;
-    padding: 5px;
-    margin-top: 5px;
+  background-color:  #cccccc;
+  color: black;
+  padding: 5px;
+  margin-top: 5px;
 }
 
-div.footerl, div.footerr {
-    color: #666666;
-    width: 100%;
+
+div.footerl, div.footerr{
+  color:#666666;
+  width: 100%;
 }
 
-#facebook {
-    width: 8%;
-    height: 13%;
-}
 
-#instagram {
-    width: 15%;
-    height: 20%;
-}
 
-.login-container {
-    width: 50%;
-    margin: 2% auto 0 auto;
-}
+/* Styling login */
 
-.login-container img {
-    display: block;
-    margin: 0 auto;
-}
+        .login-container {
+            width: 50%;
+            margin: 2% auto 0 auto;
+        }
 
-.login-container input[type=submit] {
-    width: 75%;
-    margin: 0 12.5%;
-}
+        .login-container img {
+            display: block;
+            margin: 0 auto;
+        }
 
-.login-container p {
-    text-align: center;
-    margin-top: 1%;
+        .login-container input[type=submit] {
+            width: 75%;
+            margin: 0 12.5%;
+        }
+
+        .login-container p {
+            text-align: center;
+            margin-top: 1%;
+        }
+
+/* styling about page*/
+
+.aboutkop {
+  color:black;
 }
