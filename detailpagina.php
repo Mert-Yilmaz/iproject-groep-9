@@ -20,25 +20,16 @@ $usernamemail = $_SESSION['login-token'];
 <body>
   <?php include 'navbar.php'; ?>
   <div class="grid-container">
-    <div class="grid-y">
-      <div class="cell">
-        <?php detailPagina($dbh, $_GET['item']); ?>
-      </div>
-    </div>
-    <div class="cell">
-      <h1 class="aboutkop">Privacybeleid</h1>
-      <h2>Belangrijkste hoofdpunten waar u mee instemt</h2>
-      <p>Door de service te gebruiken of ermee om te gaan, stemt u in met:</P>
-      <ul>
-        <li>het gebruik van cookies en andere technologieën.</li>
-        <li>Het verzamelen, gebruiken, delen en op andere manier verwerken van uw informatie.</li>
-        <li>De openbare beschikbaarheid van uw informatie en de controles over dergelijke informatie, zoals beschreven in Het delen van informatie.</li>
-        <li>In het geval van een fusie worden persoonsgegevens overgedragen naar het bedrijf in kwestie.</li>
-      </ul>
-    </div>
+        <?php productBreadCrumbs($dbh, $_GET['rubriek']);
+              toonItems($dbh, $_GET['rubriek']);
+        detailPagina($dbh, $_GET['item']); ?>
   </div>
     <?php
     include("footer.html");
     ?>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
   </body>
 </html>
