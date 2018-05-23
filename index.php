@@ -5,6 +5,9 @@ include 'navbar.php';
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
+if(!isset($_SESSION['WelkomPopUp'])){
+$_SESSION['WelkomPopUp'];
+}
 ?>
 <html class="no-js" lang="en" dir="ltr">
 <head>
@@ -83,6 +86,10 @@ error_reporting(E_ALL ^ E_NOTICE);
         <script src="js/app.js"></script>
         <?php
         include_once 'footer.html';
+        if(!isset($_SESSION['WelkomPopUp'])){
+          echo '<script type="text/javascript">alert("Vul hier in")</script>';
+          $_SESSION['WelkomPopUp'] = 1;
+        }
         ?>
       </body>
     </html>
