@@ -63,7 +63,7 @@ function hot_items($dbh){
     $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
-        <h4 style="margin: 0;"><a href="producten.php?item=' . $number . '">
+        <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
@@ -296,4 +296,49 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
          ' . $row['rubrieknaam'] . '</a></li>';
   }
 }
+
+function detailPagina($dbh, $rubrieknummer) {
+  $query = $dbh->prepare("SELECT * FROM Voorwerp WHERE voorwerpnummer = :rubrieknummer ");
+  $query->bindParam(':rubrieknummer', $rubrieknummer);
+  $query->setFetchMode(PDO::FETCH_ASSOC);
+  $query->execute();
+
+  while($row = $query->fetch()){
+      echo "<h1 class='aboutkop text-center'>Hallo, " . $row['verkoopprijs'] . ' ' . $row['verkoper']  . "</h1>
+            <h2>Dit zijn uw NAW-gegevens</h2>
+            <table>
+              <tr>
+                <th>Titel</th>
+                <td><?= " . $row['titel'] . "?></td>
+                <td><a href='edit.php?edit_id= '= " . $row['startprijs']  . ">Wijzig</a></td>
+              </tr>
+              <tr>
+                <th>Wachtwoord</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>beschrijving</th>
+                <td>" . $row['beschrijving'] . "</td>
+              </tr>
+              <tr>
+                <th>Plaats</th>
+                <td>" . $row['plaatsnaam'] . "</td>
+              </tr>
+              <tr>
+                <th>Betalingsinstructie</th>
+                <td>" . $row['betalingsinstructie'] . "</td>
+              </tr>
+              <tr>
+                <th>Land</th>
+                <td>" . $row['land'] . "</td>
+              </tr>
+            </table>";
+  }
+
+}
+
+
+
+
+
 ?>
