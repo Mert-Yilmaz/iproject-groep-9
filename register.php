@@ -86,19 +86,20 @@ error_reporting(E_ALL ^ E_NOTICE);
             <option value = "Aruba"> Aruba </option>
             <option value = "Nederland"> Nederland </option>
             <option value = "Czech Republic"> Czech Republic </option>
-            <optiewaarde = "Denemarken"> Denemarken </option>
-              <option value = "Djibouti"> Djibouti </option>
-              <option value = "Dominica"> Dominica </option>
-              <option value = "Guatemala"> Guatemala </option>
-                <option value = "Guinea"> Guinea </option>
-                  <option value = "Guinee-Bissau"> Guinee-Bissau </option>
-                  <option value = "Guyana"> Guyana </option>
-                  <option value = "Haiti"> Haïti </option>
-                  <optiewaarde = "Heilige Stoel"> Heilige Stoel (Vaticaanstad) </option>
-                    <option value = "Honduras"> Honduras </option>
-                    <option value = "Anders"> Overig </option>
-                  </select>
-                </div>
+            <option value = "Denemarken"> Denemarken </option>
+            <option value = "Djibouti"> Djibouti </option>
+            <option value = "Dominica"> Dominica </option>
+            <option value = "Guatemala"> Guatemala </option>
+            <option value = "Guinea"> Guinea </option>
+            <option value = "Guinee-Bissau"> Guinee-Bissau </option>
+            <option value = "Guyana"> Guyana </option>
+            <option value = "Haiti"> Haïti </option>
+            <option value = "Heilige Stoel"> Heilige Stoel (Vaticaanstad) </option>
+            <option value = "Honduras"> Honduras </option>
+            <option value = "Turkije"> Turkije </option>
+            <option value = "Anders"> Overig </option>
+          </select>
+        </div>
 
                 <div>
                   <input type="text" name="Adresregel2" maxlength="15" placeholder="Adres 2">

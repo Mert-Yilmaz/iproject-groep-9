@@ -4,9 +4,14 @@ include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
 $usernamemail = $_SESSION['login-token'];
-$queryophalen = $dbh->prepare("SELECT * FROM Gebruiker WHERE gebruikersnaam = '$usernamemail' OR mailbox = '$usernamemail'");
-$queryophalen->setFetchMode(PDO::FETCH_ASSOC);
-$queryophalen->execute();
+$querynaw = $dbh->prepare("SELECT * FROM Gebruiker WHERE gebruikersnaam = '$usernamemail' OR mailbox = '$usernamemail'");
+$querynaw->setFetchMode(PDO::FETCH_ASSOC);
+$querynaw->execute();
+
+$query = $dbh->prepare("SELECT * FROM Gebruiker WHERE gebruikersnaam = '$usernamemail' OR mailbox = '$usernamemail'");
+$query->setFetchMode(PDO::FETCH_ASSOC);
+$query->execute();
+$data = $query->fetch();
 ?>
 
 <!doctype html>
@@ -25,51 +30,84 @@ $queryophalen->execute();
   <div class="grid-container">
     <div class="grid-y">
       <div class="cell">
-          <?php while($row = $queryophalen->fetch()){?>
-        <h1 class="aboutkop text-center">Hallo, <?= $row['voornaam'] . ' ' . $row['achternaam'] ?></h1>
-        <h2>Dit zijn uw NAW-gegevens</h2>
+          <?php
+            while($rownaw = $querynaw->fetch()){
 
-          <table>
+
+                $getMail = $rownaw['mailbox'];
+
+                $link = "<a href='registerVerkoper.php?user_account=$getMail'>(Verkoper worden? Klik hier!)</a>";
+                if ($rownaw['verkoper'] == 0) {
+                    $isVerkoper = 'Nee' . $link;
+                }
+                else {
+                    $isVerkoper = 'Ja';
+                }
+          ?>
+        <h1 class="aboutkop text-center">Hallo, <?= $rownaw['voornaam'] . ' ' . $rownaw['achternaam'] ?></h1>
+        <h3>Dit zijn uw NAW-gegevens</h3>
+
+          <table id="infoTable">
               <tr>
                   <th>Emailadres</th>
-                  <td><?= $row['mailbox']?></td>
-                  <td><a href="edit.php?edit_id=<?= $row['rubrieknummer'] ?>">Wijzig</a></td>
-              </tr>
-              <tr>
-                  <th>Wachtwoord</th>
-                  <td></td>
+                  <td><?= $rownaw['mailbox']?></td>
               </tr>
               <tr>
                   <th>Adres</th>
-                  <td><?= $row['adresregel1']?></td>
+                  <td><?= $rownaw['adresregel1']?></td>
               </tr>
               <tr>
                   <th>Plaats</th>
-                  <td><?= $row['plaatsnaam']?></td>
+                  <td><?= $rownaw['plaatsnaam']?></td>
               </tr>
               <tr>
                   <th>Postcode</th>
-                  <td><?= $row['postcode']?></td>
+                  <td><?= $rownaw['postcode']?></td>
               </tr>
               <tr>
                   <th>Land</th>
-                  <td><?= $row['land']?></td>
+                  <td><?= $rownaw['land']?></td>
               </tr>
               <tr>
                   <th>Verkoper?</th>
-                  <td>
-                      <?php
-                          if($row['verkoper'] = 0) {
-                              echo 'Nee';
-                          }
-                          else if($row['verkoper'] = 1) {
-                              echo 'Ja';
-                          }
-                      ?>
-                  </td>
+                  <td><?= $isVerkoper ?></td>
+              </tr>
+              <tr>
+                  <th><a href="editPersonpage.php?edit_account=<?= $rownaw['mailbox'] ?>">Wijzig NAW-gegevens</a></th>
               </tr>
           </table>
-        <?php } ?>
+            <?php } ?>
+          <?php
+          if($data['verkoper'] == 1) {
+
+          $gebruikersnaam = $data['gebruikersnaam'];
+
+          $querybank = $dbh->prepare("SELECT * FROM Verkoper WHERE gebruiker = '$gebruikersnaam'");
+          $querybank->setFetchMode(PDO::FETCH_ASSOC);
+          $querybank->execute();
+
+          while ($rowbank = $querybank->fetch()) {
+          ?>
+          <h3>Dit zijn uw bankgegevens</h3>
+
+          <table id="infoTable">
+              <tr>
+                  <th>Bank</th>
+                  <td><?= $rowbank['bank']?></td>
+              </tr>
+              <tr>
+                  <th>Bankrekening</th>
+                  <td><?= $rowbank['bankrekening']?></td>
+              </tr>
+              <tr>
+                  <th>Creditcard</th>
+                  <td><?= $rowbank['creditcard']?></td>
+              </tr>
+              <tr>
+                  <th><a href="editBankgegevens.php?edit_account=<?= $rowbank['gebruiker'] ?>">Wijzig bankgegevens</a></th>
+              </tr>
+          </table>
+          <?php } } ?>
 
       </div>
     </div>
