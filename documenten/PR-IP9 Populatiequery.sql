@@ -20,14 +20,15 @@ VALUES	(5,'Hoe heette je eerste huisdier?'),
 
 INSERT INTO Gebruiker
 (gebruikersnaam,voornaam,achternaam,adresregel1,adresregel2,postcode,plaatsnaam,land,geboortedatum,mailbox,wachtwoord,vraag,antwoordtekst,verkoper)
-VALUES	('Gebruiker1','Gebruiker','1','Kastanjelaan 45',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker1@gmail.com','Hello1234',	5,'Poekie',		1),
-		('Gebruiker2','Gebruiker','2','Kastanjelaan 44',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker2@gmail.com','123Welkom',	4,'Elst',		1),
-		('Gebruiker3','Gebruiker','3','Krokuslaan 101',	NULL,'6666 AS','Arnhem','Nederland','24-apr-2018','Gebruiker3@gmail.com','Welkom123',	5,'Doekie',		1),
-		('Gebruiker4','Gebruiker','4','Kastanjelaan 43',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker4@gmail.com','AFSDJFJSDai2',5,'Zoekie',		0),
-		('Gebruiker5','Gebruiker','5','Kastanjelaan 42',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker5@gmail.com','SSSSS1234',	1,'Ei',			1),
-		('Gebruiker6','Gebruiker','6','Kastanjelaan 41',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker6@gmail.com','10ooo0004',	5,'Wookiee',	0),
-		('Gebruiker7','Gebruiker','7','Kastanjelaan 40',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker7@gmail.com','Ikbeneenkoe1',5,'Loekie',		1),
-		('Gebruiker8','Gebruiker','8','Kastanjelaan 39',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker8@gmail.com','wachtw00rd',	5,'Joekie',		0);
+VALUES	('Gebruiker1','Gebruiker','1',		'Kastanjelaan 45',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker1@gmail.com','Hello1234',							5,'Poekie',	1),
+		('Gebruiker2','Gebruiker','2',		'Kastanjelaan 44',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker2@gmail.com','123Welkom',							4,'Elst',	1),
+		('Gebruiker3','Gebruiker','3',		'Krokuslaan 101', NULL,'6666 AS','Arnhem','Nederland','24-apr-2018','Gebruiker3@gmail.com','Welkom123',							5,'Doekie',	1),
+		('Gebruiker4','Gebruiker','4',		'Kastanjelaan 43',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker4@gmail.com','AFSDJFJSDai2',						5,'Zoekie',	0),
+		('Gebruiker5','Gebruiker','5',		'Kastanjelaan 42',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker5@gmail.com','SSSSS1234',							1,'Ei',		1),
+		('Gebruiker6','Gebruiker','6',		'Kastanjelaan 41',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker6@gmail.com','10ooo0004',							5,'Wookiee',0),
+		('Gebruiker7','Gebruiker','7',		'Kastanjelaan 40',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker7@gmail.com','Ikbeneenkoe1',						5,'Loekie',	1),
+		('Gebruiker8','Gebruiker','8',		'Kastanjelaan 39',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker8@gmail.com','wachtw00rd',						5,'Joekie',	0),
+		('Admin',	  'Admin',    'Admin',	'Kastanjelaan 46',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Admin@Admin.com',	   'e64b78fc3bc91bcbc7dc232ba8ec59e0',	5,'Roekie',	0);  /*Wachtwoord: Admin123*/
 
 INSERT INTO Gebruikerstelefoon
 (volgnr,gebruiker,telefoon)
@@ -39,6 +40,7 @@ VALUES	(1,'Gebruiker1','026-7152867'),
 		(6,'Gebruiker6','026-3333333'),
 		(7,'Gebruiker7','026-4444444'),
 		(8,'Gebruiker8','026-5555555');
+		/*(9,'Admin',		'026-6666666');*/
 
 INSERT INTO Rubriek(rubrieknummer, rubrieknaam, rubriek)
 VALUES
@@ -3499,6 +3501,7 @@ VALUES	('Gebruiker1','Rabobank',3966701,'Creditcard','1234-5678-9012-3456'),
 		('Gebruiker3','SNS bank',8001657,'Creditcard','0192-8374-6556-7483'),
 		('Gebruiker5','ING bank',7283489,'Creditcard','2984-1231-8714-1327'),
 		('Gebruiker7','Rabobank',6576750,'Creditcard','3693-0284-5869-8732');
+		/*('Admin',	  'Rabobank',8946532,'Creditcard','4562-9732-1234-7896');*/
 
 INSERT INTO Voorwerp
 (voorwerpnummer,titel,beschrijving,startprijs,betalingswijze,betalingsinstructie,plaatsnaam,land,looptijd,looptijdBeginDag,looptijdBeginTijdstip,verzendkosten,verzendinstructies,verkoper,koper,looptijdEindeDag,looptijdEindeTijdstip,veilingGesloten,verkoopprijs)
@@ -3518,9 +3521,9 @@ VALUES	(0000000001,	150.00,	'Gebruiker1','21-apr-2018','12:00:00.0000000'),
 
 INSERT INTO Bestand
 (filenaam,voorwerp)
-VALUES	('F:\Afb\001.jpg',	0000000001),
-		('F:\Afb\002.jpg',	0000000002),
-		('F;\Afb\003.png',	0000000003);
+VALUES	('bmw304i.jpg',			0000000001),
+		('cake.jpg',			0000000002),
+		('reclamebordcola.jpg',	0000000003);
 
 INSERT INTO VoorwerpInRubriek (voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau)
 VALUES	(0000000001,9837,	9800),

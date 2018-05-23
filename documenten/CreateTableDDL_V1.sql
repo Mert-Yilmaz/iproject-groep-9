@@ -1,5 +1,5 @@
 USE iproject9
-/*
+
 ----- ----- ----- -----
 --- Droppen tables ---
 ---- ----- ----- -----
@@ -27,19 +27,21 @@ IF OBJECT_ID('dbo.Vraag') IS NOT NULL
 ---- ----- ----- ----- ----- ----
 -- Creëren en droppen functies --
 ---- ----- ----- ----- ----- ----
+/*
 IF OBJECT_ID ('fControleerGebruikerIsVerkoper') IS NOT NULL
 DROP FUNCTION fControleerGebruikerIsVerkoper
 
-/*IF OBJECT_ID ('fControleoptieCreditcard') IS NOT NULL
-DROP FUNCTION fControleoptieCreditcard*/
+IF OBJECT_ID ('fControleoptieCreditcard') IS NOT NULL
+DROP FUNCTION fControleoptieCreditcard
 
 IF OBJECT_ID ('fCKMaxAfbeeldingen') IS NOT NULL
 DROP FUNCTION fCKMaxAfbeeldingen
 
 IF OBJECT_ID ('fCKBodEnMinimaleVerhoging') IS NOT NULL	-- WERKT NIET!
 DROP FUNCTION fCKBodEnMinimaleVerhoging
----------------------------------
 */
+---------------------------------
+
 GO
 CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker VARCHAR(10))
 RETURNS BIT
@@ -83,6 +85,8 @@ BEGIN
 END
 GO
 
+/*
+-- Version 1
 GO
 CREATE FUNCTION fCKBodEnMinimaleVerhoging(@bodbedrag NUMERIC(5), @voorwerp NUMERIC(10))
 RETURNS BIT
@@ -105,6 +109,33 @@ BEGIN
 	RETURN 0
 END
 GO
+*/
+
+/*
+-- Version 2
+GO
+CREATE FUNCTION fCKBodEnMinimaleVerhoging(@bodbedrag NUMERIC(5), @voorwerp NUMERIC(10))
+RETURNS BIT
+AS
+BEGIN
+	IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 1 AND MAX(bodbedrag) <= 49.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 0.50)
+		RETURN 1 -- true
+	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 50.00 AND MAX(bodbedrag) <= 499.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00)
+		RETURN 1 -- true
+	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 500.00 AND MAX(bodbedrag) <= 999.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 5.00)
+		RETURN 1 -- true
+	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 1000.00 AND MAX(bodbedrag) <= 4999.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 10.00)
+		RETURN 1 -- true
+	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 5000.00) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 50.00)
+		RETURN 1 -- true
+	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) = NULL AND @bodbedrag > (SELECT startprijs FROM Voorwerp WHERE voorwerpnummer = @voorwerp))
+		RETURN 1 -- true
+	ELSE
+		RETURN 0 -- false
+	RETURN 0
+END
+GO
+*/
 ---------------------------------
 
 ----- ----- ----- -----
@@ -131,7 +162,7 @@ CREATE TABLE Gebruiker (
 	mailbox				CHAR(50)		NOT NULL,	-- WAS CHAR(18)
 	wachtwoord			CHAR(100)		NOT NULL,	-- WAS 9
 	vraag				INTEGER			NOT NULL,	-- 1
-	antwoordtekst		CHAR(20)		NOT NULL,	-- WAS 6
+	antwoordtekst		CHAR(100)		NOT NULL,	-- WAS 6
 	verkoper			BIT	DEFAULT 0	NOT NULL,	-- WAS CHAR(3)
 
 	/*--- Constraints Appendix D ---*/
@@ -239,7 +270,9 @@ CREATE TABLE Voorwerp (
 	/*--- Constraint Appendix B - Hogere bieding ---*/
 	CONSTRAINT ckHogereBieding CHECK (verkoopprijs >= startprijs),
 	/*--- Eigen constraint - Looptijd begin < eind ---*/
-	CONSTRAINT ckLooptijdBeginEind CHECK (looptijdEindeDag >= looptijdBeginDag AND looptijdEindeTijdstip > looptijdBeginTijdstip)
+	CONSTRAINT ckLooptijdBeginEind CHECK (looptijdEindeDag >= looptijdBeginDag AND looptijdEindeTijdstip > looptijdBeginTijdstip),
+	/*--- Eigen constraint - Startprijs > 1 ---*/
+	CONSTRAINT ckStartprijs CHECK (startprijs > 1)
 )
 
 CREATE TABLE Feedback (
@@ -272,7 +305,7 @@ CREATE TABLE Bod (
 		ON UPDATE CASCADE
 		ON DELETE NO ACTION,
 	CONSTRAINT fkBodGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam),
-	/*CONSTRAINT ckBod CHECK (dbo.fCKBodEnMinimaleVerhoging(bodbedrag, voorwerp) = 1),*/
+	/*CONSTRAINT ckBod CHECK (dbo.fCKBodEnMinimaleVerhoging(bodbedrag, voorwerp) = 1)*/
 )
 
 CREATE TABLE Bestand (

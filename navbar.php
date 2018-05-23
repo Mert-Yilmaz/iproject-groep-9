@@ -23,8 +23,14 @@ if(isset($_SESSION['login-token'])) {
                     </div>
                     <div class="large-3 medium-3 cell">
                         <div class="grid-y grid-padding-y">
-                            <div class="cell small-6">
-                                <a href="about.php">Over</a>
+                            <div class="cell small-6 medium-8 large-2">
+                                <?php
+                                if($isLoggedIn) {
+                                    echo "<a href='bod.php'>Bied aan</a>";
+                                } else {
+                                    echo "<a href='about.php'>Over</a>";
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -32,7 +38,7 @@ if(isset($_SESSION['login-token'])) {
                         <div class="grid-y grid-padding-y">
                             <div class="cell small-6 medium-8 large-2">
                                 <?php
-                                if(!$isLoggedIn) {
+                                if($isLoggedIn) {
                                     echo "<a href='personpage.php'>Account</a>";
                                 } else {
                                     echo "<a href='register.php'>Aanmelden</a>";
