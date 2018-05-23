@@ -298,12 +298,16 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
 }
 
 function detailPagina($dbh, $rubrieknummer) {
-  $query = $dbh->prepare("SELECT * FROM Voorwerp WHERE voorwerpnummer = :rubrieknummer ");
+  $query = $dbh->prepare("SELECT * FROM Voorwerp v
+                          INNER JOIN Bestand b
+                          ON v.voorwerpnummer = b.voorwerp
+                          WHERE v.voorwerpnummer = :rubrieknummer ");
   $query->bindParam(':rubrieknummer', $rubrieknummer);
   $query->setFetchMode(PDO::FETCH_ASSOC);
   $query->execute();
 
   while($row = $query->fetch()){
+      $file = "img/veilingen/" . $row['filenaam'];
       echo "<h1 class='aboutkop text-center'>Dit item wordt aangeboden door: " . $row['verkoper']  . "</h1>
             <table>
               <tr>
@@ -351,7 +355,8 @@ function detailPagina($dbh, $rubrieknummer) {
                 <th>Om</th>
                 <td>" . $row['looptijdEindeTijdstip'] . "</td>
               </tr>
-            </table>";
+            </table>
+            <img src=" . $file . ">";
   }
 
 }
