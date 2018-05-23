@@ -308,64 +308,6 @@ function detailPagina($dbh, $rubrieknummer) {
 
   while($row = $query->fetch()){
       $file = "img/veilingen/" . $row['filenaam'];
-<<<<<<< HEAD
-      echo "<h1 class='aboutkop text-center'>Dit item wordt aangeboden door: " . $row['verkoper']  . "</h1>
-            <table>
-              <tr>
-                <th>Titel</th>
-                <td>" . $row['titel'] . "</td>
-                <td><a href='edit.php?edit_id= '= " . $row['startprijs']  . ">Wijzig</a></td>
-              </tr>
-              <tr>
-                <th>Vraagprijs</th>
-                <td>" . $row['verkoopprijs'] . "</td>
-              </tr>
-              <tr>
-                <th>Startprijs</th>
-                <td>" . $row['startprijs'] . "</td>
-              </tr>
-              <tr>
-                <th>Beschrijving</th>
-                <td>" . $row['beschrijving'] . "</td>
-              </tr>
-              <tr>
-                <th>Plaats</th>
-                <td>" . $row['plaatsnaam'] . "</td>
-              </tr>
-              <tr>
-                <th>Betalingsinstructie</th>
-                <td>" . $row['betalingsinstructie'] . "</td>
-              </tr>
-              <tr>
-                <th>Betalingswijze</th>
-                <td>" . $row['betalingswijze'] . "</td>
-              </tr>
-              <tr>
-                <th>Land</th>
-                <td>" . $row['land'] . "</td>
-              </tr>
-              <tr>
-                <th>Loopijd</th>
-                <td>" . $row['looptijd'] . "</td>
-              </tr>
-              <tr>
-                <th>Eindigt op</th>
-                <td>" . $row['looptijdEindeDag'] . "</td>
-              </tr>
-              <tr>
-                <th>Om</th>
-                <td>" . $row['looptijdEindeTijdstip'] . "</td>
-              </tr>
-            </table>
-            <form action='#' method='POST'>
-              <label>Bied op dit item!</label>
-              <input type='text' name='bodbedrag' placeholder='bedrag'>
-              <input type='hidden' name='datum' value=" . date("m/d/Y") . ">
-              <input type='hidden' name='tijd' value=" . date("H:i") . ">
-              <input type='submit' class='knop' value='Bied' name='submit'>
-            </form>";
-    }
-=======
       $endtime = date_create($row['looptijdEindeTijdstip']);
       echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
 
@@ -408,6 +350,7 @@ function detailPagina($dbh, $rubrieknummer) {
           <button data-slide='3'><span class='show-for-sr'>Fourth slide details.</span></button>
         </nav>
       </div>
+
       </div>
       </div>
 
@@ -465,8 +408,15 @@ function detailPagina($dbh, $rubrieknummer) {
                   </tr>
                   </table>
               </div></div>
-            </div>";
+            </div>
+
+            <form action='#' method='POST'>
+              <label>Bied op dit item!</label>
+              <input type='text' name='bodbedrag' placeholder='bedrag'>
+              <input type='hidden' name='datum' value=" . date("m/d/Y") . ">
+              <input type='hidden' name='tijd' value=" . date("H:i") . ">
+              <input type='submit' class='knop' value='Bied' name='submit'>
+            </form>";
   }
->>>>>>> 43864d13b6e45c8c80d0da7afad90a08a7e2a227
 }
 ?>
