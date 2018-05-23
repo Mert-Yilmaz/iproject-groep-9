@@ -111,10 +111,10 @@ error_reporting(E_ALL ^ E_NOTICE);
           <textarea rows="4" name="verzendinstructies" placeholder="Geef hier instructies voor het verzenden.. (optioneel)" maxlength="30"></textarea>
         </div>
 
-        <div>
+      <!--  <div>
           <label>Upload hier je image</label>
           <input name="plaatje" type="file" accept="image/*" multiple required>
-        </div>
+        </div> -->
 
         <div>
           <button type="submit" class="knop" name="plaats_item">Plaats</button>
