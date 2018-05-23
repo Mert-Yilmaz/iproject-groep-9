@@ -297,12 +297,12 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   }
 }
 
-function detailPagina($dbh, $rubrieknummer) {
+function detailPagina($dbh, $voorwerpnummer) {
   $query = $dbh->prepare("SELECT * FROM Voorwerp v
                           INNER JOIN Bestand b
                           ON v.voorwerpnummer = b.voorwerp
-                          WHERE v.voorwerpnummer = :rubrieknummer ");
-  $query->bindParam(':rubrieknummer', $rubrieknummer);
+                          WHERE v.voorwerpnummer = :voorwerpnummer ");
+  $query->bindParam(':voorwerpnummer', $voorwerpnummer);
   $query->setFetchMode(PDO::FETCH_ASSOC);
   $query->execute();
 
@@ -356,13 +356,28 @@ function detailPagina($dbh, $rubrieknummer) {
                 <td>" . $row['looptijdEindeTijdstip'] . "</td>
               </tr>
             </table>
-            <img src=" . $file . ">";
-  }
+            <form action='#' method='POST'>
+              <label>Bied op dit item!</label>
+              <input type='text' name='bodbedrag' placeholder='bedrag'>
+              <input type='text' name='telefoonnummer' placeholder='telefoonnummer'>
+              <input type='hidden' name='datum' value=" . date("Y/m/d") . ">
+              <input type='hidden' name='tijd' value=" . date("H:i") . ">
+              <input type='submit' class='knop' value='Bied'>
+            </form>";
 
+              if (isset($_POST["Gebruikersnaam"],$_POST["Wachtwoord"],$_POST["Adresregel1"],$_POST["Naam"],$_POST["Achternaam"],$_POST["Land"],$_POST["Plaats"],$_POST["Postcode"],$_POST["Geboortedatum"],$_POST["Email"],$_POST["Vraag"],$_POST["Antwoord"])){
+              $bodbedrag = $_POST["bodbedrag"];
+              $boddag = md5($_POST["datum"]);
+              $bodtijdstip = $_POST["tijd"];
+              $gebruiker = 'gebruiker5';
+
+              try{
+                $query = $dbh->prepare("INSERT INTO Bod
+                                        VALUES ('$voorwerpnummer','$bodbedrag','$gebruiker','$boddag','$bodtijdstip')");
+                $query->execute();
+              }catch(PDOException $e) {
+                echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+              }
+        }
+    }
 }
-
-
-
-
-
-?>
