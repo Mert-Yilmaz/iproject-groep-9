@@ -359,25 +359,9 @@ function detailPagina($dbh, $voorwerpnummer) {
             <form action='#' method='POST'>
               <label>Bied op dit item!</label>
               <input type='text' name='bodbedrag' placeholder='bedrag'>
-              <input type='text' name='telefoonnummer' placeholder='telefoonnummer'>
-              <input type='hidden' name='datum' value=" . date("Y/m/d") . ">
+              <input type='hidden' name='datum' value=" . date("m/d/Y") . ">
               <input type='hidden' name='tijd' value=" . date("H:i") . ">
-              <input type='submit' class='knop' value='Bied'>
+              <input type='submit' class='knop' value='Bied' name='submit'>
             </form>";
-
-              if (isset($_POST["Gebruikersnaam"],$_POST["Wachtwoord"],$_POST["Adresregel1"],$_POST["Naam"],$_POST["Achternaam"],$_POST["Land"],$_POST["Plaats"],$_POST["Postcode"],$_POST["Geboortedatum"],$_POST["Email"],$_POST["Vraag"],$_POST["Antwoord"])){
-              $bodbedrag = $_POST["bodbedrag"];
-              $boddag = md5($_POST["datum"]);
-              $bodtijdstip = $_POST["tijd"];
-              $gebruiker = 'gebruiker5';
-
-              try{
-                $query = $dbh->prepare("INSERT INTO Bod
-                                        VALUES ('$voorwerpnummer','$bodbedrag','$gebruiker','$boddag','$bodtijdstip')");
-                $query->execute();
-              }catch(PDOException $e) {
-                echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-              }
-        }
     }
 }
