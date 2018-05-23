@@ -94,7 +94,7 @@ function ending_items($dbh){
     $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
-        <h4 style="margin: 0;"><a href="producten.php?item=' . $number . '">
+        <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
@@ -125,7 +125,7 @@ function cheap_items($dbh){
     $endday = date_create($row['looptijdEindeDag']);
     $output .=
     '<div class="large-4 medium-4 small-12 cell">
-        <h4 style="margin: 0;"><a href="producten.php?item=' . $number . '">
+        <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
@@ -304,20 +304,23 @@ function detailPagina($dbh, $rubrieknummer) {
   $query->execute();
 
   while($row = $query->fetch()){
-      echo "<h1 class='aboutkop text-center'>Hallo, " . $row['verkoopprijs'] . ' ' . $row['verkoper']  . "</h1>
-            <h2>Dit zijn uw NAW-gegevens</h2>
+      echo "<h1 class='aboutkop text-center'>Dit item wordt aangeboden door: " . $row['verkoper']  . "</h1>
             <table>
               <tr>
                 <th>Titel</th>
-                <td><?= " . $row['titel'] . "?></td>
+                <td>" . $row['titel'] . "</td>
                 <td><a href='edit.php?edit_id= '= " . $row['startprijs']  . ">Wijzig</a></td>
               </tr>
               <tr>
-                <th>Wachtwoord</th>
-                <td></td>
+                <th>Vraagprijs</th>
+                <td>" . $row['verkoopprijs'] . "</td>
               </tr>
               <tr>
-                <th>beschrijving</th>
+                <th>Startprijs</th>
+                <td>" . $row['startprijs'] . "</td>
+              </tr>
+              <tr>
+                <th>Beschrijving</th>
                 <td>" . $row['beschrijving'] . "</td>
               </tr>
               <tr>
@@ -329,8 +332,24 @@ function detailPagina($dbh, $rubrieknummer) {
                 <td>" . $row['betalingsinstructie'] . "</td>
               </tr>
               <tr>
+                <th>Betalingswijze</th>
+                <td>" . $row['betalingswijze'] . "</td>
+              </tr>
+              <tr>
                 <th>Land</th>
                 <td>" . $row['land'] . "</td>
+              </tr>
+              <tr>
+                <th>Loopijd</th>
+                <td>" . $row['looptijd'] . "</td>
+              </tr>
+              <tr>
+                <th>Eindigt op</th>
+                <td>" . $row['looptijdEindeDag'] . "</td>
+              </tr>
+              <tr>
+                <th>Om</th>
+                <td>" . $row['looptijdEindeTijdstip'] . "</td>
               </tr>
             </table>";
   }
