@@ -28,7 +28,7 @@ VALUES	('Gebruiker1','Gebruiker','1',		'Kastanjelaan 45',NULL,'6666 AC','Arnhem'
 		('Gebruiker6','Gebruiker','6',		'Kastanjelaan 41',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker6@gmail.com','10ooo0004',							5,'Wookiee',0),
 		('Gebruiker7','Gebruiker','7',		'Kastanjelaan 40',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker7@gmail.com','Ikbeneenkoe1',						5,'Loekie',	1),
 		('Gebruiker8','Gebruiker','8',		'Kastanjelaan 39',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker8@gmail.com','wachtw00rd',						5,'Joekie',	0),
-		('Admin',	  'Admin',    'Admin',	'Kastanjelaan 46',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Admin@Admin.com',	   'e64b78fc3bc91bcbc7dc232ba8ec59e0',	5,'Roekie',	0);  /*Wachtwoord: Admin123*/
+		('Admin',	  'Admin',    'Admin',	'Kastanjelaan 46',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Admin@Admin.com',	   'e64b78fc3bc91bcbc7dc232ba8ec59e0',	5,'Roekie',	1);  /*Wachtwoord: Admin123*/
 
 INSERT INTO Gebruikerstelefoon
 (volgnr,gebruiker,telefoon)
@@ -39,8 +39,8 @@ VALUES	(1,'Gebruiker1','026-7152867'),
 		(5,'Gebruiker5','026-2222222'),
 		(6,'Gebruiker6','026-3333333'),
 		(7,'Gebruiker7','026-4444444'),
-		(8,'Gebruiker8','026-5555555');
-		/*(9,'Admin',		'026-6666666');*/
+		(8,'Gebruiker8','026-5555555'),
+		(9,'Admin',		'026-6666666');
 
 INSERT INTO Rubriek(rubrieknummer, rubrieknaam, rubriek)
 VALUES
@@ -3500,14 +3500,14 @@ VALUES	('Gebruiker1','Rabobank',3966701,'Creditcard','1234-5678-9012-3456'),
 		('Gebruiker2','Postbank',7190582,'Creditcard','0987-6543-2109-8765'),
 		('Gebruiker3','SNS bank',8001657,'Creditcard','0192-8374-6556-7483'),
 		('Gebruiker5','ING bank',7283489,'Creditcard','2984-1231-8714-1327'),
-		('Gebruiker7','Rabobank',6576750,'Creditcard','3693-0284-5869-8732');
-		/*('Admin',	  'Rabobank',8946532,'Creditcard','4562-9732-1234-7896');*/
+		('Gebruiker7','Rabobank',6576750,'Creditcard','3693-0284-5869-8732'),
+		('Admin',	  'Rabobank',8946532,'Creditcard','4562-9732-1234-7896');
 
 INSERT INTO Voorwerp
 (voorwerpnummer,titel,beschrijving,startprijs,betalingswijze,betalingsinstructie,plaatsnaam,land,looptijd,looptijdBeginDag,looptijdBeginTijdstip,verzendkosten,verzendinstructies,verkoper,koper,looptijdEindeDag,looptijdEindeTijdstip,veilingGesloten,verkoopprijs)
-VALUES	(0000000001,'BMW 340i',		'Mooie BMW',			50.00,	'IDeal/PayPal',	'Gewoon overmaken',				'Arnhem',	'Nederland',	7,	'15-may-1999',	'09:20:20.0000000',	null,	null,	'Gebruiker7',	'Gebruiker1',	'22-may-1999',	'20:20:21',	1,	150.00),
-		(0000000002,'Cake',			'Zo goed als nieuw',	90.00,	'IDeal/PayPal',	'Je mag het geld zelf houden',	'Zevenaar',	'Polen',		3,	'20-feb-2018',	'09:20:20.0000000', null,	null,	'Gebruiker1',	'Gebruiker5',	'22-feb-2018',	'20:20:21',	1,	639.99),
-		(0000000003,'Reclamebord',	'5x5 meter',			60.00,	'IDeal/PayPal',	'Contant',						'Utrecht',	'Nederland',	5,	'08-may-2018',	'09:20:20.0000000',	null,	null,	'Gebruiker7',	'Gebruiker5',	'13-may-2018',	'20:20:21',	1,	75.00 );
+VALUES	(0000000001,'BMW 340i',		'Mooie BMW',			50.00,	'IDeal/PayPal',	'Gewoon overmaken',				'Arnhem',	'Nederland',	7,	'15-may-1999',	'09:20:20.0000000',	null,	null,	'Admin',	'Gebruiker1',	'22-may-1999',	'20:20:21',	1,	150.00),
+		(0000000002,'Cake',			'Zo goed als nieuw',	90.00,	'IDeal/PayPal',	'Je mag het geld zelf houden',	'Zevenaar',	'Polen',		3,	'20-feb-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker5',	'22-feb-2018',	'20:20:21',	1,	639.99),
+		(0000000003,'Reclamebord',	'5x5 meter',			60.00,	'IDeal/PayPal',	'Contant',						'Utrecht',	'Nederland',	5,	'08-may-2018',	'09:20:20.0000000',	null,	null,	'Admin',	'Gebruiker5',	'13-may-2018',	'20:20:21',	1,	75.00 );
 
 INSERT INTO Feedback
 (voorwerp,soortgebruiker,feedbacksoort,dag,tijdstip,commentaar)
