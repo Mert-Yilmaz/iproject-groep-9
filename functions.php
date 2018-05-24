@@ -280,7 +280,7 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   $query->execute();
   while($row = $query->fetch()) {
     echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] .
-         '&rubriek2=' . $rubrieknaam . '">
+         '&rubriek2=' . $rubrieknaam . '" class="rubrieken">
          ' . $row['rubrieknaam'] . '</a></li>';
   }
 }
@@ -296,103 +296,103 @@ function detailPagina($dbh) {
   $query->setFetchMode(PDO::FETCH_ASSOC);
   $query->execute();
   while($row = $query->fetch()){
-      $file = "img/veilingen/" . $row['filenaam'];
-      $endtime = date_create($row['looptijdEindeTijdstip']);
-      echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
-      <div class='grid-x grid-padding-x'>
-        <div class='small-12'>
-      <div class='orbit' role='region' aria-label='Favorite Space Pictures' data-orbit>
-        <div class='orbit-wrapper'>
-          <div class='orbit-controls'>
-            <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
-            <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
+    $file = "img/veilingen/" . $row['filenaam'];
+    $endtime = date_create($row['looptijdEindeTijdstip']);
+    echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
+    <div class='grid-x grid-padding-x'>
+      <div class='small-12'>
+        <div class='orbit' role='region' aria-label='Favorite Space Pictures' data-orbit>
+          <div class='orbit-wrapper'>
+            <div class='orbit-controls'>
+              <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
+              <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
+            </div>
+            <ul class='orbit-container'>
+              <li class='is-active orbit-slide'>
+                <figure class='orbit-figure'>
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
+              <li class='orbit-slide'>
+                <figure class='orbit-figure'>
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
+              <li class='orbit-slide'>
+                <figure class='orbit-figure'>
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
+              <li class='orbit-slide'>
+                <figure class='orbit-figure'>
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
+            </ul>
           </div>
-          <ul class='orbit-container'>
-            <li class='is-active orbit-slide'>
-              <figure class='orbit-figure'>
-                <img class='orbit-image' src= " . $file . " alt='Space'>
-                </figure>
-            </li>
-            <li class='orbit-slide'>
-              <figure class='orbit-figure'>
-                <img class='orbit-image' src= " . $file . " alt='Space'>
-                </figure>
-            </li>
-            <li class='orbit-slide'>
-              <figure class='orbit-figure'>
-                <img class='orbit-image' src= " . $file . " alt='Space'>
-                </figure>
-            </li>
-            <li class='orbit-slide'>
-              <figure class='orbit-figure'>
-                <img class='orbit-image' src= " . $file . " alt='Space'>
-                </figure>
-            </li>
-          </ul>
+          <nav class='orbit-bullets'>
+            <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>
+            <button data-slide='1'><span class='show-for-sr'>Second slide details.</span></button>
+            <button data-slide='2'><span class='show-for-sr'>Third slide details.</span></button>
+            <button data-slide='3'><span class='show-for-sr'>Fourth slide details.</span></button>
+          </nav>
         </div>
-        <nav class='orbit-bullets'>
-          <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>
-          <button data-slide='1'><span class='show-for-sr'>Second slide details.</span></button>
-          <button data-slide='2'><span class='show-for-sr'>Third slide details.</span></button>
-          <button data-slide='3'><span class='show-for-sr'>Fourth slide details.</span></button>
-        </nav>
       </div>
+    </div>
+    <div class= 'grid-x grid-padding-x'>
+      <div class= 'cell large-8 medium-7'>
+        <table>
+          <tr>
+            <th>Verkoper</th>
+            <td>" . $row['verkoper'] . "</td>
+          </tr>
+          <tr>
+            <th>Beschrijving</th>
+            <td>" . $row['beschrijving'] . "</td>
+          </tr>
+          <tr>
+            <th>Plaats</th>
+            <td>" . $row['plaatsnaam'] . "</td>
+          </tr>
+          <tr>
+            <th>Betalingsinstructie</th>
+            <td>" . $row['betalingsinstructie'] . "</td>
+          </tr>
+          <tr>
+            <th>Betalingswijze</th>
+            <td>" . $row['betalingswijze'] . "</td>
+         </tr>
+          <tr>
+            <th>Land</th>
+            <td>" . $row['land'] . "</td>
+          </tr>
+        </table>
       </div>
+      <div class='cell large-4 medium-5 right'>
+        <table>
+          <tr>
+            <th>Vraagprijs</th>
+            <td> €" . $row['verkoopprijs'] . ",- </td>
+          </tr>
+          <tr>
+            <th>Startprijs</th>
+            <td> €" . $row['startprijs'] . ",- </td>
+          </tr>
+          <tr>
+            <th>Looptijd</th>
+            <td>" . $row['looptijd'] . " dagen</td>
+          </tr>
+          <tr>
+            <th>Einddatum</th>
+            <td>" . $row['looptijdEindeDag'] . "</td>
+          </tr>
+            <tr>
+            <th>Tijdstip einde</th>
+            <td>" . date_format($endtime, "H:i:s") . "</td>
+          </tr>
+        </table>
       </div>
-            <div class= 'grid-x grid-padding-x'>
-              <div class= 'cell large-8 medium-7'>
-                <table>
-                  <tr>
-                    <th>Verkoper</th>
-                    <td>" . $row['verkoper'] . "</td>
-                  </tr>
-                  <tr>
-                    <th>Beschrijving</th>
-                    <td>" . $row['beschrijving'] . "</td>
-                  </tr>
-                  <tr>
-                    <th>Plaats</th>
-                    <td>" . $row['plaatsnaam'] . "</td>
-                  </tr>
-                  <tr>
-                    <th>Betalingsinstructie</th>
-                    <td>" . $row['betalingsinstructie'] . "</td>
-                  </tr>
-                  <tr>
-                    <th>Betalingswijze</th>
-                    <td>" . $row['betalingswijze'] . "</td>
-                  </tr>
-                  <tr>
-                    <th>Land</th>
-                    <td>" . $row['land'] . "</td>
-                  </tr>
-                </table>
-              </div>
-              <div class='cell large-4 medium-5 right'>
-                <table>
-                  <tr>
-                    <th>Vraagprijs</th>
-                    <td> €" . $row['verkoopprijs'] . ",- </td>
-                  </tr>
-                  <tr>
-                    <th>Startprijs</th>
-                    <td> €" . $row['startprijs'] . ",- </td>
-                  </tr>
-                  <tr>
-                    <th>Looptijd</th>
-                    <td>" . $row['looptijd'] . " dagen</td>
-                  </tr>
-                  <tr>
-                    <th>Einddatum</th>
-                    <td>" . $row['looptijdEindeDag'] . "</td>
-                  </tr>
-                  <tr>
-                    <th>Tijdstip einde</th>
-                    <td>" . date_format($endtime, "H:i:s") . "</td>
-                  </tr>
-                  </table>
-              </div></div>
-            </div>";
+    </div>";
   }
 }
 
@@ -463,7 +463,7 @@ function biedOpItem($dbh) {
     try{
       if($bodbedrag < 50) {
         if($bodbedrag >= $hoogstebod + 0.5) {
-            $query = $dbh->prepare("INSERT INTO Bod
+          $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
                                   VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
           $query->execute();
