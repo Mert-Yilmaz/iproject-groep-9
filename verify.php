@@ -10,7 +10,7 @@ include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
 
-if(isset($_POST['register'])) {
+if(isset($_POST['reg_user'])) {
     $email = $_POST['email'];
     $code = md5(rand(0,1000));
 
