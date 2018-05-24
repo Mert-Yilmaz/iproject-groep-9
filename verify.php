@@ -6,6 +6,13 @@
  * Time: 11:21
  */
 
+/*------------------------------------------------------------------------------------------------
+NOTE:
+In deze file moeten alle meegegeven gegevens worden gecheckt OF moet de eerste query ($insert) op
+update blijven en moet er in register een code worden meegegeven van '0' en actief 0
+Verder moet in register.php 'action=' worden veranderd naar action=verify.php.
+------------------------------------------------------------------------------------------------*/
+
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
@@ -28,7 +35,7 @@ if(isset($_POST['reg_user'])) {
     ---------------
     
     Klik op de onderstaande link om je account te activeren en mee te bieden:
-    <a href="verification.php">verify.php?email=' . $email . '&code=' . $code.'</a>';
+    <a href="verification.php">verify.php?email=' . $email . '&code=' . $code.'</a>';   //of <a href="verification.php">http://iproject9.icasites.nl/verify.php?email=' . $email . '&code=' . $code.'</a>'
     $headers = "From: " . $from;
     mail($to, $subject, $message, $headers);
     echo 'Er is een mail gestuurd naar' . $email . 'met een activatiecode.';
