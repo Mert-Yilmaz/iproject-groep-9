@@ -88,6 +88,7 @@ $data = $query->fetch();
 
           while ($rowbank = $querybank->fetch()) {
           ?>
+
           <h3>Dit zijn uw bankgegevens</h3>
 
           <table id="infoTable">
@@ -105,8 +106,11 @@ $data = $query->fetch();
               </tr>
               <tr>
                   <th><a href="editBankgegevens.php?edit_account=<?= $rowbank['gebruiker'] ?>">Wijzig bankgegevens</a></th>
+
               </tr>
           </table>
+          <a class='knop'href='verkooppage.php'>Klik hier om te verkopen</a>
+
           <?php } } ?>
 
       </div>

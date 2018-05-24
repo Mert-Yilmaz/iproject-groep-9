@@ -1,11 +1,10 @@
 <?php
-session_start();
-include 'functions.php';
-include_once 'db.php';
-error_reporting(E_ALL ^ E_NOTICE);
-$usernamemail = $_SESSION['login-token'];
+  session_start();
+  include 'functions.php';
+  include_once 'db.php';
+  error_reporting(E_ALL ^ E_NOTICE);
+  $usernamemail = $_SESSION['login-token'];
 ?>
-
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 <head>
@@ -27,9 +26,7 @@ $usernamemail = $_SESSION['login-token'];
               }
               biedingenItem($dbh);
         ?>
-
-
-  </div>
+    </div>
     <?php
     include("footer.html");
     ?>
