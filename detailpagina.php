@@ -18,26 +18,14 @@
 </head>
 <body>
   <?php include 'navbar.php'; ?>
-    <div class="grid-container">
-      <?php productBreadCrumbs($dbh, $_GET['rubriek']);
-            toonItems($dbh, $_GET['rubriek']);
-            detailPagina($dbh, $_GET['item']);
-
-            if (isset($_POST["submit"])){
-              $voorwerpnummer = $_GET['item'];
-              $bodbedrag = $_POST["bodbedrag"];
-              $boddag = $_POST["datum"];
-              $bodtijdstip = $_POST["tijd"];
-              $gebruiker = 'gebruiker5';
-              try{ $query = $dbh->prepare("INSERT INTO Bod
-                                     (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                      VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
-              $query->execute();}
-              catch(PDOException $e) {
-              echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-                }
+  <div class="grid-container">
+        <?php productBreadCrumbs($dbh, $_GET['rubriek']);
+              detailPagina($dbh);
+              if(isset($_SESSION['login-token'])) {
+                  biedOpItem($dbh);
               }
-              ?>
+              biedingenItem($dbh);
+        ?>
     </div>
     <?php
     include("footer.html");

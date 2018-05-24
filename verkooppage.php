@@ -94,11 +94,11 @@ error_reporting(E_ALL ^ E_NOTICE);
         <div>
           <select name="looptijd">
             <option value selected disabled>Selecteer de looptijd in dagen</option>
-            <option value = "1"> 1 </option>
-            <option value = "3"> 3 </option>
-            <option value = "5"> 5 </option>
-            <option value = "7"> 7 (Standaard) </option>
-            <option value = "10"> 10 </option>
+            <option value = 1> 1 </option>
+            <option value = 2> 3 </option>
+            <option value = 3> 5 </option>
+            <option value = 4> 7 (Standaard) </option>
+            <option value = 5> 10 </option>
           </select>
         </div>
 
@@ -111,10 +111,20 @@ error_reporting(E_ALL ^ E_NOTICE);
           <textarea rows="4" name="verzendinstructies" placeholder="Geef hier instructies voor het verzenden.. (optioneel)" maxlength="30"></textarea>
         </div>
 
-      <!--  <div>
+        <div>
           <label>Upload hier je image</label>
-          <input name="plaatje" type="file" accept="image/*" multiple required>
-        </div> -->
+          <input name="plaatje1" type="file" accept=".jpg, .jpeg, .bpem, .png" required>
+        </div>
+
+        <div>
+          <label>Upload hier je image</label>
+          <input name="plaatje2" type="file" accept=".jpg, .jpeg, .bpem, .png">
+        </div>
+
+        <div>
+          <label>Upload hier je image</label>
+          <input name="plaatje3" type="file" accept=".jpg, .jpeg, .bpem, .png">
+        </div>
 
         <div>
           <button type="submit" class="knop" name="plaats_item">Plaats</button>
@@ -139,8 +149,9 @@ error_reporting(E_ALL ^ E_NOTICE);
       $verzendinstructies = $_POST["verzendinstructies"];
       $plaatje = $_POST["plaatje"];
       is_null($koper);
-      $begindag = date("Y/M/D");
-      $einddag = date("Y/M/(D + $looptijd)");
+
+      $begindag = date("Y-M-D");
+      $einddag = date("Y-M-D");
       $plaatstijd = date("H:i:s");
       $veilinggesloten = 0;
       is_null($verkoopprijs);
