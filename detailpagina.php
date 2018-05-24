@@ -1,11 +1,10 @@
 <?php
-session_start();
-include 'functions.php';
-include_once 'db.php';
-error_reporting(E_ALL ^ E_NOTICE);
-$usernamemail = $_SESSION['login-token'];
+  session_start();
+  include 'functions.php';
+  include_once 'db.php';
+  error_reporting(E_ALL ^ E_NOTICE);
+  $usernamemail = $_SESSION['login-token'];
 ?>
-
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 <head>
@@ -19,31 +18,27 @@ $usernamemail = $_SESSION['login-token'];
 </head>
 <body>
   <?php include 'navbar.php'; ?>
-  <div class="grid-container">
-        <?php productBreadCrumbs($dbh, $_GET['rubriek']);
-              toonItems($dbh, $_GET['rubriek']);
-        detailPagina($dbh, $_GET['item']);
+    <div class="grid-container">
+      <?php productBreadCrumbs($dbh, $_GET['rubriek']);
+            toonItems($dbh, $_GET['rubriek']);
+            detailPagina($dbh, $_GET['item']);
 
-        if (isset($_POST["submit"])){
-        $voorwerpnummer = $_GET['item'];
-        $bodbedrag = $_POST["bodbedrag"];
-        $boddag = $_POST["datum"];
-        $bodtijdstip = $_POST["tijd"];
-        $gebruiker = 'gebruiker5';
-
-        try{
-          $query = $dbh->prepare("INSERT INTO Bod
-                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
-          $query->execute();
-        }catch(PDOException $e) {
-          echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-        }
-      }
-?>
-
-
-  </div>
+            if (isset($_POST["submit"])){
+              $voorwerpnummer = $_GET['item'];
+              $bodbedrag = $_POST["bodbedrag"];
+              $boddag = $_POST["datum"];
+              $bodtijdstip = $_POST["tijd"];
+              $gebruiker = 'gebruiker5';
+              try{ $query = $dbh->prepare("INSERT INTO Bod
+                                     (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                      VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+              $query->execute();}
+              catch(PDOException $e) {
+              echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+                }
+              }
+              ?>
+    </div>
     <?php
     include("footer.html");
     ?>
