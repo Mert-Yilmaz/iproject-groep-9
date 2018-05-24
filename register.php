@@ -153,19 +153,20 @@ error_reporting(E_ALL ^ E_NOTICE);
             $query = $dbh->prepare("INSERT INTO Gebruiker
                 VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$actief','$code')");
             $query->execute();
-
-            if (isset($_POST['reg_user'])) {
-                $to = $email;
-                $subject = 'Activatie account EenmaalAndermaal (9)';
-                $from = 'noreply@eenmaalandermaal9.nl';
-                $body = "Bedankt voor het registreren! Uw activatiecode is $code Klik op deze link om uw account te bevestigen: " . "<a href='verify.php'>verify.php?email=$email&code=$code</a>";
-                $headers = "From: " . $from;
-                mail($to, $subject, $body, $headers);
-                echo "Mail verzonden naar " . $email;
-            }
         }catch(PDOException $e) {
             echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-        }}
+        }
+
+        if (isset($_POST['reg_user'])) {
+            $to = $email;
+            $subject = 'Activatie account EenmaalAndermaal (9)';
+            $from = 'noreply@eenmaalandermaal9.nl';
+            $body = "Bedankt voor het registreren! Uw activatiecode is $code Klik op deze link om uw account te bevestigen: " . "<a href='verify.php'>verify.php?email=$email&code=$code</a>";
+            $headers = "From: " . $from;
+            mail($to, $subject, $body, $headers);
+            echo "Mail verzonden naar " . $email;
+        }
+    }
     include("footer.html");
     ?>
 </body>
