@@ -44,7 +44,7 @@ CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker VARCHAR(10))
 RETURNS BIT
 AS
 BEGIN
-	IF (@gebruiker = (SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = @gebruiker AND verkoper = 1))
+	IF (@gebruiker = (SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = @gebruiker AND verkoper = 1 AND actief = 1))
 		RETURN 1 -- true
 	ELSE 
 		RETURN 0 -- false
@@ -104,11 +104,13 @@ CREATE TABLE Gebruiker (
 	plaatsnaam			CHAR(15)				NOT NULL,	-- WAS 12
 	land				CHAR(20)				NOT NULL,	-- WAS 9
 	geboortedatum		DATE					NOT NULL,	-- WAS CHAR(10)
-	mailbox				CHAR(50)				NOT NULL,	-- WAS CHAR(18)
+	mailbox				VARCHAR(50)				NOT NULL,	-- WAS CHAR(18)
 	wachtwoord			CHAR(100)				NOT NULL,	-- WAS 9
 	vraag				INTEGER					NOT NULL,	-- 1
 	antwoordtekst		CHAR(100)				NOT NULL,	-- WAS 6
 	verkoper			BIT	DEFAULT 0			NOT NULL,	-- WAS CHAR(3)
+	code				CHAR(32) DEFAULT 0		NOT NULL,	-- EIGEN
+	actief				BIT DEFAULT 0			NOT NULL,	-- EIGEN
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkGebruiker PRIMARY KEY (gebruikersnaam),
@@ -126,7 +128,9 @@ CREATE TABLE Gebruiker (
 	/*--- Constraint Appendix B - Wachtwoord minimaal 7 tekens, bestaande uit letters, cijfers --> Hoofdletters via site ---*/
 	CONSTRAINT ckWachtwoord CHECK (wachtwoord LIKE '%[0-9]%' AND wachtwoord LIKE '%[A-Z]%' AND LEN(wachtwoord) >= 7),
 	/*--- Eigen constraint - Geboortedatum <= vandaag ---*/
-	CONSTRAINT ckGeboortedatum CHECK (geboortedatum <= CURRENT_TIMESTAMP)
+	CONSTRAINT ckGeboortedatum CHECK (geboortedatum <= CURRENT_TIMESTAMP),
+	/*--- Eigen constraint - Unieke code ---*/
+	CONSTRAINT akCode UNIQUE(code)
 )
 
 CREATE TABLE Gebruikerstelefoon (

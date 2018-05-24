@@ -19,16 +19,16 @@ VALUES	(5,'Hoe heette je eerste huisdier?'),
 		(3,'Welke bijnaam had je als kind?');
 
 INSERT INTO Gebruiker
-(gebruikersnaam,voornaam,achternaam,adresregel1,adresregel2,postcode,plaatsnaam,land,geboortedatum,mailbox,wachtwoord,vraag,antwoordtekst,verkoper)
-VALUES	('Gebruiker1','Gebruiker','1',		'Kastanjelaan 45',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker1@gmail.com','Hello1234',							5,'Poekie',	1),
-		('Gebruiker2','Gebruiker','2',		'Kastanjelaan 44',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker2@gmail.com','123Welkom',							4,'Elst',	1),
-		('Gebruiker3','Gebruiker','3',		'Krokuslaan 101', NULL,'6666 AS','Arnhem','Nederland','24-apr-2018','Gebruiker3@gmail.com','Welkom123',							5,'Doekie',	1),
-		('Gebruiker4','Gebruiker','4',		'Kastanjelaan 43',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker4@gmail.com','AFSDJFJSDai2',						5,'Zoekie',	0),
-		('Gebruiker5','Gebruiker','5',		'Kastanjelaan 42',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker5@gmail.com','SSSSS1234',							1,'Ei',		1),
-		('Gebruiker6','Gebruiker','6',		'Kastanjelaan 41',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker6@gmail.com','10ooo0004',							5,'Wookiee',0),
-		('Gebruiker7','Gebruiker','7',		'Kastanjelaan 40',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker7@gmail.com','Ikbeneenkoe1',						5,'Loekie',	1),
-		('Gebruiker8','Gebruiker','8',		'Kastanjelaan 39',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker8@gmail.com','wachtw00rd',						5,'Joekie',	0),
-		('Admin',	  'Admin',    'Admin',	'Kastanjelaan 46',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Admin@Admin.com',	   'e64b78fc3bc91bcbc7dc232ba8ec59e0',	5,'Roekie',	1);  /*Wachtwoord: Admin123*/
+(gebruikersnaam,voornaam,achternaam,adresregel1,adresregel2,postcode,plaatsnaam,land,geboortedatum,mailbox,wachtwoord,vraag,antwoordtekst,verkoper, code, actief)
+VALUES	('Gebruiker1','Gebruiker','1',		'Kastanjelaan 45',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker1@gmail.com','Hello1234',							5,'Poekie',	1, '5751ec3e9a4feab575962e78e006250d', 1),
+		('Gebruiker2','Gebruiker','2',		'Kastanjelaan 44',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker2@gmail.com','123Welkom',							4,'Elst',	1, '82161242827b703e6acf9c726942a1e4', 1),
+		('Gebruiker3','Gebruiker','3',		'Krokuslaan 101', NULL,'6666 AS','Arnhem','Nederland','24-apr-2018','Gebruiker3@gmail.com','Welkom123',							5,'Doekie',	1, 'c0e190d8267e36708f955d7ab048990d', 1),
+		('Gebruiker4','Gebruiker','4',		'Kastanjelaan 43',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker4@gmail.com','AFSDJFJSDai2',						5,'Zoekie',	0, '07c5807d0d927dcd0980f86024e5208b', 1),
+		('Gebruiker5','Gebruiker','5',		'Kastanjelaan 42',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker5@gmail.com','SSSSS1234',							1,'Ei',		1, '2afe4567e1bf64d32a5527244d104cea', 1),
+		('Gebruiker6','Gebruiker','6',		'Kastanjelaan 41',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker6@gmail.com','10ooo0004',							5,'Wookiee',0, '02a32ad2669e6fe298e607fe7cc0e1a0', 1),
+		('Gebruiker7','Gebruiker','7',		'Kastanjelaan 40',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker7@gmail.com','Ikbeneenkoe1',						5,'Loekie',	1, 'fb89705ae6d743bf1e848c206e16a1d7', 1),
+		('Gebruiker8','Gebruiker','8',		'Kastanjelaan 39',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Gebruiker8@gmail.com','wachtw00rd',						5,'Joekie',	0, '01386bd6d8e091c2ab4c7c7de644d37b', 1),
+		('Admin',	  'Admin',    'Admin',	'Kastanjelaan 46',NULL,'6666 AC','Arnhem','Nederland','24-apr-2018','Admin@Admin.com',	   'e64b78fc3bc91bcbc7dc232ba8ec59e0',	5,'Roekie',	1, 'df877f3865752637daa540ea9cbc474f', 1);  /*Wachtwoord: Admin123*/
 
 INSERT INTO Gebruikerstelefoon
 (volgnr,gebruiker,telefoon)
