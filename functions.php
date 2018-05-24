@@ -20,7 +20,6 @@ catch(PDOException $e)
     echo "Error: " . $e->getMessage();
     }
 }
-
 //Haalt gegevens uit 'Vraag'
 $output;
 function search_item($dbh, $input){
@@ -44,7 +43,6 @@ function search_item($dbh, $input){
   }
   echo $output;
 }
-
 //Hot Items (Selecteert 3 items met de meest recente biedingen)
 function hot_items($dbh){
   $output="";
@@ -75,7 +73,6 @@ function hot_items($dbh){
   }
   echo $output;
 }
-
 //Aflopende Items (Selecteert 3 items die het snelst aflopen)
 function ending_items($dbh){
   $output="";
@@ -106,7 +103,6 @@ function ending_items($dbh){
   }
 echo $output;
 }
-
 //Laaggeboden Items (Selecteert 3 items met de laagste biedingen)
 function cheap_items($dbh){
   $output="";
@@ -137,8 +133,6 @@ function cheap_items($dbh){
   }
   echo $output;
 }
-
-
 // Zoek naar RUBRIEKEN op hoofdpagina
 function zoekRubriek($dbh, $zoekWoord, $order) {
   if($order == "COUNT ASC") {
@@ -196,7 +190,6 @@ function zoekRubriek($dbh, $zoekWoord, $order) {
        echo "Er is iets mis gegaan. De foutmelding is: $e";
    }
 }
-
 // Haalt het antal items op in een Rubriek
 function aantalItems($dbh, $rubrieknummer) {
   $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
@@ -209,7 +202,6 @@ function aantalItems($dbh, $rubrieknummer) {
       echo $row['Aantal_items'];
   }
 }
-
 // Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
   try{
@@ -232,7 +224,6 @@ function toonItems($dbh, $zoekWoord) {
       echo "Er is iets mis gegaan. De foutmelding is: $e";
   }
 }
-
 //Toont BREADCRUMBS voor Producten
 function productBreadCrumbs($dbh, $zoekWoord) {
   $breadcrumb;
@@ -258,7 +249,6 @@ function productBreadCrumbs($dbh, $zoekWoord) {
               </nav';
   }
 }
-
 //Toont BREADCRUMBS voor de website
 function breadCrumbs($dbh, $zoekWoord) {
   echo '<nav aria-label="You are here: "role="navigation">
@@ -268,7 +258,6 @@ function breadCrumbs($dbh, $zoekWoord) {
         </ul>
         </nav';
 }
-
 // Haalt RUBRIEKEN op de Database
 function Category($dbh, $zoekWoord) {
   $query = $dbh->prepare("SELECT *
@@ -282,7 +271,6 @@ function Category($dbh, $zoekWoord) {
     subCategory($dbh, $rubrieknummer, $rubrieknaam);
   }
 }
-
 // Haalt SUBRUBRIEKEN op de Database
 function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   $query = $dbh->prepare("SELECT *
@@ -297,23 +285,22 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   }
 }
 
-function detailPagina($dbh, $rubrieknummer) {
+// Laat de details van een item zien
+function detailPagina($dbh) {
+  $voorwerpnummer = $_GET['item'];
   $query = $dbh->prepare("SELECT * FROM Voorwerp v
                           INNER JOIN Bestand b
                           ON v.voorwerpnummer = b.voorwerp
-                          WHERE v.voorwerpnummer = :rubrieknummer ");
-  $query->bindParam(':rubrieknummer', $rubrieknummer);
+                          WHERE v.voorwerpnummer = :voorwerpnummer ");
+  $query->bindParam(':voorwerpnummer', $voorwerpnummer);
   $query->setFetchMode(PDO::FETCH_ASSOC);
   $query->execute();
-
   while($row = $query->fetch()){
       $file = "img/veilingen/" . $row['filenaam'];
       $endtime = date_create($row['looptijdEindeTijdstip']);
       echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
-
       <div class='grid-x grid-padding-x'>
         <div class='small-12'>
-
       <div class='orbit' role='region' aria-label='Favorite Space Pictures' data-orbit>
         <div class='orbit-wrapper'>
           <div class='orbit-controls'>
@@ -350,10 +337,8 @@ function detailPagina($dbh, $rubrieknummer) {
           <button data-slide='3'><span class='show-for-sr'>Fourth slide details.</span></button>
         </nav>
       </div>
-
       </div>
       </div>
-
             <div class= 'grid-x grid-padding-x'>
               <div class= 'cell large-8 medium-7'>
                 <table>
@@ -383,7 +368,6 @@ function detailPagina($dbh, $rubrieknummer) {
                   </tr>
                 </table>
               </div>
-
               <div class='cell large-4 medium-5 right'>
                 <table>
                   <tr>
@@ -408,15 +392,125 @@ function detailPagina($dbh, $rubrieknummer) {
                   </tr>
                   </table>
               </div></div>
-            </div>
-
-            <form action='#' method='POST'>
-              <label>Bied op dit item!</label>
-              <input type='text' name='bodbedrag' placeholder='bedrag'>
-              <input type='hidden' name='datum' value=" . date("m/d/Y") . ">
-              <input type='hidden' name='tijd' value=" . date("H:i") . ">
-              <input type='submit' class='knop' value='Bied' name='submit'>
-            </form>";
+            </div>";
   }
 }
+
+
+// Toont details van de 3 hoogste biedingen op het Item
+function biedingenItem($dbh) {
+  $voorwerpnummer = $_GET['item'];
+  try{
+    $query = $dbh->prepare("SELECT TOP(3) *
+                            FROM Bod
+                            WHERE voorwerp = $voorwerpnummer
+                            ORDER BY bodbedrag DESC");
+    $query->execute();
+  } catch(PDOException $e) {
+      echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+  }
+  while($row = $query->fetch()){
+    $bodbedrag = $row['bodbedrag'];
+    $gebruiker = $row['gebruiker'];
+    $boddag = $row['boddag'];
+    $bodtijdstip = $row['bodtijdstip'];
+    echo "$bodbedrag <br>
+          $gebruiker <br>
+          $boddag <br>
+          $bodtijdstip <br> <br> <br>";
+  }
+}
+
+// Gebruiker plaatst een bod binnen de richtlijnen
+function biedOpItem($dbh) {
+    echo "<form action='#' method='POST'>
+            <label>Bied op dit item!</label>
+            <input type='text' name='bodbedrag' placeholder='bedrag'>
+            <input type='hidden' name='datum' value=" . date("m/d/Y") . ">
+            <input type='hidden' name='tijd' value=" . date("H:i") . ">
+            <input type='submit' class='knop' value='Bied' name='submit'>
+          </form>";
+    if (isset($_POST["submit"])){
+    $voorwerpnummer = $_GET['item'];
+    $bodbedrag = $_POST["bodbedrag"];
+    $boddag = $_POST["datum"];
+    $bodtijdstip = $_POST["tijd"];
+    $usernamemail = $_SESSION['login-token'];
+    try{
+      $query = $dbh->prepare("SELECT *
+                              FROM Gebruiker
+                              WHERE gebruikersnaam = '$usernamemail'
+                              OR mailbox = '$usernamemail'");
+      $query->setFetchMode(PDO::FETCH_ASSOC);
+      $query->execute();
+      $data = $query->fetch();
+      $gebruiker = $data['gebruikersnaam'];
+    } catch(PDOException $e) {
+        echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+    }
+    try {
+      $query = $dbh->prepare("SELECT TOP(1) *
+                              FROM Bod
+                              WHERE voorwerp = $voorwerpnummer
+                              ORDER BY bodbedrag DESC");
+      $query->setFetchMode(PDO::FETCH_ASSOC);
+      $query->execute();
+      $data = $query->fetch();
+      $hoogstebod = $data['bodbedrag'];
+    } catch(PDOException $e) {
+        echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+    }
+    try{
+      if($bodbedrag < 50) {
+        if($bodbedrag >= $hoogstebod + 0.5) {
+            $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ("Bedrag te laag!");
+      }
+      if($bodbedrag > 50 && $bodbedrag < 500) {
+        if($bodbedrag >= $hoogstebod + 1) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ($e);
+      }
+      if($bodbedrag > 500 && $bodbedrag < 1000) {
+        if($bodbedrag >= $hoogstebod + 5) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ($e);
+      }
+      if($bodbedrag > 1000 && $bodbedrag < 5000) {
+        if($bodbedrag >= $hoogstebod + 10) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ($e);
+      }
+      if($bodbedrag > 5000) {
+        if($bodbedrag >= $hoogstebod + 50) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ($e);
+      }
+    } catch(PDOException $e) {
+        echo '<script type="text/javascript">alert("Bedrag te laag!")</script>';
+    }
+  }
+}
+
+
 ?>
