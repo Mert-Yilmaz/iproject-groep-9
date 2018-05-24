@@ -63,7 +63,7 @@ $getLand = $data['land'];
 <form method="post">
     <div class="input-group">
         <label>Emailadres</label>
-        <input type="text" name="email" placeholder="Emailadres" value="<?= $data['mailbox'] ?>">
+        <input type="text" name="email" placeholder="Emailadres" value="<?= $data['mailbox'] ?>" readonly>
     </div>
     <div class="input-group">
         <label>Wachtwoord</label>

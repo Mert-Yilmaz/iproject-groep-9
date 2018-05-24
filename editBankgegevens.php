@@ -24,7 +24,7 @@ try {
         $bank = $_POST['bank'];
         $bankrekening = $_POST['bankrekening'];
         $controleoptie = $_POST['controle'];
-        $creditcard = $_POST['creditcrd'];
+        $creditcard = $_POST['creditcard'];
 
         $update = $dbh->prepare("UPDATE Verkoper 
                                           SET bank='$bank',
@@ -63,12 +63,12 @@ $getControle = $data['controleoptie'];
     <div class="input-group">
         <label>Bank</label>
         <select name="bank">
-            <option value selected = '<?php echo $getBank; ?>'><?php echo $getBank; ?></option>
-            <option value="abnamro">ABN AMRO</option>
-            <option value="asnbank">ASN BANK</option>
-            <option value="ing">ING</option>
-            <option value="rabobank">RABOBANK</option>
-            <option value="snsbank">SNS BANK</option>
+            <option value="<?php echo $getBank; ?>" selected><?php echo $getBank; ?></option>
+            <option value="ABN AMRO">ABN AMRO</option>
+            <option value="ASN BANK">ASN BANK</option>
+            <option value="ING">ING</option>
+            <option value="RABOBANK">RABOBANK</option>
+            <option value="SNS BANK">SNS BANK</option>
         </select>
     </div>
     <div class="input-group">
@@ -77,11 +77,7 @@ $getControle = $data['controleoptie'];
     </div>
     <div class="input-group">
         <label>Controle optie</label>
-        <select name="controle">
-            <option value selected = '<?php echo $getControle; ?>'><?php echo $getControle; ?></option>
-            <option value="post">Post</option>
-            <option value="creditcard">Creditcard</option>
-        </select>
+        <input type="text" name="controle" value="<?= $data['controleoptie'] ?>" readonly>
     </div>
     <div class="input-group">
         <label>Creditcard</label>
