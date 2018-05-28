@@ -1,4 +1,4 @@
-﻿USE iproject9
+USE iproject9
 
 DELETE FROM VoorwerpInRubriek;
 DELETE FROM Bestand;
@@ -3513,7 +3513,7 @@ VALUES	(0000000001, 'BMW 340i',		'Mooie BMW',						50.00,	'IDeal/PayPal',	'Gewoo
 		(0000000006, 'Audi RS6',		'Lekkere motor',					70.00,	'IDeal/PayPal', 'Kijk maar of je betaald',		'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	80.00),
 		(0000000007, 'Renault Megane',	'Lelijke auto',						10.00,	'IDeal/PayPal', 'Kijk maar of je betaald',		'Boxmeer',	'Nederland',	3,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	15.00),
 		(0000000008, 'Mercedes C63s',	'Heeft geen smaak',					270.00, 'IDeal/PayPal', 'Betaal gewoon kill',			'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	280.00),
-		(0000000014, 'Call Of Duty BO3','Gekke gimma a niffaauwwww',		40.00,	'IDeal/PayPal', 'Betaal gewoon kill',			'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'30-may-2018',	'20:20:21', 0,	50.00),
+		(0000000014, 'Call Of Duty BO3','Gekke gimma a nifauw',				40.00,	'IDeal/PayPal', 'Betaal gewoon kill',			'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'30-may-2018',	'20:20:21', 0,	50.00),
 		(0000000015, 'Fortnite',		'A zebiiiisssss',					40.00,	'IDeal/PayPal', 'Betaal gewoon kill',			'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'30-may-2018',	'20:20:21', 0,	50.00),
 		(0000000016, 'Battlefield 1',	'Erg leuk',							40.00,	'IDeal/PayPal', 'Betaal gewoon kill',			'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'30-may-2018',	'20:20:21', 0,	50.00),
 		(0000000017, 'Counter Strike',	'Super pittig',						40.00,	'IDeal/PayPal', 'Betaal gewoon kill',			'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'30-may-2018',	'20:20:21', 0,	50.00),
@@ -3553,7 +3553,7 @@ VALUES	('bmw304i.jpg',			0000000001),
 		('fortnite.jpg',		0000000015),
 		('b1.jpg',				0000000016),
 		('cs.jpg',				0000000017),
-		('bo2.jpg',				0000000018),
+		('bo2.jpg',				0000000018);
 
 INSERT INTO VoorwerpInRubriek (voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau)
 VALUES	(0000000001,9837,	9800),
