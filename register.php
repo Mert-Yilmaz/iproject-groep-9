@@ -31,7 +31,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 <div class="grid-x">
     <div class="large-4 medium-3"></div>
     <div class="medium-6 small-12 large-4">
-        <form class="registerform" method="POST" action="verify.php">
+        <form class="registerform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
 
             <div>
@@ -65,6 +65,11 @@ error_reporting(E_ALL ^ E_NOTICE);
                        required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
             </div>
 
+            <div>
+                <input type="password" name="Wachtwoord_check" placeholder="Wachtwoord check" maxlength="100"
+                       required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
+            </div>
+
 
             <div>
                 <input type="text" name="Adresregel1" placeholder="Adres" maxlength="30" required>
@@ -84,7 +89,7 @@ error_reporting(E_ALL ^ E_NOTICE);
             <div>
 
 
-                <select name="Land"> <!-- In array/db zetten? -->
+                <select name="Land">
                     <option value disabled selected>Selecteer een land</option>
                     <option value="Afghanistan"> Afghanistan</option>
                     <option value="Albania"> Albanië</option>
@@ -122,7 +127,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 
             <div>
-                <select name="Vraag"> <!-- Uit DB halen -->
+                <select name="Vraag">
                     <option value disabled selected>Selecteer een beveiligingsvraag</option>
                     <option value="1">Welk gerecht kon je als eerste koken?</option>
                     <option value="2">Wat is je moeders tweede naam?</option>
@@ -149,6 +154,7 @@ error_reporting(E_ALL ^ E_NOTICE);
     <div class="medium-3 large-4"></div>
 
     <?php
+    if ($_POST['Wachtwoord'] == $_POST['Wachtwoord_check']){
     if (isset($_POST["Gebruikersnaam"], $_POST["Wachtwoord"], $_POST["Adresregel1"], $_POST["Naam"], $_POST["Achternaam"], $_POST["Land"], $_POST["Plaats"], $_POST["Postcode"], $_POST["Geboortedatum"], $_POST["Email"], $_POST["Vraag"], $_POST["Antwoord"])) {
         $gebruikersnaam = $_POST["Gebruikersnaam"];
         $wachtwoord = md5($_POST["Wachtwoord"]);
@@ -164,39 +170,18 @@ error_reporting(E_ALL ^ E_NOTICE);
         $vraag = $_POST["Vraag"];
         $antwoord = md5($_POST["Antwoord"]);
         $verkoper = 0;
-        $code = md5(rand(0,1000));
-        $actief = 0;
 
         try {
             $query = $dbh->prepare("INSERT INTO Gebruiker
-	                VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$code','$actief')");
+	                VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord',0)");
             $query->execute();
-
-            //Email versturen
-            $to      = $email;
-            $from    = 'noreply@eenmaalandermaal9.nl';
-            $subject = 'Verificatie account EenmaalAndermaal';
-            $message = '
-            
-            Beste ' . $voornaam . '
-            Bedankt voor het aanmelden op EenmaalAndermaal!
-            Om mee te kunnen bieden en in te kunnen loggen moet u uw account activeren aan de hand van de onderstaande link.
- 
-            ------------------------
-            Gebruikersnaam: ' . $gebruikersnaam . '
-            Email: ' . $email . '
-            Wachtwoord: ' . $_POST['Wachtwoord'] . '
-            ------------------------
- 
-            Klik op de onderstaande link om uw account te activeren:
-            http://iproject9.icasites.nl/verify.php?email='.$email.'&code='.$code.'';
-
-            $headers = 'From: ' . $from . "\r\n";
-            mail($to, $subject, $message, $headers);
-
         } catch (PDOException $e) {
             echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
         }
+      }
+    }
+    else{
+      echo '<script type="text/javascript">alert("Wachtwoord komt niet overeen met wachtwoord check")</script>';
     }
     include("footer.html");
     ?>
