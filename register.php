@@ -1,4 +1,11 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: demiv
+ * Date: 28-5-2018
+ * Time: 10:56
+ */
+
 session_start();
 include 'functions.php';
 include_once 'db.php';
@@ -32,59 +39,37 @@ error_reporting(E_ALL ^ E_NOTICE);
     <div class="large-4 medium-3"></div>
     <div class="medium-6 small-12 large-4">
         <form class="registerform" method="POST" action="verify.php">
-
-
             <div>
                 <input type="text" name="Naam" placeholder="Voornaam" maxlength="15" required>
             </div>
-
-
             <div>
                 <input type="text" name="Achternaam" placeholder="Achternaam" maxlength="20" required>
             </div>
-
-
             <div>
                 <label>Geboortedatum</label>
                 <input type="date" name="Geboortedatum" placeholder="Geboortedatum" required>
             </div>
-
-
             <div>
                 <input type="email" name="Email" placeholder="E-Mail" maxlength="50" required>
             </div>
-
-
             <div>
                 <input type="text" name="Gebruikersnaam" placeholder="Gebruikersnaam" maxlength="20" required>
             </div>
-
-
             <div>
                 <input type="password" name="Wachtwoord" placeholder="Wachtwoord (Minimaal 7 tekens, een hoofdletter en een getal)" maxlength="100"
-                       required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
             </div>
-
-
             <div>
                 <input type="text" name="Adresregel1" placeholder="Adres" maxlength="30" required>
             </div>
-
-
             <div>
                 <input type="text" name="Plaats" placeholder="Plaats" maxlength="15" required>
             </div>
-
-
             <div>
                 <input type="text" name="Postcode" placeholder="Postcode" maxlength="7" required>
             </div>
-
-
             <div>
-
-
-                <select name="Land"> <!-- In array/db zetten? -->
+                <select name="Land">
                     <option value disabled selected>Selecteer een land</option>
                     <option value="Afghanistan"> Afghanistan</option>
                     <option value="Albania"> Albanië</option>
@@ -114,15 +99,11 @@ error_reporting(E_ALL ^ E_NOTICE);
                     <option value="Anders"> Overig</option>
                 </select>
             </div>
-
-
             <div>
                 <input type="text" name="Adresregel2" maxlength="15" placeholder="Adres 2">
             </div>
-
-
             <div>
-                <select name="Vraag"> <!-- Uit DB halen -->
+                <select name="Vraag"> <!-- Ophalen uit DB? -->
                     <option value disabled selected>Selecteer een beveiligingsvraag</option>
                     <option value="1">Welk gerecht kon je als eerste koken?</option>
                     <option value="2">Wat is je moeders tweede naam?</option>
@@ -131,13 +112,9 @@ error_reporting(E_ALL ^ E_NOTICE);
                     <option value="5">Hoe heette je eerste huisdier?</option>
                 </select>
             </div>
-
-
             <div>
                 <input type="text" name="Antwoord" placeholder="Antwoord beveiligingsvraag" maxlength="20" required>
             </div>
-
-
             <div>
                 <button type="submit" class="knop" name="reg_user">Registreer</button>
             </div>
@@ -166,31 +143,36 @@ error_reporting(E_ALL ^ E_NOTICE);
         $verkoper = 0;
         $code = md5(rand(0,1000));
         $actief = 0;
+
+        //Prepare
+        $query = "INSERT INTO Gebruiker VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,)";
+        $query = $dbh->prepare($query);
+
+        //In DB
         try {
-            $query = $dbh->prepare("INSERT INTO Gebruiker
-	                VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$code','$actief')");
-            $query->execute();
-            //Email versturen
+            $query->execute(array($gebruikersnaam, $voornaam, $achternaam, $adresregel1, $adresregel2, $postcode, $plaats, $land, $geboortedatum, $email, $wachtwoord, $vraag, $antwoord, $verkoper, $code, $actief));
+
             $to      = $email;
             $from    = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Verificatie account EenmaalAndermaal';
             $message = '
             
-            Beste ' . $voornaam . '
+            
+            Beste ' . $voornaam . ',
             Bedankt voor het aanmelden op EenmaalAndermaal!
             Om mee te kunnen bieden en in te kunnen loggen moet u uw account activeren aan de hand van de onderstaande link.
- 
             ------------------------
             Gebruikersnaam: ' . $gebruikersnaam . '
             Email: ' . $email . '
             Wachtwoord: ' . $_POST['Wachtwoord'] . '
             ------------------------
- 
-            Klik op de onderstaande link om uw account te activeren:
+            Kopieer de onderstaande link om uw account te activeren:
             http://iproject9.icasites.nl/verify.php?email='.$email.'&code='.$code.'';
+
             $headers = 'From: ' . $from . "\r\n";
             mail($to, $subject, $message, $headers);
         } catch (PDOException $e) {
+            echo $e;
             echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
         }
     }
