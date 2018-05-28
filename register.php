@@ -170,6 +170,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 	                VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord',0)");
             $query->execute();
         } catch (PDOException $e) {
+		echo $e;
             echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
         }
     }
