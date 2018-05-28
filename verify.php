@@ -24,8 +24,7 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
         //sqlsrv_query($conn, "UPDATE Gebruiker SET actief=1 WHERE mailbox=$email AND code=$code AND actief=0") OR DIE (sqlsrv_errors());
         
         //ANDERS:
-        $update = "UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0";
-        $updatestmt = $dbh->prepare($update);
+        $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0");
         $updatestmt->execute();
         
         //ANDERS:
