@@ -126,7 +126,7 @@ error_reporting(E_ALL ^ E_NOTICE);
     <div class="medium-3 large-4"></div>
 
     <?php
-    if (isset($_POST["Gebruikersnaam"], $_POST["Wachtwoord"], $_POST["Adresregel1"], $_POST["Naam"], $_POST["Achternaam"], $_POST["Land"], $_POST["Plaats"], $_POST["Postcode"], $_POST["Geboortedatum"], $_POST["Email"], $_POST["Vraag"], $_POST["Antwoord"])) {
+    if (isset($_POST['reg_user'])) {
         $gebruikersnaam = $_POST["Gebruikersnaam"];
         $wachtwoord = md5($_POST["Wachtwoord"]);
         $adresregel1 = $_POST["Adresregel1"];
