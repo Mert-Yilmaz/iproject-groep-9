@@ -61,12 +61,7 @@ error_reporting(E_ALL ^ E_NOTICE);
                 <input type="password" name="Wachtwoord" placeholder="Wachtwoord (Minimaal 7 tekens, een hoofdletter en een getal)" maxlength="100"
                        required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
             </div>
-
-            <!-- <div>
-                <input type="password" name="Wachtwoord_check" placeholder="Wachtwoord check" maxlength="100"
-                       required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
-            </div> -->
-
+            
 
             <div>
                 <input type="text" name="Adresregel1" placeholder="Adres" maxlength="30" required>
