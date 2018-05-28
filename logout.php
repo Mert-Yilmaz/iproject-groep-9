@@ -3,7 +3,7 @@
 session_start();
 unset($_SESSION['login_token']);
 
-if(session_destroy()) {
+if(!isset($_SESSION['login_token'])) {
     header("Location: index.php");
 }
 ?>
