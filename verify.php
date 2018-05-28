@@ -22,8 +22,10 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
 
     if($match > 0) {
         sqlsrv_query($conn, "UPDATE Gebruiker SET actief=1 WHERE mailbox=$email AND code=$code AND actief=0") OR DIE (sqlsrv_errors());
-//        $sqlquery = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code'");
-//        $sqlquery->execute();
+        //ANDERS: 
+        //$update = "UPDATE Gebruiker SET actief=1 WHERE mailbox=$email AND code=$code AND actief=0";
+        //$update = $dbh->prepare($update);
+        //$update->execute();
         $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
         echo "<h3>$message</h3>";
     } else {
