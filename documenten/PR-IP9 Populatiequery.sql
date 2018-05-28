@@ -3507,7 +3507,12 @@ INSERT INTO Voorwerp
 (voorwerpnummer,titel,beschrijving,startprijs,betalingswijze,betalingsinstructie,plaatsnaam,land,looptijd,looptijdBeginDag,looptijdBeginTijdstip,verzendkosten,verzendinstructies,verkoper,koper,looptijdEindeDag,looptijdEindeTijdstip,veilingGesloten,verkoopprijs)
 VALUES	(0000000001,'BMW 340i',		'Mooie BMW',			50.00,	'IDeal/PayPal',	'Gewoon overmaken',				'Arnhem',	'Nederland',	7,	'15-may-1999',	'09:20:20.0000000',	null,	null,	'Admin',	'Gebruiker1',	'22-may-1999',	'20:20:21',	1,	150.00),
 		(0000000002,'Cake',			'Zo goed als nieuw',	90.00,	'IDeal/PayPal',	'Je mag het geld zelf houden',	'Zevenaar',	'Polen',		3,	'20-feb-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker5',	'22-feb-2018',	'20:20:21',	1,	639.99),
-		(0000000003,'Reclamebord',	'5x5 meter',			60.00,	'IDeal/PayPal',	'Contant',						'Utrecht',	'Nederland',	5,	'08-may-2018',	'09:20:20.0000000',	null,	null,	'Admin',	'Gebruiker5',	'13-may-2018',	'20:20:21',	1,	75.00 );
+		(0000000003,'Reclamebord',	'5x5 meter',			60.00,	'IDeal/PayPal',	'Contant',						'Utrecht',	'Nederland',	5,	'08-may-2018',	'09:20:20.0000000',	null,	null,	'Admin',	'Gebruiker5',	'13-may-2018',	'20:20:21',	1,	75.00),
+		(0000000004, 'BMW 320d'		'Zuinige sportieve auto' 70.00, 'IDeal/PayPal', 'Kijk maar of je betaald',		'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	80.00),
+		(0000000005, 'BMW 535i'		'Fijne auto' 85.00, 'IDeal/PayPal', 'Contant betalen kan niet',		'Arnhem',	'Nederland',	7,	'27-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	90.00),
+		(0000000006, 'Audi RS6'		'Lekkere motor' 70.00, 'IDeal/PayPal', 'Kijk maar of je betaald',		'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	80.00),
+		(0000000007, 'Renault Megane'		'Lelijke auto' 10.00, 'IDeal/PayPal', 'Kijk maar of je betaald',		'Boxmeer',	'Nederland',	3,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	11.00),
+		(0000000008, 'Mercedes C63s'		'Voor de autorijder zonder smaak' 270.00, 'IDeal/PayPal', 'Betaal gewoon kill',		'Arnhem',	'Nederland',	7,	'28-may-2018',	'09:20:20.0000000', null,	null,	'Admin',	'Gebruiker1',	'29-may-2018',	'20:20:21', 1,	80:00);
 
 INSERT INTO Feedback
 (voorwerp,soortgebruiker,feedbacksoort,dag,tijdstip,commentaar)
@@ -3517,15 +3522,32 @@ INSERT INTO Bod
 (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
 VALUES	(0000000001,	150.00,	'Gebruiker1','21-apr-2018','12:00:00.0000000'),
 		(0000000002,	639.99,	'Gebruiker5','21-feb-2018','15:45:06.0000000'),
-		(0000000003,	75.00,	'Gebruiker5','10-may-2018','05:04:03.0000000');
+		(0000000003,	75.00,	'Gebruiker5','10-may-2018','05:04:03.0000000'),
+		(0000000004,	70,		'Gebruiker3','28-may-2018','23:04:03.0000000'),
+		(0000000005,	88,		'Gebruiker7','28-may-2018','23:04:03.0000000'),
+		(0000000006,	71,		'Gebruiker3','28-may-2018','23:04:03.0000000'),
+		(0000000007,	11,		'Gebruiker5','28-may-2018','23:04:03.0000000'),
+		(0000000008,	271,	'Gebruiker5','28-may-2018','23:04:03.0000000');
+
+
 
 INSERT INTO Bestand
 (filenaam,voorwerp)
 VALUES	('bmw304i.jpg',			0000000001),
 		('cake.jpg',			0000000002),
-		('reclamebordcola.jpg',	0000000003);
+		('reclamebordcola.jpg',	0000000003),
+		('320d',				0000000004),
+		('535i',				0000000005),
+		('rs6',					0000000006),
+		('megane',				0000000007),
+		('c63s',				0000000008);
 
 INSERT INTO VoorwerpInRubriek (voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau)
 VALUES	(0000000001,9837,	9800),
 		(0000000002,1139,	267),
-		(0000000003,62862,	1);	-- Of 62848?
+		(0000000003,62862,	1),	-- Of 62848?
+		(0000000004,9837,	9800),
+		(0000000005,9837,	9800),
+		(0000000006,9837,	9800),
+		(0000000007,9837,	9800),
+		(0000000008,9837,	9800);
