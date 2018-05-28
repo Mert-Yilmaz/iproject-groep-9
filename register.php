@@ -62,10 +62,10 @@ error_reporting(E_ALL ^ E_NOTICE);
                        required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
             </div>
 
-            <div>
+            <!-- <div>
                 <input type="password" name="Wachtwoord_check" placeholder="Wachtwoord check" maxlength="100"
                        required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
-            </div>
+            </div> -->
 
 
             <div>
@@ -86,7 +86,7 @@ error_reporting(E_ALL ^ E_NOTICE);
             <div>
 
 
-                <select name="Land">
+                <select name="Land"> <!-- In array/Database zetten? -->
                     <option value disabled selected>Selecteer een land</option>
                     <option value="Afghanistan"> Afghanistan</option>
                     <option value="Albania"> Albanië</option>
@@ -172,14 +172,15 @@ error_reporting(E_ALL ^ E_NOTICE);
             $query = $dbh->prepare("INSERT INTO Gebruiker
               VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$code','$actief')");
             $query->execute();
+            
             //Email versturen
             $to      = $email;
             $from    = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Verificatie account EenmaalAndermaal';
             $message = '
-            Beste ' . $voornaam . '
+            Beste ' . $voornaam . ',
             Bedankt voor het aanmelden op EenmaalAndermaal!
-            Om mee te kunnen bieden en in te kunnen loggen moet u uw account activeren aan de hand van de onderstaande link.
+            Om mee te kunnen bieden en in te kunnen loggen op EenmaalAndermaal moet u uw account activeren aan de hand van de onderstaande link.
             ------------------------
             Gebruikersnaam: ' . $gebruikersnaam . '
             Email: ' . $email . '
