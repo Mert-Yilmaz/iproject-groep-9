@@ -38,7 +38,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 <div class="grid-x">
     <div class="large-4 medium-3"></div>
     <div class="medium-6 small-12 large-4">
-        <form class="registerform" method="POST" action="verify.php">
+        <form class="registerform" method="POST" action="register.php">
             <div>
                 <input type="text" name="Naam" placeholder="Voornaam" maxlength="15" required>
             </div>
