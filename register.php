@@ -145,7 +145,7 @@ error_reporting(E_ALL ^ E_NOTICE);
         $actief = 0;
 
         //Prepare
-        $query = "INSERT INTO Gebruiker VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,)";
+        $query = "INSERT INTO Gebruiker VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $query = $dbh->prepare($query);
 
         //In DB
