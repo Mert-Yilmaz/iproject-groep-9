@@ -17,8 +17,10 @@ if(isset($_POST['email']) && isset($_POST['code'])) {
         $query = $dbh->prepare("UPDATE Gebruiker SET actief='1' WHERE email='$email' AND code='$code'");
         $query->execute();
         $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
+        echo $message;
     } else {
         $message = "Error";
+        echo $message;
     }
 }
 
@@ -39,8 +41,6 @@ error_reporting(E_ALL ^ E_NOTICE);
 </head>
 <body>
 <?php include 'navbar.php'; ?>
-
-<h1><?php echo $message ?></h1>
 
 <?php include_once 'footer.html'; ?>
 </body>
