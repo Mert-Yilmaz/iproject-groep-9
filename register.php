@@ -194,8 +194,8 @@ error_reporting(E_ALL ^ E_NOTICE);
             Wachtwoord: ' . $_POST['Wachtwoord'] . '
             ------------------------
 
-            Klik op de onderstaande link om uw account te activeren:
-            http://iproject9.icasites.nl/verify.php?email='.$email.'&code='.$code.'';
+            Klik op de onderstaande link om uw account te activeren:' . 
+            "<a href='http://iproject9.icasites.nl/verify.php?email=$email&code=$code</a>";
 
             $headers = 'From: ' . $from . "\r\n";
             mail($to, $subject, $message, $headers);
