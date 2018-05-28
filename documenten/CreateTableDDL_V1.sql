@@ -123,6 +123,8 @@ CREATE TABLE Gebruiker (
 			--ON DELETE,*/
 	/*--- Constraint Appendix B - Geldig emailadres ---*/
 	CONSTRAINT ckEmail CHECK (mailbox LIKE '%_@__%.__%'),
+	/*--- Eigen constraint - Uniek email adres ---*/
+	CONSTRAINT akEmail UNIQUE (mailbox),
 	/*--- Constraint Appendix B - Unieke gebruikersnaam ---*/
 	CONSTRAINT akGebruikersnaam UNIQUE (gebruikersnaam),
 	/*--- Constraint Appendix B - Wachtwoord minimaal 7 tekens, bestaande uit letters, cijfers --> Hoofdletters via site ---*/
