@@ -11,11 +11,11 @@ if(isset($_POST['email']) && isset($_POST['code'])) {
     $email = $_POST['email'];
     $code = $_POST['code'];
 
-    $sql = $dbh->prepare("SELECT email, password FROM Gebruiker WHERE email='$email' AND code='$code'");
+    $sql = $dbh->prepare("SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
     $sql->execute();
-    $match = sqlsrv_num_rows("SELECT email, password FROM Gebruiker WHERE email='$email' AND code='$code'");
+    $match = sqlsrv_num_rows("SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
     if($match > 0) {
-        $query = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE email='$email' AND code='$code'");
+        $query = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code'");
         $query->execute();
         $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
         echo $message;
