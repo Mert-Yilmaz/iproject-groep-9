@@ -31,8 +31,7 @@
 		 <div class="grid-x">
 		     <div class="large-4 medium-3"></div>
 		     <div class="medium-6 small-12 large-4">
-		-        <form class="registerform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-		+        <form class="registerform" method="POST" action="verify.php">
+		         <form class="registerform" method="POST" action="verify.php">
 		 
 		 
 		             <div>
