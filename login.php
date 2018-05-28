@@ -10,7 +10,7 @@ if(isset($_POST['username-mail']) AND isset($_POST['password'])) {
     $passworduser = md5($_POST['password']);
 
     if(isset($_POST['loginbtn'])) {
-        $query_login = "SELECT * FROM Gebruiker WHERE (gebruikersnaam='$usernamemail' OR mailbox='$usernamemail') AND wachtwoord='$passworduser' AND actief=1";
+        $query_login = "SELECT * FROM Gebruiker WHERE (gebruikersnaam='$usernamemail' OR mailbox='$usernamemail') AND wachtwoord='$passworduser'";
         $result = $dbh->query($query_login);
         $count = $result->rowCount();
 
