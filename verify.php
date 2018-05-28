@@ -19,17 +19,18 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     $queryresult = $dbh->query($query);
     $count = $queryresult->rowCount();
     
+    echo "<h1>$count</h1>";
+
     if($count == 1 || $count == -1) {
         $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0");
         $updatestmt->execute();
-        
+
         $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
-        echo "<h3>$message</h3>";
     } else {
         $message = "Error, no match.";
-        echo "<h3>$message</h3>";
     }
-    
+    echo "<h3>$message</h3>";
+
     /*if($match > 0) {
         //sqlsrv_query($conn, "UPDATE Gebruiker SET actief=1 WHERE mailbox=$email AND code=$code AND actief=0") OR DIE (sqlsrv_errors());
 
@@ -48,7 +49,7 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
         $message = "Error, no match.";
         echo "<h3>$message</h3>";
     }*/
-    
+
 } else {
     echo "<h3>Error, use link</h3>";
 }
