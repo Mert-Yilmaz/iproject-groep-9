@@ -15,13 +15,12 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     echo "<h3>Email en code meegekregen (check)</h3>";
     echo "<p>$email, $code</p>";
 
-    $query = sqlsrv_query($conn, "SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
-    $queryresult = $dbh->query($query);
-    $count = $queryresult->rowCount();
-    
-    echo "<h1>$count</h1>";
+    $query = "SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'";
+    $check = sqlsrv_query($conn, $query);
+    //    $queryresult = $dbh->query($query);
+    //    $count = $queryresult->rowCount();
 
-    if($count == 1 || $count == -1) {
+    if(sqlsrv_num_rows($check) > 0) {
         $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0");
         $updatestmt->execute();
 
