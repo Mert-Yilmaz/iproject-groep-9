@@ -13,12 +13,24 @@ if(isset($_POST['email']) && isset($_POST['code'])) {
     echo "EMAIL EN CODE MEEGEKREGEN";
     $email = $_POST['email'];
     $code = $_POST['code'];
+    echo "<h3>Email en code meegekregen (check)</h3>";
+    echo "<p>$email, $code</p>";
 
-    $query = "SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox=$email AND code=$code";
-    $stmt = sqlsrv_query($conn, $query);
+    $query = sqlsrv_query($conn, "SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox=$email AND code=$code");
+    $match = sqlsrv_num_rows($query);
 
-    $match = sqlsrv_num_rows($stmt);
-    echo $match;
+    if($match > 0) {
+        sqlsrv_query($conn, "UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code'");
+//        $sqlquery = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code'");
+//        $sqlquery->execute();
+        $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
+        echo "<h3>$message</h3>";
+    } else {
+        $message = "Error, no match.";
+        echo "<h3>$message</h3>";
+    }
+} else {
+    echo "<h3>Error, use link</h3>";
 }
 
 include 'functions.php';
