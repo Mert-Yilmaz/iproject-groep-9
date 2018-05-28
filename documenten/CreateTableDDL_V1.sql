@@ -25,7 +25,7 @@ IF OBJECT_ID('dbo.Vraag') IS NOT NULL
 	DROP TABLE Vraag;
 
 ---- ----- ----- ----- ----- ----
--- Creëren en droppen functies --
+-- CreÃ«ren en droppen functies --
 ---- ----- ----- ----- ----- ----
 /*
 IF OBJECT_ID ('fControleerGebruikerIsVerkoper') IS NOT NULL
@@ -84,7 +84,7 @@ GO
 ---------------------------------
 
 ----- ----- ----- -----
--- Creëren  tabellen --
+-- CreÃ«ren  tabellen --
 ----- ----- ----- -----
 CREATE TABLE Vraag (
 	vraagnummer	INTEGER		NOT NULL,	-- 1
@@ -183,25 +183,25 @@ CREATE TABLE Verkoper (
 )
 
 CREATE TABLE Voorwerp (
-	voorwerpnummer			NUMERIC(10)			NOT NULL,
-	titel					CHAR(18)			NOT NULL,
+	voorwerpnummer			INTEGER				NOT NULL,	-- WAS NUM
+	titel				CHAR(18)			NOT NULL,
 	beschrijving			CHAR(22)			NOT NULL,
-	startprijs				NUMERIC(8)			NOT NULL,	-- WAS CHAR(5)
+	startprijs			INTEGER				NOT NULL,	-- WAS CHAR(5)
 	betalingswijze			CHAR(15)			NOT NULL,	-- WAS 9
-	betalingsinstructie		CHAR(30)				NULL,	-- WAS 23
-	plaatsnaam				CHAR(12)			NOT NULL,
-	land					CHAR(20)			NOT NULL,	-- WAS CHAR(9)
-	looptijd				INTEGER	DEFAULT 7	NOT NULL,	-- 1
+	betalingsinstructie		CHAR(30)			NULL,		-- WAS 23
+	plaatsnaam			CHAR(12)			NOT NULL,
+	land				CHAR(20)			NOT NULL,	-- WAS CHAR(9)
+	looptijd			INTEGER	DEFAULT 7		NOT NULL,	-- 1
 	looptijdBeginDag		DATE				NOT NULL,	-- WAS CHAR(10)
-	looptijdBeginTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
-	verzendkosten			NUMERIC(5)				NULL,	-- WAS CHAR(5)
-	verzendinstructies		CHAR(30)				NULL,	-- WAS 27
-	verkoper				VARCHAR(20)			NOT NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
-	koper					VARCHAR(20)				NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
+	looptijdBeginTijdstip		TIME				NOT NULL,	-- WAS CHAR(8)
+	verzendkosten			INTEGER				NULL,		-- WAS NUM
+	verzendinstructies		CHAR(30)			NULL,		-- WAS 27
+	verkoper			VARCHAR(20)			NOT NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
+	koper				VARCHAR(20)			NULL,		-- Gebruikersnaam	-- WAS CHAR(10)
 	looptijdEindeDag		DATE				NOT NULL,	-- WAS CHAR(10)
-	looptijdEindeTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
-	veilingGesloten			BIT					NOT NULL,	-- WAS CHAR(3)
-	verkoopprijs			NUMERIC(8)				NULL,	-- WAS CHAR(5)
+	looptijdEindeTijdstip		TIME				NOT NULL,	-- WAS CHAR(8)
+	veilingGesloten			BIT				NOT NULL,	-- WAS CHAR(3)
+	verkoopprijs			INTEGER				NULL,		-- WAS CHAR(5)
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerp PRIMARY KEY (voorwerpnummer),
