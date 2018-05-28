@@ -7,6 +7,7 @@
  */
 
 if(isset($_POST['email']) && isset($_POST['code'])) {
+    echo "EMAIL EN CODE MEEGEKREGEN";
     $email = $_POST['email'];
     $code = $_POST['code'];
 
