@@ -6,14 +6,18 @@
  * Time: 11:07
  */
 
+$connectionInfo = array("DB"=>$dbname, "UN"=>$username, "PW"=>$pw);
+$conn = sqlsrv_connect($hostname, $connectionInfo);
+
 if(isset($_POST['email']) && isset($_POST['code'])) {
     echo "EMAIL EN CODE MEEGEKREGEN";
     $email = $_POST['email'];
     $code = $_POST['code'];
 
-    $sql = $dbh->prepare("SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
-    $sql->execute();
-    $match = sqlsrv_num_rows("SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
+    $query = "SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox=$email AND code=$code";
+    $stmt = sqlsrv_query($conn, $query);
+
+    $match = sqlsrv_num_rows($stmt);
     if($match > 0) {
         $sqlquery = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code'");
         $sqlquery->execute();
