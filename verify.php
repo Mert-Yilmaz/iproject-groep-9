@@ -13,7 +13,7 @@ if(isset($_POST['email']) && isset($_POST['code'])) {
 
     $sql = $dbh->prepare("SELECT email, password FROM Gebruiker WHERE email='$email' AND code='$code'");
     $sql->execute();
-    $match = sqlsrv_num_rows($sql);
+    $match = sqlsrv_num_rows("SELECT email, password FROM Gebruiker WHERE email='$email' AND code='$code'");
     if($match > 0) {
         $query = $dbh->prepare("UPDATE Gebruiker SET actief='1' WHERE email='$email' AND code='$code'");
         $query->execute();
