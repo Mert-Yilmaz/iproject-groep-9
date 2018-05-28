@@ -5,7 +5,6 @@ include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
 ?>
 
-
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 <head>
@@ -17,8 +16,6 @@ error_reporting(E_ALL ^ E_NOTICE);
     <link rel="stylesheet" href="css/app.css">
     <link rel="icon" href="img/logo2.PNG">
 </head>
-
-
 <body>
 <?php include 'navbar.php'; ?>
 <div class="grid-x">
@@ -154,7 +151,6 @@ error_reporting(E_ALL ^ E_NOTICE);
     <div class="medium-3 large-4"></div>
 
     <?php
-    /*if ($_POST['Wachtwoord'] == $_POST['Wachtwoord_check']){*/
     if (isset($_POST["Gebruikersnaam"], $_POST["Wachtwoord"], $_POST["Adresregel1"], $_POST["Naam"], $_POST["Achternaam"], $_POST["Land"], $_POST["Plaats"], $_POST["Postcode"], $_POST["Geboortedatum"], $_POST["Email"], $_POST["Vraag"], $_POST["Antwoord"])) {
         $gebruikersnaam = $_POST["Gebruikersnaam"];
         $wachtwoord = md5($_POST["Wachtwoord"]);
@@ -172,42 +168,32 @@ error_reporting(E_ALL ^ E_NOTICE);
         $verkoper = 0;
         $code = md5(rand(0,1000));
         $actief = 0;
-
         try {
             $query = $dbh->prepare("INSERT INTO Gebruiker
               VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$code','$actief')");
             $query->execute();
-
             //Email versturen
             $to      = $email;
             $from    = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Verificatie account EenmaalAndermaal';
             $message = '
-
             Beste ' . $voornaam . '
             Bedankt voor het aanmelden op EenmaalAndermaal!
             Om mee te kunnen bieden en in te kunnen loggen moet u uw account activeren aan de hand van de onderstaande link.
-
             ------------------------
             Gebruikersnaam: ' . $gebruikersnaam . '
             Email: ' . $email . '
             Wachtwoord: ' . $_POST['Wachtwoord'] . '
             ------------------------
-
             Kopieer de onderstaande link om uw account te activeren:
             http://iproject9.icasites.nl/verify.php?email='.$email.'&code='.$code.'';
-
+            
             $headers = 'From: ' . $from . "\r\n";
             mail($to, $subject, $message, $headers);
-
         } catch (PDOException $e) {
             echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
         }
-      }
-    /*}
-    else{
-      echo '<script type="text/javascript">alert("Wachtwoord komt niet overeen met wachtwoord check")</script>';
-    }*/
+    }
     include("footer.html");
     ?>
 </body>
