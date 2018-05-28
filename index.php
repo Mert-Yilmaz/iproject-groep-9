@@ -1,7 +1,5 @@
-<!doctype html>
 <?php
 session_start();
-include 'navbar.php';
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
@@ -9,6 +7,7 @@ if(!isset($_SESSION['WelkomPopUp'])){
 $_SESSION['WelkomPopUp'];
 }
 ?>
+<!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -20,6 +19,7 @@ $_SESSION['WelkomPopUp'];
     <link rel="icon" href="img/logo2.PNG">
 </head>
 <body>
+  <?php include 'navbar.php'; ?>
   <div class="grid-container fluid">
     <div class="grid-x grid-padding-x">
       <div class="cell large-2 text-center">
@@ -85,11 +85,10 @@ $_SESSION['WelkomPopUp'];
         <script src="js/vendor/foundation.js"></script>
         <script src="js/app.js"></script>
         <?php
-        include_once 'footer.html';
+        include_once('footer.html');
         if(!isset($_SESSION['WelkomPopUp'])){
-          echo '<script type="text/javascript">alert("Vul hier in")</script>';
-          $_SESSION['WelkomPopUp'] = 1;
-        }
+          echo '<script type="text/javascript">alert("Welkom, zie ons privacybeleid")</script>';
+          $_SESSION['WelkomPopUp'] = 1;}
         ?>
       </body>
     </html>

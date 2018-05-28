@@ -36,41 +36,41 @@ error_reporting(E_ALL ^ E_NOTICE);
     <div class="medium-3"></div>
 </div>
 <div class="grid-x">
-    <div class="large-4 medium-3"></div>
+  <div class="large-4 medium-3"></div>
     <div class="medium-6 small-12 large-4">
         <form class="registerform" method="POST" action="register.php">
             <div>
-                <input type="text" name="Naam" placeholder="Voornaam" maxlength="15" required>
+                <input type="text" name="Naam" placeholder="Voornaam, verplicht" maxlength="15" required>
             </div>
             <div>
-                <input type="text" name="Achternaam" placeholder="Achternaam" maxlength="20" required>
+                <input type="text" name="Achternaam" placeholder="Achternaam, verplicht" maxlength="20" required>
             </div>
             <div>
                 <label>Geboortedatum</label>
-                <input type="date" name="Geboortedatum" placeholder="Geboortedatum" required>
+                <input type="date" name="Geboortedatum" placeholder="Geboortedatum, verplicht" required>
             </div>
             <div>
-                <input type="email" name="Email" placeholder="E-Mail" maxlength="50" required>
+                <input type="email" name="Email" placeholder="E-Mail, verplicht" maxlength="50" required>
             </div>
             <div>
-                <input type="text" name="Gebruikersnaam" placeholder="Gebruikersnaam" maxlength="20" required>
+                <input type="text" name="Gebruikersnaam" placeholder="Gebruikersnaam, verplicht" maxlength="20" required>
             </div>
             <div>
-                <input type="password" name="Wachtwoord" placeholder="Wachtwoord (Minimaal 7 tekens, een hoofdletter en een getal)" maxlength="100"
+                <input type="password" name="Wachtwoord" placeholder="Wachtwoord (Minimaal 7 tekens, een hoofdletter en een getal), verplicht" maxlength="100"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
             </div>
             <div>
-                <input type="text" name="Adresregel1" placeholder="Adres" maxlength="30" required>
+                <input type="text" name="Adresregel1" placeholder="Adres, verplicht" maxlength="30" required>
             </div>
             <div>
-                <input type="text" name="Plaats" placeholder="Plaats" maxlength="15" required>
+                <input type="text" name="Plaats" placeholder="Plaats, verplicht" maxlength="15" required>
             </div>
             <div>
-                <input type="text" name="Postcode" placeholder="Postcode" maxlength="7" required>
+                <input type="text" name="Postcode" placeholder="Postcode, verplicht" maxlength="7" required>
             </div>
             <div>
                 <select name="Land">
-                    <option value disabled selected>Selecteer een land</option>
+                    <option value disabled selected>Selecteer een land, verplicht</option>
                     <option value="Afghanistan"> Afghanistan</option>
                     <option value="Albania"> Albanië</option>
                     <option value="Algerije"> Algerije</option>
@@ -100,11 +100,11 @@ error_reporting(E_ALL ^ E_NOTICE);
                 </select>
             </div>
             <div>
-                <input type="text" name="Adresregel2" maxlength="15" placeholder="Adres 2">
+                <input type="text" name="Adresregel2" maxlength="15" placeholder="Adres 2, niet verplicht">
             </div>
             <div>
                 <select name="Vraag"> <!-- Ophalen uit DB? -->
-                    <option value disabled selected>Selecteer een beveiligingsvraag</option>
+                    <option value disabled selected>Selecteer een beveiligingsvraag, verplicht</option>
                     <option value="1">Welk gerecht kon je als eerste koken?</option>
                     <option value="2">Wat is je moeders tweede naam?</option>
                     <option value="3">Welke bijnaam had je als kind?</option>
@@ -113,7 +113,7 @@ error_reporting(E_ALL ^ E_NOTICE);
                 </select>
             </div>
             <div>
-                <input type="text" name="Antwoord" placeholder="Antwoord beveiligingsvraag" maxlength="20" required>
+                <input type="text" name="Antwoord" placeholder="Antwoord beveiligingsvraag, verplicht" maxlength="20" required>
             </div>
             <div>
                 <button type="submit" class="knop" name="reg_user">Registreer</button>
@@ -123,7 +123,7 @@ error_reporting(E_ALL ^ E_NOTICE);
             </p>
         </form>
     </div>
-    <div class="medium-3 large-4"></div>
+    <!--<div class="medium-3 large-4"></div>-->
 
     <?php
     if (isset($_POST['reg_user'])) {
@@ -156,8 +156,8 @@ error_reporting(E_ALL ^ E_NOTICE);
             $from    = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Verificatie account EenmaalAndermaal';
             $message = '
-            
-            
+
+
             Beste ' . $voornaam . ',
             Bedankt voor het aanmelden op EenmaalAndermaal!
             Om mee te kunnen bieden en in te kunnen loggen moet u uw account activeren aan de hand van de onderstaande link.

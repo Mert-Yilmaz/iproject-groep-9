@@ -18,11 +18,12 @@ error_reporting(E_ALL ^ E_NOTICE);
   </head>
 <body>
   <?php include 'navbar.php'; ?>
-
+<div class="menubar cell text-center">
     <?php productBreadCrumbs($dbh, $_GET['rubriek']);
-          toonItems($dbh, $_GET['rubriek']);
-
-include_once 'footer.html';
+          toonItems($dbh, $_GET['rubriek']);?>
+</div>
+<div class="cell text-center randomtext"><p>EenmaalAndermaal, de perfecte plek om al uw geld uit te geven.</p></div>
+  <?php include_once 'footer.html';
 ?>
 
 </body>
