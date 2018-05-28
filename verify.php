@@ -9,10 +9,10 @@
 $connectionInfo = array("DB"=>$dbname, "UN"=>$username, "PW"=>$pw);
 $conn = sqlsrv_connect($hostname, $connectionInfo);
 
-if(isset($_POST['email']) && isset($_POST['code'])) {
+if(isset($_GET['email']) && isset($_GET['code'])) {
     echo "EMAIL EN CODE MEEGEKREGEN";
-    $email = $_POST['email'];
-    $code = $_POST['code'];
+    $email = $_GET['email'];
+    $code = $_GET['code'];
     echo "<h3>Email en code meegekregen (check)</h3>";
     echo "<p>$email, $code</p>";
 
