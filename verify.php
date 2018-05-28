@@ -15,7 +15,7 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     echo "<h3>Email en code meegekregen (check)</h3>";
     echo "<p>$email, $code</p>";
 
-    $query = sqlsrv_query($conn, "SELECT mailbox, wachtwoord FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
+    $query = sqlsrv_query($conn, "SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
     $match = sqlsrv_num_rows($query);
 
     echo $match;
