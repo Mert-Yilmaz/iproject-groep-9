@@ -146,7 +146,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
         try {
             $query = $dbh->prepare("INSERT INTO Gebruiker
-	                VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$code','$actief')");
+	                VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$code','$actief');");
             $query->execute();
         } catch (PDOException $e) {
             echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
