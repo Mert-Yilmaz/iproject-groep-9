@@ -15,14 +15,14 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     echo "<h3>Email en code meegekregen (check)</h3>";
     echo "<p>$email, $code</p>";
 
-    $query = "SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'";
-    $result = $dbh->query($query);
+    $result = $dbh->prepare("SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
     $count = $result->rowCount();
     $test = $result->fetch();
     //    $queryresult = $dbh->query($query);
     //    $count = $queryresult->rowCount();
 
     if($test['mailbox']==$email && $test['code'] == $code) {
+    //if($count == 1 || $count == -1) {
         $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1"); /*AND isToegestaan=1*/
         $updatestmt->execute();
 
