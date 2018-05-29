@@ -414,20 +414,19 @@ function biedingenItem($dbh) {
     $gebruiker = $row['gebruiker'];
     $boddag = $row['boddag'];
     $bodtijdstip = $row['bodtijdstip'];
-    echo "<ul>
-          <li>$bodbedrag</li>
-          <li>$gebruiker<li>
-          <li>$boddag</li>
-          <li>$bodtijdstip</li>
-          </ul>";
+    echo "<div class='text-center'><ul>
+          <li>Geboden bodbedrag: €$bodbedrag,-</li>
+          <li>Geboden door: $gebruiker<li>
+          <li>Datum: $boddag</li>
+          <li>Tijdstip: $bodtijdstip</li>
+          </ul></div>";
   }
 }
 
 // Gebruiker plaatst een bod binnen de richtlijnen
 function biedOpItem($dbh) {
     echo "<form action='#' method='POST'>
-            <label>Bied op dit item!</label>
-            <input type='text' name='bodbedrag' placeholder='bedrag'>
+            <input type='text' name='bodbedrag' placeholder='Vul hier uw gewenste bod in.'>
             <input type='hidden' name='datum' value=" . date("m/d/Y") . ">
             <input type='hidden' name='tijd' value=" . date("H:i") . ">
             <input type='submit' class='knop' value='Bied' name='submit'>

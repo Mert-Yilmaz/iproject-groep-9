@@ -20,11 +20,13 @@
     <?php include 'navbar.php'; ?>
     <div class="grid-container">
       <?php productBreadCrumbs($dbh, $_GET['rubriek']);
-            detailPagina($dbh);
-            if(isset($_SESSION['login-token'])) {
+            detailPagina($dbh);?>
+            <div class= "biedingen">
+            <?php if(isset($_SESSION['login-token'])) {
                 biedOpItem($dbh);
             }
             biedingenItem($dbh); ?>
+          </div>
     </div>
     <?php include("footer.html"); ?>
     <script src="js/vendor/jquery.js"></script>
