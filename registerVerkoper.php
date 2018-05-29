@@ -20,6 +20,7 @@ try {
 
     //Stuur mail met random gegenereerde code
     $code = md5(rand(0,1000));
+    
     $insertCode = $dbh->prepare("INSERT INTO Gebruiker (verkopercode) VALUES ('$code')");
     $insertCode->execute();
 
@@ -27,7 +28,7 @@ try {
     $from = "noreply@eenmaalandermaal9.nl";
     $subject = "Verificatiecode verkoopaccount activatie";
     $message = '
-        Beste ' . $_POST['user'] . ',
+        Beste ' . $data['gebruikersnaam'] . ',
         Om uw verkoopaccount te activeren, dient u de onderstaande code in het veld "activatiecode" in te vullen:
         ' . $code;
     $headers = 'From: ' . $from . "\r\n";
@@ -35,7 +36,7 @@ try {
 
     //Als er op de submit knop gedruk wordt
     if(isset($_POST['done'])) {
-        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam='$email' AND verkopercode=" . $_POST['verkoopcode'] . "";
+        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam=" . $data['gebruikersnaam'] . "AND verkopercode=" . $_POST['verkoopcode'];
         $result = $dbh->query($query);
         $count = $result->rowCount();
 
@@ -43,7 +44,7 @@ try {
             $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$email'");
             $update->execute();
 
-            $gebruikersnaam = $_POST['user'];
+            $gebruikersnaam = $data['gebruikersnaam'];
             $bank = $_POST['bank'];
             $bankrekening = $_POST['bankrekening'];
             $controleoptie = $_POST['controle'];
@@ -58,7 +59,6 @@ try {
 catch(PDOException $e) {
     echo "error:".$e->getMessage();
 }
-
 ?>
 
 <!doctype html>
