@@ -9,32 +9,53 @@
 require 'db.php';
 
 try {
-
+    //Haal email uit link
     $getAccount = $_GET['user_account'];
 
+    //Haal gegevens op uit db met hetzelfde email adres
     $select = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox='$getAccount'");
     $select->setFetchMode(PDO::FETCH_ASSOC);
     $select->execute();
     $data=$select->fetch();
 
-    if(isset($_POST['done']))
-    {
-        $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$getAccount'");
-        $update->execute();
+    //Stuur mail met random gegenereerde code
+    $code = md5(rand(0,1000));
+    $insertCode = $dbh->prepare("INSERT INTO Gebruiker (verkopercode) VALUES ('$code')");
+    $insertCode->execute();
 
-        $gebruikersnaam = $data['gebruikersnaam'];
-        $bank = $_POST['bank'];
-        $bankrekening = $_POST['bankrekening'];
-        $controleoptie = $_POST['controle'];
-        $creditcard = $_POST['creditcard'];
+    $to = $getAccount;
+    $from = "noreply@eenmaalandermaal9.nl";
+    $subject = "Verificatiecode verkoopaccount activatie";
+    $message = '
+        Beste ' . $_POST['user'] . ',
+        Om uw verkoopaccount te activeren, dient u de onderstaande code in het veld "activatiecode" in te vullen:
+        ' . $code;
+    $headers = 'From: ' . $from . "\r\n";
+    mail($to, $subject, $message, $headers);
 
-        $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
-        $insert->execute();
-        header('location: personpage.php');
+    //Als er op de submit knop gedruk wordt
+    if(isset($_POST['done'])) {
+        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam='$getAccount' AND verkopercode=" . $_POST['verkoopcode'] . "";
+        $result = $dbh->query($query);
+        $count = $result->rowCount();
+
+        if ($count == 1 || $count == -1) {
+            $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$getAccount'");
+            $update->execute();
+
+            $gebruikersnaam = $data['gebruikersnaam'];
+            $bank = $_POST['bank'];
+            $bankrekening = $_POST['bankrekening'];
+            $controleoptie = $_POST['controle'];
+            $creditcard = $_POST['creditcard'];
+
+            $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
+            $insert->execute();
+            header('location: personpage.php');
+        }
     }
 }
-catch(PDOException $e)
-{
+catch(PDOException $e) {
     echo "error:".$e->getMessage();
 }
 
@@ -58,6 +79,10 @@ catch(PDOException $e)
         <label>Gebruikersnaam</label>
         <label type="text" name="user"><?= $data['gebruikersnaam'] ?></label>
     </div>
+    <div class="input-group" >
+        <label >Verkoopcode</label >
+        <input type = "text" name = "verkoopcode" placeholder = "Vul uw activatiecode in" required >
+    </div >
     <div class="input-group">
         <label>Bank</label>
         <select name="bank">
@@ -89,4 +114,3 @@ catch(PDOException $e)
         <button type="submit" name="done" class="btn">Opslaan</button>
     </div>
 </form>
-
