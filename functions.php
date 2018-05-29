@@ -414,10 +414,12 @@ function biedingenItem($dbh) {
     $gebruiker = $row['gebruiker'];
     $boddag = $row['boddag'];
     $bodtijdstip = $row['bodtijdstip'];
-    echo "$bodbedrag <br>
-          $gebruiker <br>
-          $boddag <br>
-          $bodtijdstip <br> <br> <br>";
+    echo "<ul>
+          <li>$bodbedrag</li>
+          <li>$gebruiker<li>
+          <li>$boddag</li>
+          <li>$bodtijdstip</li>
+          </ul>";
   }
 }
 
