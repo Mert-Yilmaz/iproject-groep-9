@@ -43,10 +43,10 @@ $data2 = $queryv2->fetch();
             <?php
             while ($rownaw = $querynaw->fetch()) {
 
-
                 $getMail = $rownaw['mailbox'];
+                $getUsername = $rownaw['gebruikersnaam'];
 
-                $link = "<a href='registerVerkoper.php?user_account=$getMail'>(Verkoper worden? Klik hier!)</a>";
+                $link = "<a href='registerVerkoper.php?user_account=$getMail'&username='$getUsername'>(Verkoper worden? Klik hier!)</a>";
                 if ($rownaw['verkoper'] == 0) {
                     $isVerkoper = 'Nee' . $link;
                 } else {
