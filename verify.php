@@ -16,8 +16,10 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     echo "<p>$email, $code</p>";
 
     $result = $dbh->prepare("SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
-    $count = $result->rowCount();
+    $result->setFetchMode(PDO::FETCH_ASSOC);
+    $result->execute();
     $test = $result->fetch();
+    
     echo $test;
 
     if($test['mailbox']==$email && $test['code'] == $code) {
