@@ -413,13 +413,14 @@ function biedingenItem($dbh) {
     $bodbedrag = $row['bodbedrag'];
     $gebruiker = $row['gebruiker'];
     $boddag = $row['boddag'];
-    $bodtijdstip = $row['bodtijdstip'];
-    echo "<div class='text-center'><ul>
+    $bodtijdstip = date_create($row['bodtijdstip']);
+
+    echo "<ul>
           <li>Geboden bodbedrag: €$bodbedrag,-</li>
           <li>Geboden door: $gebruiker<li>
           <li>Datum: $boddag</li>
-          <li>Tijdstip: $bodtijdstip</li>
-          </ul></div>";
+          <li>Tijdstip: " . date_format($bodtijdstip, 'H:i:s'). " </li>
+          </ul>";
   }
 }
 

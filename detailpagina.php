@@ -21,11 +21,14 @@
     <div class="grid-container">
       <?php productBreadCrumbs($dbh, $_GET['rubriek']);
             detailPagina($dbh);?>
-            <div class= "biedingen">
-            <?php if(isset($_SESSION['login-token'])) {
-                biedOpItem($dbh);
-            }
-            biedingenItem($dbh); ?>
+            <div class= "grid-x padding-x text-center" style="margin-top:20px;">
+              <div class="cell large-8 medium-7">
+                <?php biedingenItem($dbh); ?>
+              </div>
+              <div class="cell large-4 medium-5">
+                <?php if(isset($_SESSION['login-token'])) {
+                biedOpItem($dbh);} ?>
+              </div>
           </div>
     </div>
     <?php include("footer.html"); ?>
