@@ -18,19 +18,19 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     $result = $dbh->prepare("SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
     $result->setFetchMode(PDO::FETCH_ASSOC);
     $result->execute();
-    $test = $result->fetch();
     
-    echo $test;
+    while ($test = $result->fetch()) {
+        echo $test;
+        if ($test['mailbox'] == $email && $test['code'] == $code) {
+            $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1"); /*AND isToegestaan=1*/
+            $updatestmt->execute();
 
-    if($test['mailbox']==$email && $test['code'] == $code) {
-        $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1"); /*AND isToegestaan=1*/
-        $updatestmt->execute();
-
-        $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
-    } else {
-        $message = "Error, no match.";
+            $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
+        } else {
+            $message = "Error, no match.";
+        }
+        echo "<h3>$message</h3>";
     }
-    echo "<h3>$message</h3>";
 
     /*if($match > 0) {
         //sqlsrv_query($conn, "UPDATE Gebruiker SET actief=1 WHERE mailbox=$email AND code=$code AND actief=0 AND isToegestaan=1") OR DIE (sqlsrv_errors());
