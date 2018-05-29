@@ -233,7 +233,7 @@ function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
 // Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
   try{
-      $query = $dbh->prepare("SELECT *
+      $query = $dbh->prepare("SELECT *, v.voorwerpnummer
                               FROM	Voorwerp v
                               INNER JOIN VoorwerpInRubriek vi
                               ON v.voorwerpnummer = vi.voorwerp
@@ -246,8 +246,8 @@ function toonItems($dbh, $zoekWoord) {
       $query->bindParam(':zoekwoord', $zoekWoord);
       $query->execute();
       while($row = $query->fetch()) {
-          echo "<li>". $row['titel'] . ":
-               ". $row['beschrijving'] . "</li>";
+          echo "<li><a href='detailpagina.php?item=". $row['voorwerpnummer'] . "'>" . $row['titel'] . ':
+               '. $row['beschrijving'] . '</a></li>';
       }
   } catch(PDOException $e) {
       echo "Er is iets mis gegaan. De foutmelding is: $e";
