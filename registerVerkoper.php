@@ -10,10 +10,10 @@ require 'db.php';
 
 try {
     //Haal email uit link
-    $getAccount = $_GET['user_account'];
+    $email = $_GET['user_account'];
 
     //Haal gegevens op uit db met hetzelfde email adres
-    $select = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox='$getAccount'");
+    $select = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox='$email'");
     $select->setFetchMode(PDO::FETCH_ASSOC);
     $select->execute();
     $data=$select->fetch();
@@ -23,7 +23,7 @@ try {
     $insertCode = $dbh->prepare("INSERT INTO Gebruiker (verkopercode) VALUES ('$code')");
     $insertCode->execute();
 
-    $to = $getAccount;
+    $to = $email;
     $from = "noreply@eenmaalandermaal9.nl";
     $subject = "Verificatiecode verkoopaccount activatie";
     $message = '
@@ -35,12 +35,12 @@ try {
 
     //Als er op de submit knop gedruk wordt
     if(isset($_POST['done'])) {
-        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam='$getAccount' AND verkopercode=" . $_POST['verkoopcode'] . "";
+        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam='$email' AND verkopercode=" . $_POST['verkoopcode'] . "";
         $result = $dbh->query($query);
         $count = $result->rowCount();
 
         if ($count == 1 || $count == -1) {
-            $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$getAccount'");
+            $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$email'");
             $update->execute();
 
             $gebruikersnaam = $_POST['user'];
