@@ -202,6 +202,34 @@ function aantalItems($dbh, $rubrieknummer) {
       echo $row['Aantal_items'];
   }
 }
+
+// Haalt het antal items op in een Rubriek
+function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
+  $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
+                          FROM	 Rubriek r INNER JOIN VoorwerpInRubriek v
+                          ON r.rubrieknummer = v.rubriekOpLaagsteNiveau
+                          WHERE  rubriekOpLaagsteNiveau = :rubrieknummer");
+  $query->bindParam(':rubrieknummer', $rubrieknummer);
+  $query->execute();
+  while($row = $query->fetch()) {
+    if($row['Aantal_items'] != 0){
+      echo $row['Aantal_items'];
+      }
+    }
+  //   $isAantalItemsLeeg = $query->fetchColumn();
+  //     if(!isset($isAantalItemsLeeg)){
+  //       $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
+  //                               FROM	 Rubriek r INNER JOIN VoorwerpInRubriek v
+  //                               ON r.rubrieknummer = v.rubriekOpLaagsteNiveau
+  //                               WHERE  rubriekOpLaagsteNiveau = :rubriek");
+  //       $query->bindParam(':rubriek', $rubriek);
+  //       $query->execute();
+  //       while($row = $query->fetch()) {
+  //           echo $row['Aantal_items'];
+  //     }
+  // }
+}
+
 // Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
   try{
