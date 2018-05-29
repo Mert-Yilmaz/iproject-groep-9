@@ -43,7 +43,7 @@ try {
             $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$getAccount'");
             $update->execute();
 
-            $gebruikersnaam = $data['gebruikersnaam'];
+            $gebruikersnaam = $_POST['user'];
             $bank = $_POST['bank'];
             $bankrekening = $_POST['bankrekening'];
             $controleoptie = $_POST['controle'];
