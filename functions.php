@@ -280,7 +280,7 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   $query->execute();
   while($row = $query->fetch()) {
     echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] .
-         '&rubriek2=' . $rubrieknaam . '" class="rubrieken">
+         '&rubriek2=' . $rubrieknaam . '" class="rubrieken text-center">
          ' . $row['rubrieknaam'] . '</a></li>';
   }
 }
