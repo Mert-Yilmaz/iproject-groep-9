@@ -18,11 +18,11 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     $query = "SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'";
     $result = $dbh->query($query);
     $count = $result->rowCount();
+    $test = $result->fetch();
     //    $queryresult = $dbh->query($query);
     //    $count = $queryresult->rowCount();
 
-    //if($row['']==)
-    if($count == 1 || $count == -1) {
+    if($test['mailbox']==$email && $test['code'] == $code) {
         $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1"); /*AND isToegestaan=1*/
         $updatestmt->execute();
 
