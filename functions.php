@@ -211,8 +211,9 @@ function toonItems($dbh, $zoekWoord) {
                               ON v.voorwerpnummer = vi.voorwerp
                               INNER JOIN Rubriek r
                               ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
-                              WHERE r.rubrieknaam
-                              LIKE :zoekwoord
+                              WHERE vi.rubriekOpLaagsteNiveau IN (SELECT rubrieknummer
+                                                                  FROM Rubriek
+                                                                  WHERE rubrieknaam LIKE :zoekwoord)
                               ORDER BY v.looptijdEindeTijdstip ASC");
       $query->bindParam(':zoekwoord', $zoekWoord);
       $query->execute();
@@ -280,8 +281,9 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   $query->execute();
   while($row = $query->fetch()) {
     echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] .
-         '&rubriek2=' . $rubrieknaam . '" class="rubrieken text-center">
+         '&rubriek2=' . $rubrieknaam . '" class="rubrieken">
          ' . $row['rubrieknaam'] . '</a></li>';
+         echo aantalItemsSub($dbh, $row['rubrieknummer'], $row['rubriek']);
   }
 }
 
