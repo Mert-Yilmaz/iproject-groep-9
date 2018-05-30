@@ -10,7 +10,7 @@ include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
 
-if(isset($_GET['email']) && isset($_GET['code'])) {
+if(isset($_GET['email']) && !empty($_GET['email']) && isset($_GET['code']) && !empty($_GET['code'])) {
     $getemail = $_GET['email'];
     $getcode = $_GET['code'];
     echo "<h3>Email en code meegekregen (check)</h3>";
@@ -21,7 +21,7 @@ if(isset($_GET['email']) && isset($_GET['code'])) {
     $sqlquery->execute();
     $sqlquerydata = $sqlquery->fetch();
 
-    $gebruikersnaam = $sqlquerydata['mailbox'];
+    $email = $sqlquerydata['mailbox'];
     $code = $sqlquerydata['code'];
 
     $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1");
