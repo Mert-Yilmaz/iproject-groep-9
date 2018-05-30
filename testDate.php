@@ -10,10 +10,11 @@ include_once 'db.php';
 
 if(isset($_SESSION['login-token'])) {
     $logintoken = $_SESSION['login-token'];
-    $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE $logintoken = gebruikernaam OR $logintoken = mailbox");
-    $sessionUserMail = $sqlquery->execute();
+    $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
+    $sessionQueryData = $sqlquery->execute();
+    $sessionGebruikersnaam = $sessionQueryData['gebruikersnaam'];
 
-    $getGebruikersnaamQuery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = $sessionUserMail OR mailbox =$sessionUserMail");
+    $getGebruikersnaamQuery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$sessionGebruikersnaam'");
     $getGebruikersnaamQuery->execute();
     $getGebruikersnaamData = $getGebruikersnaamQuery->fetch();
 
