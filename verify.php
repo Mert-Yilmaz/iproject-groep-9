@@ -6,56 +6,32 @@
  * Time: 11:07
  */
 
+include 'functions.php';
+include_once 'db.php';
+error_reporting(E_ALL ^ E_NOTICE);
+
 $connectionInfo = array("DB"=>$dbname, "UN"=>$username, "PW"=>$pw);
 $conn = sqlsrv_connect($hostname, $connectionInfo);
 
 if(isset($_GET['email']) && isset($_GET['code'])) {
-    $email = $_GET['email'];
-    $code = $_GET['code'];
+    $getemail = $_GET['email'];
+    $getcode = $_GET['code'];
     echo "<h3>Email en code meegekregen (check)</h3>";
     echo "<p>$email, $code</p>";
 
-    $result = $dbh->prepare("SELECT mailbox, code FROM Gebruiker WHERE mailbox='$email' AND code='$code'");
-    $result->setFetchMode(PDO::FETCH_ASSOC);
-    $result->execute();
-    
-    while ($test = $result->fetch()) {
-        echo $test;
-        if ($test['mailbox'] == $email && $test['code'] == $code) {
-            $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1"); /*AND isToegestaan=1*/
-            $updatestmt->execute();
+    $sqlquery = $dbh->prepare("SELECT mailbox, code FROM Gebruiker WHERE mailbox='$getemail' AND code='$getcode'");
+    $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
+    $sqlquery->execute();
+    $sqlquerydata = $sqlquery->fetch();
 
-            $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
-        } else {
-            $message = "Error, no match.";
-        }
-        echo "<h3>$message</h3>";
-    }
+    $gebruikersnaam = $sqlquerydata['mailbox'];
+    $code = $sqlquerydata['code'];
 
-    /*if($match > 0) {
-        //sqlsrv_query($conn, "UPDATE Gebruiker SET actief=1 WHERE mailbox=$email AND code=$code AND actief=0 AND isToegestaan=1") OR DIE (sqlsrv_errors());
+    $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1");
+    $updatestmt->execute();
 
-        //ANDERS:
-        $updatestmt = $dbh->prepare("UPDATE Gebruiker SET actief=1 WHERE mailbox='$email' AND code='$code' AND actief=0 AND isToegestaan=1");
-        $updatestmt->execute();
-
-        //ANDERS:
-        //$update = "UPDATE Gebruiker SET actief=1 WHERE mailbox=? AND code=? AND actief=0 AND isToegestaan=1";
-        //$update = $dbh->prepare($update);
-        //$update->execute(array($email, $code));
-
-        $message = "Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!";
-        echo "<h3>$message</h3>";
-    } else {
-        $message = "Error, no match.";
-        echo "<h3>$message</h3>";
-    }*/
-
+    echo "<h3>Bedankt voor het aanmelden! Check je mailbox voor de activatiecode!</h3>";
 } else {
     echo "<h3>Error, use link</h3>";
 }
-
-include 'functions.php';
-include_once 'db.php';
-error_reporting(E_ALL ^ E_NOTICE);
 ?>
