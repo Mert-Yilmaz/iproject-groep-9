@@ -27,7 +27,10 @@
               </div>
               <div class="cell large-4 medium-5">
                 <?php if(isset($_SESSION['login-token'])) {
-                biedOpItem($dbh);} ?>
+                biedOpItem($dbh);}
+                else{
+                  echo "<p>Log in om te kunnen bieden</p>";
+                } ?>
               </div>
           </div>
     </div>
