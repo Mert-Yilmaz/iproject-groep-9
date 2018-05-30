@@ -10,7 +10,7 @@ include_once 'db.php';
 $getGebruikersnaam = 'Demi12345'; /*Ophalen uit file*/
 
 $query = $dbh->prepare("SELECT V.voorwerpnummer, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
-                                 FROM Voorwerp V INNER JOIN Gebruiker G ON V.verkoper = G.gebruikersnaam
+                                 FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam
                                  WHERE V.verkoper='$getGebruikersnaam'");
 $query->setFetchMode(PDO::FETCH_ASSOC);
 $query->execute();
@@ -23,20 +23,20 @@ $gebruikersnaam = $data['verkoper'];
 $isMailVerstuurd = $data['isMailVerstuurd'];
 $email = $data['mailbox'];
 
-//$day = date('d', strtotime($enddate));
-//$month = date('m', strtotime($enddate));
-//$year = date('Y', strtotime($enddate));
-//
-//$hour = date('H', strtotime($endtime));
-//$minute = date('i', strtotime(($endtime)));
-//$seconds = date('s', strtotime($endtime));
+$day = date('d', strtotime($enddate));
+$month = date('m', strtotime($enddate));
+$year = date('Y', strtotime($enddate));
 
-$day = 31;
-$month = 5;
-$year = 2018;
-$hour = 11;
-$minute = 28;
-$seconds = 00;
+$hour = date('H', strtotime($endtime));
+$minute = date('i', strtotime(($endtime)));
+$seconds = date('s', strtotime($endtime));
+
+//$day = 31;
+//$month = 5;
+//$year = 2018;
+//$hour = 11;
+//$minute = 22;
+//$seconds = 00;
 
 $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
 $day_before = strtotime("yesterday", $from_unix_time);
