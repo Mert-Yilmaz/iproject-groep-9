@@ -122,10 +122,48 @@ catch(PDOException $e) {
         catch (PDOException $e) {
             echo $e;
         }
-
-        include_once '../footer.html';
-        ?>
+        try {
+            $gebruikersophalen = $dbh->prepare("SELECT * FROM Gebruiker");
+            $gebruikersophalen->setFetchMode(PDO::FETCH_ASSOC);
+            $gebruikersophalen->execute();
+        }
+        catch(PDOException $e) {
+            echo $e;
+        }
+?>
 
     </table>
+    <h1 class="text-center">Rubrieken</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Gebruikersnaam</th>
+                <th colspan="4">Acties</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                    while ($row = $gebruikersophalen->fetch()) {
+                        ?>
+                        <tr>
+                            <td><?= $row['gebruikersnaam'] ?></td>
+                            <td>
+                            <?php
+                            if($row['isToegestaan'] == 1) { ?>
+                                <a href="blokkeren.php?blok_id=<?= $row['gebruikersnaam'] ?>">Blokkeer</a>
+                            <?php } else if ($row['isToegestaan'] == 0) { ?>
+                                <a href="blokkeren.php?blok_id=<?= $row['gebruikersnaam'] ?>">Deblokkeren</a>
+                            <?php } ?>
+                            </td>
+                        </tr>
+                    <?php
+                        }
+                    ?>
+        </tbody>
+    </table>
+    <?php
+    include_once '../footer.html';
+    ?>
+
   </body>
 </html>
