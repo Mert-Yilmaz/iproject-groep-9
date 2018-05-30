@@ -48,7 +48,7 @@ catch(PDOException $e) {
 //        }
 //        ?>
 
-        <h1 class="text-center">Rubrieken</h1>
+        <h1 class="text-center">Rubrieken beheren</h1>
         <table>
             <thead>
                 <tr>
@@ -86,7 +86,7 @@ catch(PDOException $e) {
             </tbody>
         </table>
 
-        <form method="post" action="dashboard.php">
+        <form method="post" action="dashboard.php" class="form">
             <div class="input-group">
                 <label>Rubrieknummer</label>
                 <input type="text" name="rubnummer">
@@ -133,7 +133,7 @@ catch(PDOException $e) {
 ?>
 
     </table>
-    <h1 class="text-center">Rubrieken</h1>
+    <h1 class="text-center">Gebruikers beheren</h1>
     <table>
         <thead>
             <tr>
@@ -178,7 +178,7 @@ catch(PDOException $e) {
     }
     ?>
 
-    <h1 class="text-center">Items</h1>
+    <h1 class="text-center">Items beheren</h1>
     <table>
         <thead>
             <tr>
@@ -206,17 +206,19 @@ catch(PDOException $e) {
                     <?php
                         }
                     ?>
-                    <form method="post" action="dashboard.php">
-                        <div class="input-group">
-                            <label>Zoek items</label>
-                            <input type="text" name="itemnaam">
-                        </div>
-                        <div>
-                            <button type="submit" name="zoekitems" class="btn">Zoek</button>
-                        </div>
-                    </form>
         </tbody>
     </table>
+
+
+    <form class="form" method="post" action="dashboard.php">
+        <div class="input-group">
+            <label>Zoek items</label>
+            <input type="text" name="itemnaam" placeholder="Zoek op itemnaam">
+        </div>
+        <div>
+            <button type="submit" name="zoekitems" class="btn">Zoek</button>
+        </div>
+    </form>
     <?php
     include_once '../footer.html';
     ?>
