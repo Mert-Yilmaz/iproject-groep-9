@@ -7,16 +7,21 @@
  */
 
 include_once 'db.php';
-session_start();
-$_SESSION["isEmailSend"] = false;
+$getGebruikersnaam = 'Demi12345'; /*Ophalen uit file*/
 
-$query = $dbh->prepare("SELECT looptijdEindeDag, looptijdEindeTijdstip FROM Voorwerp"); /*WHERE verkoper = persoon, INNER JOIN Gebruiker*/
+$query = $dbh->prepare("SELECT V.voorwerpnummer, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
+                                 FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam
+                                 WHERE verkoper='$getGebruikersnaam'");
 $query->setFetchMode(PDO::FETCH_ASSOC);
 $query->execute();
 $data = $query->fetch();
 
+$voorwerpnummer = $data['voorwerpnummer'];
 $enddate = $data['looptijdEindeDag'];
 $endtime = $data['looptijdEindeTijdstip'];
+$gebruikersnaam = $data['verkoper'];
+$isMailVerstuurd = $data['isMailVerstuurd'];
+$email = $data['mailbox'];
 
 //$day = date('d', strtotime($enddate));
 //$month = date('m', strtotime($enddate));
@@ -30,7 +35,7 @@ $day = 31;
 $month = 5;
 $year = 2018;
 $hour = 11;
-$minute = 00;
+$minute = 22;
 $seconds = 00;
 
 $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
@@ -46,18 +51,23 @@ $today = date("Y-m-d H:i:s"); /*TESTEN*/
 echo $today;
 echo "<br>";
 
-if($formatted >= $today && $_SESSION['isEmailSend'] == false) {
+if($formatted >= $today && $isMailVerstuurd == 0) {
     echo "<h1>MORGEN VERLOOPT UW VEILING</h1>";
     echo $formatted;
     echo "<br>";
     echo $today;
-    $to = 'demi.van.kesteren@gmail.com';
+    $to = $email;
     $from    = 'noreply@eenmaalandermaal9.nl';
     $subject = 'Uw veiling verloopt morgen!';
     $message = 'UW VEILING VERLOOPT MORGEN!';
     $headers = 'From: ' . $from . "\r\n";
     mail($to, $subject, $message, $headers);
-    $_SESSION['isEmailSend'] = true;
+
+    $sql = $dbh->prepare("UPDATE Voorwerp 
+                                   SET isMailVerstuurd=1 
+                                   WHERE voorwerpnummer=$voorwerpnummer");
+    $sql->setFetchMode(PDO::FETCH_ASSOC);
+    $sql->execute();
 }
 
 ?>
