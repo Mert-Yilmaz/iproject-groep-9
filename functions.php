@@ -601,7 +601,6 @@ function zendMailVerloopVeiling($dbh) {
         $today = date("Y-m-d");
 
         if ($formatted >= $today && $isMailVerstuurd == 0) {
-            echo "<h1>MORGEN VERLOOPT UW VEILING</h1>";
             $to = $email;
             $from = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Uw veiling verloopt morgen!';
