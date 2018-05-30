@@ -246,8 +246,7 @@ function toonItems($dbh, $zoekWoord) {
       $query->bindParam(':zoekwoord', $zoekWoord);
       $query->execute();
       while($row = $query->fetch()) {
-          echo "<li><a href='detailpagina.php?item=". $row['voorwerpnummer'] . "'>" . $row['titel'] . ':
-               '. $row['beschrijving'] . '</a></li>';
+          echo "<li><a href='detailpagina.php?item=". $row['voorwerpnummer'] . "'><strong>" . $row['titel'] . '</strong></a> ||' . ' startprijs: ' . $row['startprijs'] . '</li>';
       }
   } catch(PDOException $e) {
       echo "Er is iets mis gegaan. De foutmelding is: $e";
