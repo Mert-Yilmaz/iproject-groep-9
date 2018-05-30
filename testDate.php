@@ -16,6 +16,9 @@ $query->setFetchMode(PDO::FETCH_ASSOC);
 $query->execute();
 $data = $query->fetch();
 
+echo $data;
+echo "<br>";
+
 $voorwerpnummer = $data['voorwerpnummer'];
 $enddate = $data['looptijdEindeDag'];
 $endtime = $data['looptijdEindeTijdstip'];
@@ -30,6 +33,9 @@ $year = date('Y', strtotime($enddate));
 $hour = date('H', strtotime($endtime));
 $minute = date('i', strtotime(($endtime)));
 $seconds = date('s', strtotime($endtime));
+
+echo "$day-$month-$year $hour:$minute:$seconds";
+echo "<br>";
 
 //$day = 31;
 //$month = 5;
@@ -48,7 +54,7 @@ echo "Formatted " . $formatted;
 echo "<br>";
 
 $today = date("Y-m-d H:i:s"); /*TESTEN*/
-echo $today;
+echo "Today $today";
 echo "<br>";
 
 if($formatted >= $today && $isMailVerstuurd == 0) {
