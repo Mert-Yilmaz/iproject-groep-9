@@ -53,7 +53,7 @@ catch(PDOException $e) {
             <thead>
                 <tr>
                     <th>Rubrieknaam</th>
-                    <th colspan="3">Acties</th>
+                    <th colspan="4">Acties</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,6 +67,14 @@ catch(PDOException $e) {
                                 </td>
                                 <td>
                                     <a href="edit.php?edit_id=<?= $row['rubrieknummer'] ?>">Wijzig</a>
+                                </td>
+                                <td>
+                                <?php
+                                if($row['isToegestaan'] == 0) { ?>
+                                    <a href="faseren.php?fas_id=<?= $row['rubrieknummer'] ?>">Faseer in</a>
+                                <?php } else if ($row['isToegestaan'] == 1) { ?>
+                                    <a href="faseren.php?fas_id=<?= $row['rubrieknummer'] ?>">Faseer uit</a>
+                                <?php } ?>
                                 </td>
                                 <td>
                                     <a onclick="return confirm('Weet je zeker dat je deze rubriek wilt verwijderen?')" href="delete.php?del_id=<?= $row['rubrieknummer'] ?>">Verwijder</a>
@@ -98,13 +106,14 @@ catch(PDOException $e) {
             $rubrieknaam = "";
             $rubriekroot = -1;
             $volgnr = NULL;
+            $isActief = 1;
 
             if (isset($_POST['save'])) {
 
                 $rubrieknummer = $_POST['rubnummer'];
                 $rubrieknaam = $_POST['rubnaam'];
 
-                $query = $dbh->prepare("INSERT INTO Rubriek (rubrieknummer, rubrieknaam, rubriek) VALUES ('$rubrieknummer', '$rubrieknaam', '$rubriekroot')");
+                $query = $dbh->prepare("INSERT INTO Rubriek (rubrieknummer, rubrieknaam, rubriek, isToegestaan) VALUES ('$rubrieknummer', '$rubrieknaam', '$rubriekroot', '$isActief')");
 
                 $query->execute();
                 header('location: dashboard.php');
