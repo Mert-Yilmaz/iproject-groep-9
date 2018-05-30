@@ -20,6 +20,7 @@ catch(PDOException $e)
     echo "Error: " . $e->getMessage();
     }
 }
+
 //Haalt gegevens uit 'Vraag'
 $output;
 function search_item($dbh, $input){
@@ -43,6 +44,9 @@ function search_item($dbh, $input){
   }
   echo $output;
 }
+
+zendMailVerloopVeiling($dbh);
+
 //Hot Items (Selecteert 3 items met de meest recente biedingen)
 function hot_items($dbh){
   $output="";
@@ -624,5 +628,6 @@ function zendMailVerloopVeiling($dbh) {
     }
 }
 
+zendMailVerloopVeiling($dbh);
 
 ?>
