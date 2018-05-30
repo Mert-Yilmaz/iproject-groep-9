@@ -162,6 +162,62 @@ catch(PDOException $e) {
         </tbody>
     </table>
     <?php
+    try {
+        $itemnaam = $_POST['itemnaam'];
+        if(!isset($itemnaam)){
+        $itemsophalen = $dbh->prepare("SELECT TOP 10 * FROM Voorwerp ORDER BY titel ASC");
+      }
+      else{
+        $itemsophalen = $dbh->prepare("SELECT * FROM Voorwerp WHERE titel LIKE '%$itemnaam%'");
+      }
+        $itemsophalen->setFetchMode(PDO::FETCH_ASSOC);
+        $itemsophalen->execute();
+    }
+    catch(PDOException $e) {
+        echo $e;
+    }
+    ?>
+
+    <h1 class="text-center">Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Voorwerpnummer</th>
+                <th>Items</th>
+                <th colspan="2">Acties</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                    while ($row = $itemsophalen->fetch()) {
+                        ?>
+                        <tr>
+                            <td><a href="../detailpagina.php?item=<?= $row['voorwerpnummer']?>"><?= $row['voorwerpnummer']?></td>
+                            <td><a href="../detailpagina.php?item=<?= $row['voorwerpnummer']?>"><?= $row['titel'] ?></td>
+                            <td>
+                            <?php
+                            if($row['isToegestaan'] == 1) { ?>
+                                <a href="itemblok.php?vp_id=<?= $row['voorwerpnummer'] ?>">Blokkeer</a>
+                            <?php } else if ($row['isToegestaan'] == 0) { ?>
+                                <a href="itemblok.php?vp_id=<?= $row['voorwerpnummer'] ?>">Deblokkeren</a>
+                            <?php } ?>
+                            </td>
+                        </tr>
+                    <?php
+                        }
+                    ?>
+                    <form method="post" action="dashboard.php">
+                        <div class="input-group">
+                            <label>Zoek items</label>
+                            <input type="text" name="itemnaam">
+                        </div>
+                        <div>
+                            <button type="submit" name="zoekitems" class="btn">Zoek</button>
+                        </div>
+                    </form>
+        </tbody>
+    </table>
+    <?php
     include_once '../footer.html';
     ?>
 
