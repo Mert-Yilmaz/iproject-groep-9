@@ -7,19 +7,25 @@
  */
 
 include_once 'db.php';
+session_start();
 
 if(isset($_SESSION['login-token'])) {
     $logintoken = $_SESSION['login-token'];
+
     $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
-    $sessionQueryData = $sqlquery->execute();
+    $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
+    $sqlquery->execute();
+    $sessionQueryData = $sqlquery->fetch();
+
     $sessionGebruikersnaam = $sessionQueryData['gebruikersnaam'];
 
     $getGebruikersnaamQuery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$sessionGebruikersnaam'");
+    $getGebruikersnaamQuery->setFetchMode(PDO::FETCH_ASSOC);
     $getGebruikersnaamQuery->execute();
     $getGebruikersnaamData = $getGebruikersnaamQuery->fetch();
 
     $getGebruikersnaam = $getGebruikersnaamData['gebruikersnaam'];
-    echo $getGebruikersnaam;
+    echo "<h1>$getGebruikersnaam</h1>";
 
     $query = $dbh->prepare("SELECT V.voorwerpnummer, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
                                  FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam

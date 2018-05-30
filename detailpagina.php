@@ -4,6 +4,17 @@
   include_once 'db.php';
   error_reporting(E_ALL ^ E_NOTICE);
   $usernamemail = $_SESSION['login-token'];
+  //is de pagina geblokkeerd?:
+  $voorwerpnummer = $_GET['item'];
+  $ItemBlok = $dbh->prepare("SELECT isToegestaan AS antwoord FROM Voorwerp
+                            WHERE voorwerpnummer = :voorwerpnummer ");
+  $ItemBlok->bindParam(':voorwerpnummer', $voorwerpnummer);
+  $ItemBlok->execute();
+  while($row = $ItemBlok->fetch()){
+    if($row['antwoord'] == 0){
+    header('Location: index.php');
+    }
+  }
 ?>
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
