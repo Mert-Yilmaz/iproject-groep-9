@@ -573,7 +573,7 @@ function zendMailVerloopVeiling($dbh) {
 
         $getGebruikersnaam = $getGebruikersnaamData['gebruikersnaam'];
 
-        $query = $dbh->prepare("SELECT V.voorwerpnummer, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
+        $query = $dbh->prepare("SELECT V.voorwerpnummer, V.titel, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
                                  FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam
                                  WHERE V.verkoper='$getGebruikersnaam'");
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -581,6 +581,7 @@ function zendMailVerloopVeiling($dbh) {
         $data = $query->fetch();
 
         $voorwerpnummer = $data['voorwerpnummer'];
+        $titel = $data['titel'];
         $enddate = $data['looptijdEindeDag'];
         $endtime = $data['looptijdEindeTijdstip'];
         $isMailVerstuurd = $data['isMailVerstuurd'];
@@ -604,7 +605,9 @@ function zendMailVerloopVeiling($dbh) {
             $to = $email;
             $from = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Uw veiling verloopt morgen!';
-            $message = 'UW VEILING VERLOOPT MORGEN!';
+            $message = '
+            Beste ' . $getGebruikersnaam . ',
+            Je veiling ' . $titel . ' verloopt morgen!';
             $headers = 'From: ' . $from . "\r\n";
             mail($to, $subject, $message, $headers);
 
