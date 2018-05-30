@@ -144,14 +144,15 @@ error_reporting(E_ALL ^ E_NOTICE);
         $code = md5(rand(0,1000));
         $actief = 0;
         $isToegestaan = 1;
+        $verkopercode = NULL;
 
         //Prepare
-        $query = "INSERT INTO Gebruiker VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO Gebruiker VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $query = $dbh->prepare($query);
 
         //In DB
         try {
-            $query->execute(array($gebruikersnaam, $voornaam, $achternaam, $adresregel1, $adresregel2, $postcode, $plaats, $land, $geboortedatum, $email, $wachtwoord, $vraag, $antwoord, $verkoper, $code, $actief, $isToegestaan));
+            $query->execute(array($gebruikersnaam, $voornaam, $achternaam, $adresregel1, $adresregel2, $postcode, $plaats, $land, $geboortedatum, $email, $wachtwoord, $vraag, $antwoord, $verkoper, $code, $actief, $isToegestaan, $verkopercode));
 
             $to      = $email;
             $from    = 'noreply@eenmaalandermaal9.nl';
