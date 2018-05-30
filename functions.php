@@ -49,6 +49,7 @@ function hot_items($dbh){
   $sql = "SELECT TOP (3) * FROM Voorwerp v
           INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
           INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
+          WHERE isToegestaan = 1
           ORDER BY boddag DESC";
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -79,6 +80,7 @@ function ending_items($dbh){
   $sql = "SELECT TOP (3) * FROM Voorwerp v
           INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
           INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
+          WHERE isToegestaan = 1
           ORDER BY looptijdEindeDag, looptijdEindeTijdstip ASC";
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -109,6 +111,7 @@ function cheap_items($dbh){
   $sql = "SELECT TOP (3) * FROM Voorwerp v
           INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
           INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
+          WHERE isToegestaan = 1
           ORDER BY startprijs-bodbedrag DESC";
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -233,17 +236,17 @@ function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
 // Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
   try{
-      $query = $dbh->prepare("SELECT *, v.voorwerpnummer
-                              FROM	Voorwerp v
-                              INNER JOIN VoorwerpInRubriek vi
-                              ON v.voorwerpnummer = vi.voorwerp
-                              INNER JOIN Rubriek r
-                              ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
-                              WHERE vi.rubriekOpLaagsteNiveau IN (SELECT rubrieknummer
-                                                                  FROM Rubriek
-                                                                  WHERE rubrieknaam LIKE :zoekwoord)
-                              ORDER BY v.looptijdEindeTijdstip ASC");
-      $query->bindParam(':zoekwoord', $zoekWoord);
+    $query = $dbh->prepare("SELECT *, v.voorwerpnummer
+                            FROM	Voorwerp v
+                            INNER JOIN VoorwerpInRubriek vi
+                            ON v.voorwerpnummer = vi.voorwerp
+                            INNER JOIN Rubriek r
+                            ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
+                            WHERE v.isToegestaan = 1 AND vi.rubriekOpLaagsteNiveau IN (SELECT rubrieknummer
+                                                                FROM Rubriek
+                                                                WHERE rubrieknaam LIKE :zoekwoord)
+                            ORDER BY v.looptijdEindeTijdstip ASC");
+    $query->bindParam(':zoekwoord', $zoekWoord);
       $query->execute();
       while($row = $query->fetch()) {
           echo "<li><a href='detailpagina.php?item=". $row['voorwerpnummer'] . "'><strong>" . $row['titel'] . '</strong></a> ||' . ' startprijs: ' . $row['startprijs'] . '</li>';
