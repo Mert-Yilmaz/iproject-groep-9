@@ -7,6 +7,8 @@
  */
 
 include_once 'db.php';
+session_start();
+$_SESSION["isEmailSend"] = false;
 
 $query = $dbh->prepare("SELECT looptijdEindeDag, looptijdEindeTijdstip FROM Voorwerp"); /*WHERE verkoper = persoon, INNER JOIN Gebruiker*/
 $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -24,12 +26,12 @@ $endtime = $data['looptijdEindeTijdstip'];
 //$minute = date('i', strtotime(($endtime)));
 //$seconds = date('s', strtotime($endtime));
 
-$day = 1;
-$month = 6;
+$day = 31;
+$month = 5;
 $year = 2018;
-$hour = 10;
-$minute = 45;
-$seconds = 0;
+$hour = 11;
+$minute = 00;
+$seconds = 00;
 
 $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
 $day_before = strtotime("yesterday", $from_unix_time);
@@ -39,17 +41,23 @@ echo "Today $year-$month-$day $hour:$minute:$seconds";
 echo "<br>";
 echo "Formatted " . $formatted;
 echo "<br>";
-echo "<br>";
 
 $today = date("Y-m-d H:i:s"); /*TESTEN*/
-if($formatted >= $today) {
+echo $today;
+echo "<br>";
+
+if($formatted >= $today && $_SESSION['isEmailSend'] == false) {
     echo "<h1>MORGEN VERLOOPT UW VEILING</h1>";
+    echo $formatted;
+    echo "<br>";
+    echo $today;
     $to = 'demi.van.kesteren@gmail.com';
     $from    = 'noreply@eenmaalandermaal9.nl';
     $subject = 'Uw veiling verloopt morgen!';
     $message = 'UW VEILING VERLOOPT MORGEN!';
     $headers = 'From: ' . $from . "\r\n";
     mail($to, $subject, $message, $headers);
+    $_SESSION['isEmailSend'] = true;
 }
 
 ?>
