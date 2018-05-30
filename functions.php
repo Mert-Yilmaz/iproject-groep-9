@@ -21,6 +21,8 @@ catch(PDOException $e)
     }
 }
 
+session_start();
+
 //Haalt gegevens uit 'Vraag'
 $output;
 function search_item($dbh, $input){
