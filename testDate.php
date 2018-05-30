@@ -11,7 +11,7 @@ $getGebruikersnaam = 'Demi12345'; /*Ophalen uit file*/
 
 $query = $dbh->prepare("SELECT V.voorwerpnummer, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
                                  FROM Voorwerp V INNER JOIN Gebruiker G ON V.verkoper = G.gebruikersnaam
-                                 WHERE verkoper='$getGebruikersnaam'");
+                                 WHERE V.verkoper='$getGebruikersnaam'");
 $query->setFetchMode(PDO::FETCH_ASSOC);
 $query->execute();
 $data = $query->fetch();
