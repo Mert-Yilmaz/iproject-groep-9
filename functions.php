@@ -72,7 +72,7 @@ function hot_items($dbh){
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
-            <img src=' . $file . '>
+            <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
      </div>';
   }
@@ -103,7 +103,7 @@ function ending_items($dbh){
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
-            <img src=' . $file . '>
+            ><a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
      </div>';
   }
@@ -134,7 +134,7 @@ function cheap_items($dbh){
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
-            <img src=' . $file . '>
+            <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
      </div>';
   }
@@ -573,7 +573,7 @@ function zendMailVerloopVeiling($dbh) {
 
         $getGebruikersnaam = $getGebruikersnaamData['gebruikersnaam'];
 
-        $query = $dbh->prepare("SELECT V.voorwerpnummer, V.titel, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
+        $query = $dbh->prepare("SELECT V.voorwerpnummer, V.titel, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox
                                  FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam
                                  WHERE V.verkoper='$getGebruikersnaam'");
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -611,8 +611,8 @@ function zendMailVerloopVeiling($dbh) {
             $headers = 'From: ' . $from . "\r\n";
             mail($to, $subject, $message, $headers);
 
-            $sql = $dbh->prepare("UPDATE Voorwerp 
-                                   SET isMailVerstuurd=1 
+            $sql = $dbh->prepare("UPDATE Voorwerp
+                                   SET isMailVerstuurd=1
                                    WHERE voorwerpnummer=$voorwerpnummer");
             $sql->setFetchMode(PDO::FETCH_ASSOC);
             $sql->execute();
