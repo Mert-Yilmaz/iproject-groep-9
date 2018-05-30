@@ -7,6 +7,7 @@
  */
 
 include_once 'db.php';
+session_start();
 
 if(isset($_SESSION['login-token'])) {
     $logintoken = $_SESSION['login-token'];
