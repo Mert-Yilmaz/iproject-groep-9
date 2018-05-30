@@ -16,13 +16,9 @@ $query->setFetchMode(PDO::FETCH_ASSOC);
 $query->execute();
 $data = $query->fetch();
 
-echo $data;
-echo "<br>";
-
 $voorwerpnummer = $data['voorwerpnummer'];
 $enddate = $data['looptijdEindeDag'];
 $endtime = $data['looptijdEindeTijdstip'];
-$gebruikersnaam = $data['verkoper'];
 $isMailVerstuurd = $data['isMailVerstuurd'];
 $email = $data['mailbox'];
 
@@ -34,28 +30,19 @@ $hour = date('H', strtotime($endtime));
 $minute = date('i', strtotime(($endtime)));
 $seconds = date('s', strtotime($endtime));
 
-echo "$day-$month-$year $hour:$minute:$seconds";
-echo "<br>";
-
-//$day = 31;
-//$month = 5;
-//$year = 2018;
-//$hour = 11;
-//$minute = 22;
-//$seconds = 00;
+echo "<b>Database time and date:</b><br>$year-$month-$day $hour:$minute:$seconds";
+echo "<br><br>";
 
 $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
 $day_before = strtotime("yesterday", $from_unix_time);
-$formatted = date("Y-m-d H:i:s", $day_before);
+$formatted = date("Y-m-d", $day_before);
 
-echo "Today $year-$month-$day $hour:$minute:$seconds";
-echo "<br>";
-echo "Formatted " . $formatted;
-echo "<br>";
+echo "<b>Formatted: </b><br>$formatted";
+echo "<br><br>";
 
-$today = date("Y-m-d H:i:s"); /*TESTEN*/
-echo "Today $today";
-echo "<br>";
+$today = date("Y-m-d"); /*TESTEN*/
+echo "<b>Today: </b><br>$today";
+echo "<br><br>";
 
 if($formatted >= $today && $isMailVerstuurd == 0) {
     echo "<h1>MORGEN VERLOOPT UW VEILING</h1>";
@@ -75,5 +62,4 @@ if($formatted >= $today && $isMailVerstuurd == 0) {
     $sql->setFetchMode(PDO::FETCH_ASSOC);
     $sql->execute();
 }
-
 ?>
