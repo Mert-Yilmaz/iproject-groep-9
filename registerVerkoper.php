@@ -8,58 +8,135 @@
 
 require 'db.php';
 
-try {
+if(isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     //Haal email uit link
-    $email = $_GET['user_account'];
-    $username = $_GET['username'];
+    $getemail = $_GET['user_account'];
+    echo "<h1>Got email: $getemail</h1>";
 
-    //Haal gegevens op uit db met hetzelfde email adres
-    $select = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox='$email'");
-    $select->setFetchMode(PDO::FETCH_ASSOC);
-    $select->execute();
-    $data=$select->fetch();
+    //Controleer email adres link met email db
+    $query = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox = '$getemail'");
+    $query->setFetchMode(PDO::FETCH_ASSOC);
+    $query->execute();
+    $querydata = $query->fetch();
 
-    //Stuur mail met random gegenereerde code
-    $code = md5(rand(0,1000));
+    //Haal gegevens op uit db
+    $voornaam = $querydata['voornaam'];
+    $email = $querydata['mailbox'];
 
-    $insertCode = $dbh->prepare("INSERT INTO Gebruiker (verkopercode) VALUES ('$code')");
-    $insertCode->execute();
+    //Controleer of link mail = db mail, als gelijk
+    if($getemail == $email) {
+        //Genereer code en verwerk in db
+        $verkoopcode = md5(rand(0,1000));
+        $insertquery = $dbh->prepare("UPDATE Gebruiker SET verkoopcode='$verkoopcode' WHERE mailbox = '$getemail' AND verkoopcode IS NULL");
+        $insertquery->execute();
 
-    $to = $email;
-    $from = "noreply@eenmaalandermaal9.nl";
-    $subject = "Verificatiecode verkoopaccount activatie";
-    $message = '
-        Beste ' . $username . ',
+        //Verstuur email met random gegenereerde code
+        $to = $email;
+        $from = "noreply@eenmaalandermaal9.nl";
+        $subject = "Verificatiecode verkoopaccount activatie";
+        $message = '
+        Beste ' . $voornaam. ',
         Om uw verkoopaccount te activeren, dient u de onderstaande code in het veld "activatiecode" in te vullen:
-        ' . $code;
-    $headers = 'From: ' . $from . "\r\n";
-    mail($to, $subject, $message, $headers);
+        ' . $verkoopcode . '';
+        $headers = 'From: ' . $from . "\r\n";
+        mail($to, $subject, $message, $headers);
 
-    //Als er op de submit knop gedruk wordt
-    if(isset($_POST['done'])) {
-        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam='$username' AND verkopercode=" . $_POST['verkoopcode'];
-        $result = $dbh->query($query);
-        $count = $result->rowCount();
+        //Als er op de knop gedrukt is
+        if(isset($_POST['done'])) {
+            //Haal code op uit veld
+            $getverkoopcode = $_POST['verkoopcode'];
 
-        if ($count == 1 || $count == -1) {
-            $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$email'");
-            $update->execute();
+            //Haal gegevens uit db met db code = gekregen code en db mail = gekregen mail
+            $checkquery = $dbh->prepare("SELECT * FROM Gebruiker WHERE verkoopcode = '$getverkoopcode' AND mailbox = '$getemail'");
+            $checkquery->setFetchMode(PDO::FETCH_ASSOC);
+            $checkquery->execute();
+            $checkquerydata = $checkquery->fetch();
 
-            $gebruikersnaam = $username;
-            $bank = $_POST['bank'];
-            $bankrekening = $_POST['bankrekening'];
-            $controleoptie = $_POST['controle'];
-            $creditcard = $_POST['creditcard'];
+            //Haal verkoopcode op uit db
+            $verkoopcodeDB = $checkquerydata['verkoopcode'];
 
-            $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
-            $insert->execute();
-            header('location: personpage.php');
+            //Controleer of veld verkoopcode = db verkoopcode en link mail = db mail
+            if($getverkoopcode == $verkoopcodeDB && $getemail == $email) {
+                //Update gebruiker met verkoper = 1
+                $updatequery = $dbh->prepare("UPDATE Gebruiker SET verkoper=1 WHERE verkoper=0 AND mailbox = '$getemailemail' AND verkopercode = '$ververkoopcode'");
+                $updatequery->execute();
+
+                //Haal gegevens uit form
+                $gebruikersnaam = $querydata['gebruikersnaam'];
+                $bank = $_POST['bank'];
+                $bankrekening = $_POST['bankrekening'];
+                $controleoptie = $_POST['controle'];
+                $creditcard = $_POST['creditcard'];
+
+                //Stop gegevens in db tabel Verkoper
+                $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
+                $insert->execute();
+
+                //Ga terug naar persoonlijke pagina
+                header('location: personpage.php');
+            } else {
+                echo "<h1>Email en/of code komen niet overeen!</h1>";
+            }
         }
+    } else {
+        echo "<h1>Email komt niet overeen!</h1>";
     }
+} else {
+    echo "<h1>Could not get username (check)</h1>";
 }
-catch(PDOException $e) {
-    echo "error:".$e->getMessage();
-}
+
+//try {
+//    //Haal email uit link
+//    $email = $_GET['user_account'];
+//    $username = $_GET['username'];
+//
+//    //Haal gegevens op uit db met hetzelfde email adres
+//    $select = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox='$email'");
+//    $select->setFetchMode(PDO::FETCH_ASSOC);
+//    $select->execute();
+//    $data=$select->fetch();
+//
+//    //Stuur mail met random gegenereerde code
+//    $code = md5(rand(0,1000));
+//
+//    $insertCode = $dbh->prepare("INSERT INTO Gebruiker (verkopercode) VALUES ('$code')");
+//    $insertCode->execute();
+//
+//    $to = $email;
+//    $from = "noreply@eenmaalandermaal9.nl";
+//    $subject = "Verificatiecode verkoopaccount activatie";
+//    $message = '
+//        Beste ' . $username . ',
+//        Om uw verkoopaccount te activeren, dient u de onderstaande code in het veld "activatiecode" in te vullen:
+//        ' . $code;
+//    $headers = 'From: ' . $from . "\r\n";
+//    mail($to, $subject, $message, $headers);
+//
+//    //Als er op de submit knop gedruk wordt
+//    if(isset($_POST['done'])) {
+//        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam='$username' AND verkopercode=" . $_POST['verkoopcode'];
+//        $result = $dbh->query($query);
+//        $count = $result->rowCount();
+//
+//        if ($count == 1 || $count == -1) {
+//            $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$email'");
+//            $update->execute();
+//
+//            $gebruikersnaam = $username;
+//            $bank = $_POST['bank'];
+//            $bankrekening = $_POST['bankrekening'];
+//            $controleoptie = $_POST['controle'];
+//            $creditcard = $_POST['creditcard'];
+//
+//            $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
+//            $insert->execute();
+//            header('location: personpage.php');
+//        }
+//    }
+//}
+//catch(PDOException $e) {
+//    echo "error:".$e->getMessage();
+//}
 ?>
 
 <!doctype html>
@@ -78,7 +155,7 @@ catch(PDOException $e) {
 <form method="post">
     <div class="input-group">
         <label>Gebruikersnaam</label>
-        <label type="text" name="user"><?= $data['gebruikersnaam'] ?></label>
+        <label type="text" name="user"><?= $querydata['gebruikersnaam'] ?></label>
     </div>
     <div class="input-group" >
         <label >Verkoopcode</label >
