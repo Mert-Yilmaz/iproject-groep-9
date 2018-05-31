@@ -1,6 +1,8 @@
 <?php
-
 session_start();
+if(isset($_SESSION['login_token'])){
+  header("Location: index.php");
+}
 require ('db.php'); //DB connection
 
 $_SESSION['errormessage'] = "<p style='color: red; text-align: center'>Combinatie van username/email en wachtwoord is fout, of je account is nog niet geverifieerd. Probeer opnieuw.</p>";
