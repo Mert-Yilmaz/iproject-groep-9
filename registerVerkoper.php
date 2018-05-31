@@ -117,8 +117,8 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
         <label type="text" name="user"><?= $gebruikersnaam ?></label>
     </div>
     <div class="input-group">
-        <label>verkopercode</label>
-        <input type="text" name="verkopercode" placeholder="Vul uw activatiecode in" required>
+        <label>Verkopercode</label>
+        <input type="text" name="verkopercode" placeholder="Vul uw activatiecode in (zie uw mailbox)" required>
     </div>
     <div class="input-group">
         <label>Bank</label>
