@@ -59,7 +59,7 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
             //Controleer of veld verkopercode = db verkopercode en link mail = db mail
             if ($getverkopercode == $verkopercodeDB && $getemail == $email) {
                 //Update gebruiker met verkoper = 1
-                $updatequery = $dbh->prepare("UPDATE Gebruiker SET verkoper=1 WHERE verkoper=0 AND mailbox = '$getemailemail' AND verkopercode = '$ververkopercode'");
+                $updatequery = $dbh->prepare("UPDATE Gebruiker SET verkoper=1 WHERE verkoper=0 AND mailbox = '$getemail' AND verkopercode = '$getverkopercode'");
                 $updatequery->execute();
 
                 //Haal gegevens uit form
@@ -173,7 +173,7 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     </div>
     <div class="input-group">
         <label>Bankrekening</label>
-        <input type="text" name="bankrekening">
+        <input type="text" name="bankrekening" maxlength="12">
     </div>
     <div class="input-group">
         <label>Controle optie</label>
@@ -185,7 +185,7 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     </div>
     <div class="input-group">
         <label>Creditcard</label>
-        <input type="text" name="creditcard">
+        <input type="text" name="creditcard" maxlength="19">
     </div>
     <div>
         <button type="submit" name="done" class="btn">Opslaan</button>
