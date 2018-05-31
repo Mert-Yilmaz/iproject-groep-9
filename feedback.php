@@ -59,9 +59,8 @@ error_reporting(E_ALL ^ E_NOTICE);
 
     <?php
 
-    $feedback = $_POST['feedback'];
-    //$voorwerp = $_GET['item'];
-    $voorwerp = 4;
+    $feedback = $_POST['feedback']
+    $voorwerp = $_GET['item'];
     $soortgebruiker = 'koper';
     $dag = date("Y-m-d");
     $tijd = date("H:i:s");
