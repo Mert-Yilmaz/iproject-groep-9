@@ -27,6 +27,8 @@ $_SESSION['WelkomPopUp'];
           <div class="cell small-6 medium-8 large-2"><br>
             <form method="post" action="">
               <input type="text" name="zoekterm" placeholder="Zoeken..."/>
+              <div class="dertig"><input type="text" name="minprijs" placeholder="minprijs..."/></div>
+              <div class="dertig"><input type="text" name="maxprijs" placeholder="maxprijs..."/></div>
               <select name="order">
                 <option value="rubrieknaam ASC">A-Z</option>
                 <option value="rubrieknaam DESC">Z-A</option>
@@ -51,7 +53,7 @@ $_SESSION['WelkomPopUp'];
           <div class="small-12 cell">
             <div class="callout">
               <h3 class="text-center">Welkom bij de beste veilingsite van Nederland!</h3>
-              <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken.</p>
+              <p class="text-center">Zoek hieronder naar leuke items of klik op de menubalk om een account aan te maken. </p>
               <div class="grid-x grid-padding-x">
                 <?php hot_items($dbh); ?>
               </div>

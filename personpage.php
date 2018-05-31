@@ -87,6 +87,7 @@ $data2 = $queryv2->fetch();
                     </tr>
                 </table>
             <?php } ?>
+            <?php if($getUsername == 'Admin') { echo "<a class='knop' href='admin/dashboard.php'>Beheeromgeving</a>";}?>
             <?php
             if ($data['verkoper'] == 1) {
 
