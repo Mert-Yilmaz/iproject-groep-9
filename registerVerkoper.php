@@ -11,7 +11,6 @@ require 'db.php';
 if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     //Haal email uit link
     $getemail = $_GET['user_account'];
-    echo "<h1>Got email: $getemail</h1>";
 
     //Controleer email adres link met email db
     $query = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox = '$getemail'");
@@ -23,9 +22,10 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     $voornaam = $querydata['voornaam'];
     $email = $querydata['mailbox'];
     $gebruikersnaam = $querydata['gebruikersnaam'];
+    $isVerkoper = $querydata['verkoper'];
 
-    //Controleer of link mail = db mail, als gelijk
-    if ($getemail == $email) {
+    //Controleer of link mail = db mail en verkoper = 0 (nog geen verkoper), als gelijk
+    if ($getemail == $email && $isVerkoper == 0) {
         //Genereer code en verwerk in db
         $verkopercode = md5(rand(0, 1000));
         $insertquery = $dbh->prepare("UPDATE Gebruiker SET verkopercode='$verkopercode' WHERE mailbox = '$getemail' AND verkopercode IS NULL");
@@ -76,67 +76,20 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
                 header('location: personpage.php');
             } else {
                 echo "<h1>Email en/of code komen niet overeen!</h1>";
+                echo "<br>";
+                echo "<a href='http://iproject9.icasites.nl/'>Terug naar de home pagina</a>";
             }
         }
     } else {
         echo "<h1>Email komt niet overeen!</h1>";
+        echo "<br>";
+        echo "<a href='http://iproject9.icasites.nl/'>Terug naar de home pagina</a>";
     }
 } else {
     echo "<h1>Could not get email (check)</h1>";
+    echo "<br>";
+    echo "<a href='http://iproject9.icasites.nl/'>Terug naar de home pagina</a>";
 }
-
-//try {
-//    //Haal email uit link
-//    $email = $_GET['user_account'];
-//    $username = $_GET['username'];
-//
-//    //Haal gegevens op uit db met hetzelfde email adres
-//    $select = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox='$email'");
-//    $select->setFetchMode(PDO::FETCH_ASSOC);
-//    $select->execute();
-//    $data=$select->fetch();
-//
-//    //Stuur mail met random gegenereerde code
-//    $code = md5(rand(0,1000));
-//
-//    $insertCode = $dbh->prepare("INSERT INTO Gebruiker (verkopercode) VALUES ('$code')");
-//    $insertCode->execute();
-//
-//    $to = $email;
-//    $from = "noreply@eenmaalandermaal9.nl";
-//    $subject = "Verificatiecode verkoopaccount activatie";
-//    $message = '
-//        Beste ' . $username . ',
-//        Om uw verkoopaccount te activeren, dient u de onderstaande code in het veld "activatiecode" in te vullen:
-//        ' . $code;
-//    $headers = 'From: ' . $from . "\r\n";
-//    mail($to, $subject, $message, $headers);
-//
-//    //Als er op de submit knop gedruk wordt
-//    if(isset($_POST['done'])) {
-//        $query = "SELECT * FROM Gebruiker WHERE gebruikersnaam='$username' AND verkopercode=" . $_POST['verkopercode'];
-//        $result = $dbh->query($query);
-//        $count = $result->rowCount();
-//
-//        if ($count == 1 || $count == -1) {
-//            $update = $dbh->prepare("UPDATE Gebruiker SET verkoper = 1 WHERE mailbox = '$email'");
-//            $update->execute();
-//
-//            $gebruikersnaam = $username;
-//            $bank = $_POST['bank'];
-//            $bankrekening = $_POST['bankrekening'];
-//            $controleoptie = $_POST['controle'];
-//            $creditcard = $_POST['creditcard'];
-//
-//            $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
-//            $insert->execute();
-//            header('location: personpage.php');
-//        }
-//    }
-//}
-//catch(PDOException $e) {
-//    echo "error:".$e->getMessage();
-//}
 ?>
     <!doctype html>
     <html class="no-js" lang="en" dir="ltr">
