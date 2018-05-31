@@ -11,7 +11,7 @@ require 'db.php';
 if(isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     //Haal email uit link
     $getemail = $_GET['user_account'];
-    echo "<h1>Got email: $getemail</h1>";
+    //echo "<h1>Got email: $getemail</h1>";
 
     //Controleer email adres link met email db
     $query = $dbh->prepare("SELECT * FROM Gebruiker WHERE mailbox = '$getemail'");
@@ -24,9 +24,9 @@ if(isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     $email = $querydata['mailbox'];
 
     //Controleer of link mail = db mail, als gelijk
-    if($getemail == $email) {
+    if ($getemail == $email) {
         //Genereer code en verwerk in db
-        $verkoopcode = md5(rand(0,1000));
+        $verkoopcode = md5(rand(0, 1000));
         $insertquery = $dbh->prepare("UPDATE Gebruiker SET verkoopcode='$verkoopcode' WHERE mailbox = '$getemail' AND verkoopcode IS NULL");
         $insertquery->execute();
 
@@ -35,54 +35,16 @@ if(isset($_GET['user_account']) && !empty($_GET['user_account'])) {
         $from = "noreply@eenmaalandermaal9.nl";
         $subject = "Verificatiecode verkoopaccount activatie";
         $message = '
-        Beste ' . $voornaam. ',
+        Beste ' . $voornaam . ',
         Om uw verkoopaccount te activeren, dient u de onderstaande code in het veld "activatiecode" in te vullen:
         ' . $verkoopcode . '';
         $headers = 'From: ' . $from . "\r\n";
         mail($to, $subject, $message, $headers);
-
-        //Als er op de knop gedrukt is
-        if(isset($_POST['done'])) {
-            //Haal code op uit veld
-            $getverkoopcode = $_POST['verkoopcode'];
-
-            //Haal gegevens uit db met db code = gekregen code en db mail = gekregen mail
-            $checkquery = $dbh->prepare("SELECT * FROM Gebruiker WHERE verkoopcode = '$getverkoopcode' AND mailbox = '$getemail'");
-            $checkquery->setFetchMode(PDO::FETCH_ASSOC);
-            $checkquery->execute();
-            $checkquerydata = $checkquery->fetch();
-
-            //Haal verkoopcode op uit db
-            $verkoopcodeDB = $checkquerydata['verkoopcode'];
-
-            //Controleer of veld verkoopcode = db verkoopcode en link mail = db mail
-            if($getverkoopcode == $verkoopcodeDB && $getemail == $email) {
-                //Update gebruiker met verkoper = 1
-                $updatequery = $dbh->prepare("UPDATE Gebruiker SET verkoper=1 WHERE verkoper=0 AND mailbox = '$getemailemail' AND verkopercode = '$ververkoopcode'");
-                $updatequery->execute();
-
-                //Haal gegevens uit form
-                $gebruikersnaam = $querydata['gebruikersnaam'];
-                $bank = $_POST['bank'];
-                $bankrekening = $_POST['bankrekening'];
-                $controleoptie = $_POST['controle'];
-                $creditcard = $_POST['creditcard'];
-
-                //Stop gegevens in db tabel Verkoper
-                $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
-                $insert->execute();
-
-                //Ga terug naar persoonlijke pagina
-                header('location: personpage.php');
-            } else {
-                echo "<h1>Email en/of code komen niet overeen!</h1>";
-            }
-        }
     } else {
-        echo "<h1>Email komt niet overeen!</h1>";
+        //echo "<h1>Email komt niet overeen!</h1>";
     }
 } else {
-    echo "<h1>Could not get username (check)</h1>";
+    //echo "<h1>Could not get username (check)</h1>";
 }
 
 //try {
@@ -138,57 +100,98 @@ if(isset($_GET['user_account']) && !empty($_GET['user_account'])) {
 //    echo "error:".$e->getMessage();
 //}
 ?>
+    <!doctype html>
+    <html class="no-js" lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>De beste veilingsite van Nederland!</title>
+        <link rel="stylesheet" href="css/foundation.css">
+        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="css/admin/app.css"
+    </head>
+    <body>
+    <br>
+    <form method="post">
+        <div class="input-group">
+            <label>Gebruikersnaam</label>
+            <label type="text" name="user"><?= $data['gebruikersnaam'] ?></label>
+        </div>
+        <div class="input-group">
+            <label>Verkoopcode</label>
+            <input type="text" name="verkoopcode" placeholder="Vul uw activatiecode in" required>
+        </div>
+        <div class="input-group">
+            <label>Bank</label>
+            <select name="bank">
+                <option value disabled selected>Selecteer uw bank</option>
+                <option value="ABN AMRO">ABN AMRO</option>
+                <option value="ASN BANK">ASN BANK</option>
+                <option value="ING">ING</option>
+                <option value="RABOBANK">RABOBANK</option>
+                <option value="SNS BANK">SNS BANK</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Bankrekening</label>
+            <input type="text" name="bankrekening">
+        </div>
+        <div class="input-group">
+            <label>Controle optie</label>
+            <select name="controle">
+                <option value disabled selected>Selecteer een controle optie</option>
+                <option value="post">Post</option>
+                <option value="Creditcard">Creditcard</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Creditcard</label>
+            <input type="text" name="creditcard">
+        </div>
+        <div>
+            <button type="submit" name="done" class="btn">Opslaan</button>
+        </div>
+    </form>
+    </body>
+    </html>
 
-<!doctype html>
-<html class="no-js" lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>De beste veilingsite van Nederland!</title>
-    <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/admin/app.css"
-</head>
-<body>
-<br>
-<form method="post">
-    <div class="input-group">
-        <label>Gebruikersnaam</label>
-        <label type="text" name="user"><?= $querydata['gebruikersnaam'] ?></label>
-    </div>
-    <div class="input-group" >
-        <label >Verkoopcode</label >
-        <input type = "text" name = "verkoopcode" placeholder = "Vul uw activatiecode in" required >
-    </div >
-    <div class="input-group">
-        <label>Bank</label>
-        <select name="bank">
-            <option value disabled selected>Selecteer uw bank</option>
-            <option value="ABN AMRO">ABN AMRO</option>
-            <option value="ASN BANK">ASN BANK</option>
-            <option value="ING">ING</option>
-            <option value="RABOBANK">RABOBANK</option>
-            <option value="SNS BANK">SNS BANK</option>
-        </select>
-    </div>
-    <div class="input-group">
-        <label>Bankrekening</label>
-        <input type="text" name="bankrekening">
-    </div>
-    <div class="input-group">
-        <label>Controle optie</label>
-        <select name="controle">
-            <option value disabled selected>Selecteer een controle optie</option>
-            <option value="post">Post</option>
-            <option value="Creditcard">Creditcard</option>
-        </select>
-    </div>
-    <div class="input-group">
-        <label>Creditcard</label>
-        <input type="text" name="creditcard">
-    </div>
-    <div>
-        <button type="submit" name="done" class="btn">Opslaan</button>
-    </div>
-</form>
+<?php
+//Als er op de knop gedrukt is
+if (isset($_POST['done'])) {
+    //Haal code op uit veld
+    $getverkoopcode = $_POST['verkoopcode'];
+
+    //Haal gegevens uit db met db code = gekregen code en db mail = gekregen mail
+    $checkquery = $dbh->prepare("SELECT * FROM Gebruiker WHERE verkoopcode = '$getverkoopcode' AND mailbox = '$getemail'");
+    $checkquery->setFetchMode(PDO::FETCH_ASSOC);
+    $checkquery->execute();
+    $checkquerydata = $checkquery->fetch();
+
+    //Haal verkoopcode op uit db
+    $verkoopcodeDB = $checkquerydata['verkoopcode'];
+
+    //Controleer of veld verkoopcode = db verkoopcode en link mail = db mail
+    if ($getverkoopcode == $verkoopcodeDB && $getemail == $email) {
+        //Update gebruiker met verkoper = 1
+        $updatequery = $dbh->prepare("UPDATE Gebruiker SET verkoper=1 WHERE verkoper=0 AND mailbox = '$getemailemail' AND verkopercode = '$ververkoopcode'");
+        $updatequery->execute();
+
+        //Haal gegevens uit form
+        $gebruikersnaam = $querydata['gebruikersnaam'];
+        $bank = $_POST['bank'];
+        $bankrekening = $_POST['bankrekening'];
+        $controleoptie = $_POST['controle'];
+        $creditcard = $_POST['creditcard'];
+
+        //Stop gegevens in db tabel Verkoper
+        $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
+        $insert->execute();
+
+        //Ga terug naar persoonlijke pagina
+        header('location: personpage.php');
+    } else {
+        echo "<h1>Email en/of code komen niet overeen!</h1>";
+    }
+}
+?>
