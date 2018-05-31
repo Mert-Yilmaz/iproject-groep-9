@@ -9,20 +9,20 @@
         <ul class="orbit-container">
           <li class="is-active orbit-slide">
             <figure class="orbit-figure">
-              <img class="orbit-image" src="img/5.jpg" alt="Boats">
-              <figcaption class="orbit-caption">Water met boten</figcaption>
+              <img class="orbit-image" src="img/veilingen/rs6.jpg" alt="Boats">
+              <figcaption class="orbit-caption">2017 Audi RS6</figcaption>
             </figure>
           </li>
           <li class="orbit-slide">
             <figure class="orbit-figure">
-              <img class="orbit-image" src="img/6.jpg" alt="Clouds">
-              <figcaption class="orbit-caption">Hond in de wolken</figcaption>
+              <img class="orbit-image" src="img/veilingen/535i.jpg" alt="Clouds">
+              <figcaption class="orbit-caption">2016 BMW 535i</figcaption>
             </figure>
           </li>
           <li class="orbit-slide">
             <figure class="orbit-figure">
-              <img class="orbit-image" src="img/7.jpg" alt="Water">
-              <figcaption class="orbit-caption">Hond op het water</figcaption>
+              <img class="orbit-image" src="img/veilingen/reclamebordcola.jpg" alt="Water">
+              <figcaption class="orbit-caption">Origineel Bord Coca Cola 1850</figcaption>
             </figure>
           </li>
         </ul>

@@ -12,6 +12,16 @@ $query = $dbh->prepare("SELECT * FROM Gebruiker WHERE gebruikersnaam = '$usernam
 $query->setFetchMode(PDO::FETCH_ASSOC);
 $query->execute();
 $data = $query->fetch();
+
+$gebruikersnaam = $data['gebruikersnaam'];
+
+$queryv2 = $dbh->prepare("SELECT *
+                                            FROM Verkoper vk
+                                            INNER JOIN Voorwerp vw ON vk.gebruiker = vw.verkoper
+                                            WHERE vk.gebruiker = '$gebruikersnaam'");
+$queryv2->setFetchMode(PDO::FETCH_ASSOC);
+$queryv2->execute();
+$data2 = $queryv2->fetch();
 ?>
 
 <!doctype html>
@@ -33,8 +43,8 @@ $data = $query->fetch();
             <?php
             while ($rownaw = $querynaw->fetch()) {
 
-
                 $getMail = $rownaw['mailbox'];
+                $getUsername = $rownaw['gebruikersnaam'];
 
                 $link = "<a href='registerVerkoper.php?user_account=$getMail'>(Verkoper worden? Klik hier!)</a>";
                 if ($rownaw['verkoper'] == 0) {
@@ -77,10 +87,9 @@ $data = $query->fetch();
                     </tr>
                 </table>
             <?php } ?>
+            <?php if($getUsername == 'Admin') { echo "<a class='knop' href='admin/dashboard.php'>Beheeromgeving</a>";}?>
             <?php
             if ($data['verkoper'] == 1) {
-
-                $gebruikersnaam = $data['gebruikersnaam'];
 
                 $querybank = $dbh->prepare("SELECT * FROM Verkoper WHERE gebruiker = '$gebruikersnaam'");
                 $querybank->setFetchMode(PDO::FETCH_ASSOC);
@@ -132,6 +141,7 @@ $data = $query->fetch();
 
                 <?php
                 $queryNRows = $dbh->prepare("SELECT COUNT(*) FROM	Voorwerp WHERE verkoper = '$gebruikersnaam'");
+                $queryNRows->setFetchMode(PDO::FETCH_ASSOC);
                 $queryNRows->execute();
                 $nRows = $queryNRows->fetchColumn();
 
@@ -146,6 +156,7 @@ $data = $query->fetch();
                             <th>Einddag</th>
                             <th>Eindtijd</th>
                             <th>Huidige hoogste bod</th>
+                            <th>Status</th>
                         </tr>
                         <?php
                         while ($rowv = $queryv->fetch()) {
@@ -157,6 +168,12 @@ $data = $query->fetch();
                                 <td class="text-center"><?= $rowv['looptijdEindeDag'] ?></td>
                                 <td class="text-center"><?= $rowv['looptijdEindeTijdstip'] ?></td>
                                 <td class="text-center"><?= $rowv['verkoopprijs'] ?></td>
+                                <?php
+                                if($rowv['veilingGesloten'] == 0) { ?>
+                                    <td class="text-center">Open</td>
+                                <?php } else { ?>
+                                    <td class="text-center">Gesloten</td>
+                                <?php } ?>
                             </tr>
                         <?php } ?>
                     </table>

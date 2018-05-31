@@ -48,12 +48,12 @@ catch(PDOException $e) {
 //        }
 //        ?>
 
-        <h1 class="text-center">Rubrieken</h1>
+        <h1 class="text-center">Rubrieken beheren</h1>
         <table>
             <thead>
                 <tr>
                     <th>Rubrieknaam</th>
-                    <th colspan="3">Acties</th>
+                    <th colspan="4">Acties</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,6 +69,14 @@ catch(PDOException $e) {
                                     <a href="edit.php?edit_id=<?= $row['rubrieknummer'] ?>">Wijzig</a>
                                 </td>
                                 <td>
+                                <?php
+                                if($row['isToegestaan'] == 0) { ?>
+                                    <a href="faseren.php?fas_id=<?= $row['rubrieknummer'] ?>">Faseer in</a>
+                                <?php } else if ($row['isToegestaan'] == 1) { ?>
+                                    <a href="faseren.php?fas_id=<?= $row['rubrieknummer'] ?>">Faseer uit</a>
+                                <?php } ?>
+                                </td>
+                                <td>
                                     <a onclick="return confirm('Weet je zeker dat je deze rubriek wilt verwijderen?')" href="delete.php?del_id=<?= $row['rubrieknummer'] ?>">Verwijder</a>
                                 </td>
                             </tr>
@@ -78,7 +86,7 @@ catch(PDOException $e) {
             </tbody>
         </table>
 
-        <form method="post" action="dashboard.php">
+        <form method="post" action="dashboard.php" class="form">
             <div class="input-group">
                 <label>Rubrieknummer</label>
                 <input type="text" name="rubnummer">
@@ -98,13 +106,14 @@ catch(PDOException $e) {
             $rubrieknaam = "";
             $rubriekroot = -1;
             $volgnr = NULL;
+            $isActief = 1;
 
             if (isset($_POST['save'])) {
 
                 $rubrieknummer = $_POST['rubnummer'];
                 $rubrieknaam = $_POST['rubnaam'];
 
-                $query = $dbh->prepare("INSERT INTO Rubriek (rubrieknummer, rubrieknaam, rubriek) VALUES ('$rubrieknummer', '$rubrieknaam', '$rubriekroot')");
+                $query = $dbh->prepare("INSERT INTO Rubriek (rubrieknummer, rubrieknaam, rubriek, isToegestaan) VALUES ('$rubrieknummer', '$rubrieknaam', '$rubriekroot', '$isActief')");
 
                 $query->execute();
                 header('location: dashboard.php');
@@ -113,10 +122,106 @@ catch(PDOException $e) {
         catch (PDOException $e) {
             echo $e;
         }
-
-        include_once '../footer.html';
-        ?>
+        try {
+            $gebruikersophalen = $dbh->prepare("SELECT * FROM Gebruiker");
+            $gebruikersophalen->setFetchMode(PDO::FETCH_ASSOC);
+            $gebruikersophalen->execute();
+        }
+        catch(PDOException $e) {
+            echo $e;
+        }
+?>
 
     </table>
+    <h1 class="text-center">Gebruikers beheren</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Gebruikersnaam</th>
+                <th colspan="4">Acties</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                    while ($row = $gebruikersophalen->fetch()) {
+                        ?>
+                        <tr>
+                            <td><?= $row['gebruikersnaam'] ?></td>
+                            <td>
+                            <?php
+                            if($row['isToegestaan'] == 1) { ?>
+                                <a href="blokkeren.php?blok_id=<?= $row['gebruikersnaam'] ?>">Blokkeer</a>
+                            <?php } else if ($row['isToegestaan'] == 0) { ?>
+                                <a href="blokkeren.php?blok_id=<?= $row['gebruikersnaam'] ?>">Deblokkeren</a>
+                            <?php } ?>
+                            </td>
+                        </tr>
+                    <?php
+                        }
+                    ?>
+        </tbody>
+    </table>
+    <?php
+    try {
+        $itemnaam = $_POST['itemnaam'];
+        if(!isset($itemnaam)){
+        $itemsophalen = $dbh->prepare("SELECT TOP 10 * FROM Voorwerp ORDER BY titel ASC");
+      }
+      else{
+        $itemsophalen = $dbh->prepare("SELECT * FROM Voorwerp WHERE titel LIKE '%$itemnaam%'");
+      }
+        $itemsophalen->setFetchMode(PDO::FETCH_ASSOC);
+        $itemsophalen->execute();
+    }
+    catch(PDOException $e) {
+        echo $e;
+    }
+    ?>
+
+    <h1 class="text-center">Items beheren</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Voorwerpnummer</th>
+                <th>Items</th>
+                <th colspan="2">Acties</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                    while ($row = $itemsophalen->fetch()) {
+                        ?>
+                        <tr>
+                            <td><a href="../detailpagina.php?item=<?= $row['voorwerpnummer']?>"><?= $row['voorwerpnummer']?></td>
+                            <td><a href="../detailpagina.php?item=<?= $row['voorwerpnummer']?>"><?= $row['titel'] ?></td>
+                            <td>
+                            <?php
+                            if($row['isToegestaan'] == 1) { ?>
+                                <a href="itemblok.php?vp_id=<?= $row['voorwerpnummer'] ?>">Blokkeer</a>
+                            <?php } else if ($row['isToegestaan'] == 0) { ?>
+                                <a href="itemblok.php?vp_id=<?= $row['voorwerpnummer'] ?>">Deblokkeren</a>
+                            <?php } ?>
+                            </td>
+                        </tr>
+                    <?php
+                        }
+                    ?>
+        </tbody>
+    </table>
+
+
+    <form class="form" method="post" action="dashboard.php">
+        <div class="input-group">
+            <label>Zoek items</label>
+            <input type="text" name="itemnaam" placeholder="Zoek op itemnaam">
+        </div>
+        <div>
+            <button type="submit" name="zoekitems" class="btn">Zoek</button>
+        </div>
+    </form>
+    <?php
+    include_once '../footer.html';
+    ?>
+
   </body>
 </html>

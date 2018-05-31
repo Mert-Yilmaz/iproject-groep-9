@@ -36,9 +36,6 @@ DROP FUNCTION fControleoptieCreditcard
 
 IF OBJECT_ID ('fCKMaxAfbeeldingen') IS NOT NULL
 DROP FUNCTION fCKMaxAfbeeldingen
-
-IF OBJECT_ID ('fCKBodEnMinimaleVerhoging') IS NOT NULL	-- WERKT NIET!
-DROP FUNCTION fCKBodEnMinimaleVerhoging
 */
 ---------------------------------
 
@@ -47,7 +44,7 @@ CREATE FUNCTION fControleerGebruikerIsVerkoper(@gebruiker VARCHAR(10))
 RETURNS BIT
 AS
 BEGIN
-	IF (@gebruiker = (SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = @gebruiker AND verkoper = 1))
+	IF (@gebruiker = (SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = @gebruiker AND verkoper = 1 AND actief = 1))
 		RETURN 1 -- true
 	ELSE 
 		RETURN 0 -- false
@@ -84,58 +81,6 @@ BEGIN
 	RETURN 0
 END
 GO
-
-/*
--- Version 1
-GO
-CREATE FUNCTION fCKBodEnMinimaleVerhoging(@bodbedrag NUMERIC(5), @voorwerp NUMERIC(10))
-RETURNS BIT
-AS
-BEGIN
-	IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 49.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 0.50)
-		RETURN 1 -- true
-	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 50.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 499.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00)
-		RETURN 1 -- true
-	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 500.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 999.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 5.00)
-		RETURN 1 -- true
-	ELSE IF (((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1000.00 AND (SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) <= 4999.99) AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 10.00)
-		RETURN 1 -- true
-	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 5000.00 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 50.00)
-		RETURN 1 -- true
-	ELSE IF ((SELECT bodbedrag FROM Bod WHERE voorwerp = @voorwerp) = NULL AND @bodbedrag >= 0.01 AND @bodbedrag > (SELECT startprijs FROM Voorwerp WHERE voorwerpnummer = @voorwerp))
-		RETURN 1 -- true
-	ELSE
-		RETURN 0 -- false
-	RETURN 0
-END
-GO
-*/
-
-/*
--- Version 2
-GO
-CREATE FUNCTION fCKBodEnMinimaleVerhoging(@bodbedrag NUMERIC(5), @voorwerp NUMERIC(10))
-RETURNS BIT
-AS
-BEGIN
-	IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 1 AND MAX(bodbedrag) <= 49.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 0.50)
-		RETURN 1 -- true
-	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 50.00 AND MAX(bodbedrag) <= 499.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 1.00)
-		RETURN 1 -- true
-	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 500.00 AND MAX(bodbedrag) <= 999.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 5.00)
-		RETURN 1 -- true
-	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 1000.00 AND MAX(bodbedrag) <= 4999.99) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 10.00)
-		RETURN 1 -- true
-	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp HAVING MAX(bodbedrag) >= 5000.00) = 1 AND @bodbedrag-(SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) >= 50.00)
-		RETURN 1 -- true
-	ELSE IF ((SELECT MAX(bodbedrag) FROM Bod WHERE voorwerp = @voorwerp) = NULL AND @bodbedrag > (SELECT startprijs FROM Voorwerp WHERE voorwerpnummer = @voorwerp))
-		RETURN 1 -- true
-	ELSE
-		RETURN 0 -- false
-	RETURN 0
-END
-GO
-*/
 ---------------------------------
 
 ----- ----- ----- -----
@@ -150,20 +95,24 @@ CREATE TABLE Vraag (
 )
 
 CREATE TABLE Gebruiker (
-	gebruikersnaam		VARCHAR(20)		NOT NULL,	-- WAS CHAR(10)
-	voornaam			CHAR(15)		NOT NULL,	-- WAS 5
-	achternaam			CHAR(20)		NOT NULL,	-- WAS 8
-	adresregel1			CHAR(30)		NOT NULL,	-- WAS 15
-	adresregel2			CHAR(15)			NULL,
-	postcode			CHAR(7)			NOT NULL,
-	plaatsnaam			CHAR(15)		NOT NULL,	-- WAS 12
-	land				CHAR(20)		NOT NULL,	-- WAS 9
-	geboortedatum		DATE			NOT NULL,	-- WAS CHAR(10)
-	mailbox				CHAR(50)		NOT NULL,	-- WAS CHAR(18)
-	wachtwoord			CHAR(100)		NOT NULL,	-- WAS 9
-	vraag				INTEGER			NOT NULL,	-- 1
-	antwoordtekst		CHAR(100)		NOT NULL,	-- WAS 6
-	verkoper			BIT	DEFAULT 0	NOT NULL,	-- WAS CHAR(3)
+	gebruikersnaam		VARCHAR(20)				NOT NULL,	-- WAS CHAR(10)
+	voornaam			CHAR(15)				NOT NULL,	-- WAS 5
+	achternaam			CHAR(20)				NOT NULL,	-- WAS 8
+	adresregel1			CHAR(30)				NOT NULL,	-- WAS 15
+	adresregel2			CHAR(15) DEFAULT NULL		NULL,
+	postcode			CHAR(7)					NOT NULL,
+	plaatsnaam			CHAR(15)				NOT NULL,	-- WAS 12
+	land				CHAR(20)				NOT NULL,	-- WAS 9
+	geboortedatum		DATE					NOT NULL,	-- WAS CHAR(10)
+	mailbox				VARCHAR(50)				NOT NULL,	-- WAS CHAR(18)
+	wachtwoord			CHAR(100)				NOT NULL,	-- WAS 9
+	vraag				INTEGER					NOT NULL,	-- 1
+	antwoordtekst		CHAR(100)				NOT NULL,	-- WAS 6
+	verkoper			BIT	DEFAULT 0			NOT NULL,	-- WAS CHAR(3)
+	code				VARCHAR(32) DEFAULT 0	NOT NULL,	-- EIGEN
+	actief				BIT DEFAULT 0			NOT NULL,	-- EIGEN
+	isToegestaan		BIT DEFAULT 1			NOT NULL,	-- EIGEN
+	verkopercode		VARCHAR(32) DEFAULT NULL	NULL,	-- EIGEN
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkGebruiker PRIMARY KEY (gebruikersnaam),
@@ -176,12 +125,16 @@ CREATE TABLE Gebruiker (
 			--ON DELETE,*/
 	/*--- Constraint Appendix B - Geldig emailadres ---*/
 	CONSTRAINT ckEmail CHECK (mailbox LIKE '%_@__%.__%'),
+	/*--- Eigen constraint - Uniek email adres ---*/
+	CONSTRAINT akEmail UNIQUE (mailbox),
 	/*--- Constraint Appendix B - Unieke gebruikersnaam ---*/
 	CONSTRAINT akGebruikersnaam UNIQUE (gebruikersnaam),
 	/*--- Constraint Appendix B - Wachtwoord minimaal 7 tekens, bestaande uit letters, cijfers --> Hoofdletters via site ---*/
 	CONSTRAINT ckWachtwoord CHECK (wachtwoord LIKE '%[0-9]%' AND wachtwoord LIKE '%[A-Z]%' AND LEN(wachtwoord) >= 7),
 	/*--- Eigen constraint - Geboortedatum <= vandaag ---*/
-	CONSTRAINT ckGeboortedatum CHECK (geboortedatum <= CURRENT_TIMESTAMP)
+	CONSTRAINT ckGeboortedatum CHECK (geboortedatum <= CURRENT_TIMESTAMP),
+	/*--- Eigen constraint - Unieke code ---*/
+	CONSTRAINT akCode UNIQUE(code)
 )
 
 CREATE TABLE Gebruikerstelefoon (
@@ -197,10 +150,11 @@ CREATE TABLE Gebruikerstelefoon (
 )
 
 CREATE TABLE Rubriek (
-	rubrieknummer	INTEGER		NOT NULL,	-- 3
-	rubrieknaam		VARCHAR(40)	NOT NULL,	-- WAS CHAR(24)
-	rubriek			INTEGER			NULL,	-- 2
-	volgnr			INTEGER			NULL,	-- 2	-- WAS NOT NULL
+	rubrieknummer	INTEGER			NOT NULL,	-- 3
+	rubrieknaam		VARCHAR(40)		NOT NULL,	-- WAS CHAR(24)
+	rubriek			INTEGER				NULL,	-- 2
+	volgnr			INTEGER				NULL,	-- 2	-- WAS NOT NULL
+	isToegestaan	BIT DEFAULT 1	NOT NULL,	-- EIGEN
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkRubriek PRIMARY KEY (rubrieknummer),
@@ -211,10 +165,10 @@ CREATE TABLE Rubriek (
 
 CREATE TABLE Verkoper (
 	gebruiker			VARCHAR(20)	NOT NULL,	-- Gebruikersnaam	-- WAS CHAR(10)
-	bank				CHAR(8)			NULL,
+	bank				VARCHAR(8)		NULL,	-- WAS CHAR
 	bankrekening		INTEGER			NULL,	-- 7
-	controleoptie		CHAR(10)	NOT NULL,
-	creditcard			CHAR(19)		NULL,
+	controleoptie		VARCHAR(10)	NOT NULL,	-- WAS CHAR
+	creditcard			VARCHAR(19)		NULL,	-- WAS CHAR
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVerkoper PRIMARY KEY (gebruiker),
@@ -227,7 +181,7 @@ CREATE TABLE Verkoper (
 			--ON DELETE*/
 	CONSTRAINT ckGebruikerIsVerkoper CHECK (dbo.fControleerGebruikerIsVerkoper(gebruiker) = 1),
 	CONSTRAINT ckKaartgebruik CHECK (bankrekening IS NOT NULL AND creditcard IS NOT NULL),
-	CONSTRAINT ckControleOptie CHECK (controleoptie IN ('Creditcard', 'Post'))
+	CONSTRAINT ckControleOptie CHECK (controleoptie IN ('creditcard', 'post'))
 	--CONSTRAINT ckControleOptie CHECK (dbo.fControleoptieCreditcard(controleoptie))
 )
 
@@ -239,7 +193,7 @@ CREATE TABLE Voorwerp (
 	betalingswijze			CHAR(15)			NOT NULL,	-- WAS 9
 	betalingsinstructie		CHAR(30)				NULL,	-- WAS 23
 	plaatsnaam				CHAR(12)			NOT NULL,
-	land					CHAR(9)				NOT NULL,
+	land					CHAR(20)			NOT NULL,	-- WAS CHAR(9)
 	looptijd				INTEGER	DEFAULT 7	NOT NULL,	-- 1
 	looptijdBeginDag		DATE				NOT NULL,	-- WAS CHAR(10)
 	looptijdBeginTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
@@ -251,6 +205,8 @@ CREATE TABLE Voorwerp (
 	looptijdEindeTijdstip	TIME				NOT NULL,	-- WAS CHAR(8)
 	veilingGesloten			BIT					NOT NULL,	-- WAS CHAR(3)
 	verkoopprijs			NUMERIC(8)				NULL,	-- WAS CHAR(5)
+	isToegestaan			BIT DEFAULT 1		NOT NULL,	-- EIGEN
+	isMailVerstuurd			BIT DEFAULT 0		NOT NULL,	-- EIGEN
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerp PRIMARY KEY (voorwerpnummer),
@@ -288,8 +244,8 @@ CREATE TABLE Feedback (
 	CONSTRAINT fkFeedbackVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer)
 		ON UPDATE CASCADE
 		ON DELETE NO ACTION,
-	CONSTRAINT ckFeedbacksoort CHECK (feedbacksoort IN ('Negatief', 'Neutraal', 'Positief')),
-	CONSTRAINT ckSoortgebruiker CHECK (soortgebruiker IN ('Koper', 'Verkoper'))
+	CONSTRAINT ckFeedbacksoort CHECK (feedbacksoort IN ('negatief', 'neutraal', 'positief')),
+	CONSTRAINT ckSoortgebruiker CHECK (soortgebruiker IN ('koper', 'verkoper'))
 )
 
 CREATE TABLE Bod (
@@ -304,8 +260,7 @@ CREATE TABLE Bod (
 	CONSTRAINT fkBodVoorwerp FOREIGN KEY (voorwerp) REFERENCES Voorwerp(voorwerpnummer)
 		ON UPDATE CASCADE
 		ON DELETE NO ACTION,
-	CONSTRAINT fkBodGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam),
-	/*CONSTRAINT ckBod CHECK (dbo.fCKBodEnMinimaleVerhoging(bodbedrag, voorwerp) = 1)*/
+	CONSTRAINT fkBodGebruiker FOREIGN KEY (gebruiker) REFERENCES Gebruiker(gebruikersnaam)
 )
 
 CREATE TABLE Bestand (

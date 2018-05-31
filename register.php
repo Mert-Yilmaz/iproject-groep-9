@@ -1,9 +1,19 @@
-<!doctype html>
-<?php include 'navbar.php';
+<?php
+/**
+ * Created by PhpStorm.
+ * User: demiv
+ * Date: 28-5-2018
+ * Time: 10:56
+ */
+
+session_start();
 include 'functions.php';
 include_once 'db.php';
 error_reporting(E_ALL ^ E_NOTICE);
 ?>
+
+
+<!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -12,9 +22,12 @@ error_reporting(E_ALL ^ E_NOTICE);
     <title>EenmaalAndermaal - De beste veilingsite van Nederland!</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
+    <link rel="icon" href="img/logo2.PNG">
 </head>
 
+
 <body>
+<?php include 'navbar.php'; ?>
 <div class="grid-x">
     <div class="medium-3"></div>
     <div class="medium-6 text-center">
@@ -23,51 +36,41 @@ error_reporting(E_ALL ^ E_NOTICE);
     <div class="medium-3"></div>
 </div>
 <div class="grid-x">
-    <div class="large-4 medium-3"></div>
+  <div class="large-4 medium-3"></div>
     <div class="medium-6 small-12 large-4">
-        <form class="registerform" method="POST" action="verify.php"> <!-- <?php //echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> -->
-
+        <form class="registerform" method="POST" action="register.php">
             <div>
-                <input type="text" name="Naam" placeholder="Voornaam" required>
+                <input type="text" name="Naam" placeholder="Voornaam, verplicht" maxlength="15" required>
             </div>
-
             <div>
-                <input type="text" name="Achternaam" placeholder="Achternaam" required>
+                <input type="text" name="Achternaam" placeholder="Achternaam, verplicht" maxlength="20" required>
             </div>
-
             <div>
                 <label>Geboortedatum</label>
-                <input type="date" name="Geboortedatum" placeholder="Geboortedatum" required>
+                <input type="date" name="Geboortedatum" placeholder="Geboortedatum, verplicht" required>
             </div>
-
             <div>
-                <input type="email" name="Email" placeholder="E-Mail" required>
+                <input type="email" name="Email" placeholder="E-Mail, verplicht" maxlength="50" required>
             </div>
-
             <div>
-                <input type="text" name="Gebruikersnaam" placeholder="Gebruikersnaam" required>
+                <input type="text" name="Gebruikersnaam" placeholder="Gebruikersnaam, verplicht" maxlength="20" required>
             </div>
-
             <div>
-                <input type="password" name="Wachtwoord" placeholder="Wachtwoord" required>
+                <input type="password" name="Wachtwoord" placeholder="Wachtwoord (Minimaal 7 tekens, een hoofdletter en een getal), verplicht" maxlength="100"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" required>
             </div>
-
             <div>
-                <input type="text" name="Adresregel1" placeholder="Adres" required>
+                <input type="text" name="Adresregel1" placeholder="Adres, verplicht" maxlength="30" required>
             </div>
-
             <div>
-                <input type="text" name="Plaats" placeholder="Plaats" required>
+                <input type="text" name="Plaats" placeholder="Plaats, verplicht" maxlength="15" required>
             </div>
-
             <div>
-                <input type="text" name="Postcode" placeholder="Postcode" required>
+                <input type="text" name="Postcode" placeholder="Postcode, verplicht" maxlength="7" required>
             </div>
-
             <div>
-
                 <select name="Land">
-                    <option value disabled selected>Selecteer een land</option>
+                    <option value disabled selected>Selecteer een land, verplicht</option>
                     <option value="Afghanistan"> Afghanistan</option>
                     <option value="Albania"> Albanië</option>
                     <option value="Algerije"> Algerije</option>
@@ -82,31 +85,26 @@ error_reporting(E_ALL ^ E_NOTICE);
                     <option value="Aruba"> Aruba</option>
                     <option value="Nederland"> Nederland</option>
                     <option value="Czech Republic"> Czech Republic</option>
-                    <optiewaarde
-                    = "Denemarken"> Denemarken </option>
+                    <option value="Denemarken"> Denemarken</option>
                     <option value="Djibouti"> Djibouti</option>
                     <option value="Dominica"> Dominica</option>
-                    <option value="Dominicaanse Republiek"> Dominicaanse Republiek</option>
                     <option value="Guatemala"> Guatemala</option>
                     <option value="Guinea"> Guinea</option>
                     <option value="Guinee-Bissau"> Guinee-Bissau</option>
                     <option value="Guyana"> Guyana</option>
                     <option value="Haiti"> Haïti</option>
-                    <option value="Heard en McDonaldeilanden"> Heard en Mc Donald Eilanden</option>
-                    <optiewaarde
-                    = "Heilige Stoel"> Heilige Stoel (Vaticaanstad) </option>
+                    <option value="Heilige Stoel"> Heilige Stoel (Vaticaanstad)</option>
                     <option value="Honduras"> Honduras</option>
+                    <option value="Turkije"> Turkije</option>
                     <option value="Anders"> Overig</option>
                 </select>
             </div>
-
             <div>
-                <input type="text" name="Adresregel2" placeholder="Adres 2">
+                <input type="text" name="Adresregel2" maxlength="15" placeholder="Adres 2, niet verplicht">
             </div>
-
             <div>
-                <select name="Vraag">
-                    <option value disabled selected>Selecteer een beveiligingsvraag</option>
+                <select name="Vraag"> <!-- Ophalen uit DB? -->
+                    <option value disabled selected>Selecteer een beveiligingsvraag, verplicht</option>
                     <option value="1">Welk gerecht kon je als eerste koken?</option>
                     <option value="2">Wat is je moeders tweede naam?</option>
                     <option value="3">Welke bijnaam had je als kind?</option>
@@ -114,24 +112,21 @@ error_reporting(E_ALL ^ E_NOTICE);
                     <option value="5">Hoe heette je eerste huisdier?</option>
                 </select>
             </div>
-
             <div>
-                <input type="text" name="Antwoord" placeholder="Antwoord beveiligingsvraag" required>
+                <input type="text" name="Antwoord" placeholder="Antwoord beveiligingsvraag, verplicht" maxlength="20" required>
             </div>
-
             <div>
                 <button type="submit" class="knop" name="reg_user">Registreer</button>
             </div>
             <p>
-                Heb je al een account? <a href="login-page.php">Klik hier om in te logggen</a>
+                Heb je al een account? <a href="login-page.php">Klik hier om in te loggen</a>
             </p>
         </form>
     </div>
-    <div class="medium-3 large-4"></div>
+    <!--<div class="medium-3 large-4"></div>-->
 
-
-    <?php //Moet hier niet post reg_user?//
-    if (isset($_POST["Gebruikersnaam"],$_POST["Wachtwoord"],$_POST["Adresregel1"],$_POST["Naam"],$_POST["Achternaam"],$_POST["Land"],$_POST["Plaats"],$_POST["Postcode"],$_POST["Geboortedatum"],$_POST["Email"],$_POST["Vraag"],$_POST["Antwoord"])){
+    <?php
+    if (isset($_POST['reg_user'])) {
         $gebruikersnaam = $_POST["Gebruikersnaam"];
         $wachtwoord = md5($_POST["Wachtwoord"]);
         $adresregel1 = $_POST["Adresregel1"];
@@ -146,26 +141,43 @@ error_reporting(E_ALL ^ E_NOTICE);
         $vraag = $_POST["Vraag"];
         $antwoord = md5($_POST["Antwoord"]);
         $verkoper = 0;
-        $actief = 0;
         $code = md5(rand(0,1000));
+        $actief = 0;
+        $isToegestaan = 1;
+        $verkopercode = NULL;
 
-        try{
-            $query = $dbh->prepare("INSERT INTO Gebruiker
-                VALUES ('$gebruikersnaam','$voornaam','$achternaam','$adresregel1','$adresregel2','$postcode','$plaats','$land','$geboortedatum','$email','$wachtwoord','$vraag','$antwoord','$verkoper','$actief','$code')");
-            $query->execute();
+        //Prepare
+        $query = "INSERT INTO Gebruiker VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = $dbh->prepare($query);
 
-            if (isset($_POST['reg_user'])) {
-                $to = $email;
-                $subject = 'Activatie account EenmaalAndermaal (9)';
-                $from = 'noreply@eenmaalandermaal9.nl';
-                $body = "Bedankt voor het registreren! Uw activatiecode is $code Klik op deze link om uw account te bevestigen: " . "<a href='verify.php'>verify.php?email=$email&code=$code</a>";
-                $headers = "From: " . $from;
-                mail($to, $subject, $body, $headers);
-                echo "Mail verzonden naar " . $email;
-            }
-        }catch(PDOException $e) {
+        //In DB
+        try {
+            $query->execute(array($gebruikersnaam, $voornaam, $achternaam, $adresregel1, $adresregel2, $postcode, $plaats, $land, $geboortedatum, $email, $wachtwoord, $vraag, $antwoord, $verkoper, $code, $actief, $isToegestaan, $verkopercode));
+
+            $to      = $email;
+            $from    = 'noreply@eenmaalandermaal9.nl';
+            $subject = 'Verificatie account EenmaalAndermaal';
+            $message = '
+
+
+            Beste ' . $voornaam . ',
+            Bedankt voor het aanmelden op EenmaalAndermaal!
+            Om mee te kunnen bieden en in te kunnen loggen moet u uw account activeren aan de hand van de onderstaande link.
+            ------------------------
+            Gebruikersnaam: ' . $gebruikersnaam . '
+            Email: ' . $email . '
+            Wachtwoord: ' . $_POST['Wachtwoord'] . '
+            ------------------------
+            Kopieer de onderstaande link om uw account te activeren:
+            http://iproject9.icasites.nl/verify.php?email='.$email.'&code='.$code.'';
+
+            $headers = 'From: ' . $from . "\r\n";
+            mail($to, $subject, $message, $headers);
+        } catch (PDOException $e) {
+            echo $e;
             echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-        }}
+        }
+    }
     include("footer.html");
     ?>
 </body>
