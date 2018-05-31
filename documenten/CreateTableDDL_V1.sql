@@ -109,9 +109,10 @@ CREATE TABLE Gebruiker (
 	vraag				INTEGER					NOT NULL,	-- 1
 	antwoordtekst		CHAR(100)				NOT NULL,	-- WAS 6
 	verkoper			BIT	DEFAULT 0			NOT NULL,	-- WAS CHAR(3)
-	code				CHAR(32) DEFAULT 0		NOT NULL,	-- EIGEN
+	code				VARCHAR(32) DEFAULT 0	NOT NULL,	-- EIGEN
 	actief				BIT DEFAULT 0			NOT NULL,	-- EIGEN
 	isToegestaan		BIT DEFAULT 1			NOT NULL,	-- EIGEN
+	verkopercode		VARCHAR(32) DEFAULT NULL	NULL,	-- EIGEN
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkGebruiker PRIMARY KEY (gebruikersnaam),
@@ -205,6 +206,7 @@ CREATE TABLE Voorwerp (
 	veilingGesloten			BIT					NOT NULL,	-- WAS CHAR(3)
 	verkoopprijs			NUMERIC(8)				NULL,	-- WAS CHAR(5)
 	isToegestaan			BIT DEFAULT 1		NOT NULL,	-- EIGEN
+	isMailVerstuurd			BIT DEFAULT 0		NOT NULL,	-- EIGEN
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerp PRIMARY KEY (voorwerpnummer),
