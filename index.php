@@ -26,6 +26,7 @@
               <div class="cell small-6 medium-8 large-2"><br>
                 <form method="post" action="">
                   <input type="text" name="zoekterm" placeholder="Zoeken..."/>
+                  <input type="text" name="zoekitemkeyword" placeholder="Zoek items"/>
                   <div class="dertig"><input type="text" name="minprijs" placeholder="minprijs..."/></div>
                   <div class="dertig"><input type="text" name="maxprijs" placeholder="maxprijs..."/></div>
                   <select name="order">
@@ -40,7 +41,7 @@
                 <h1>Groepen</h1>
                 <?php
                   echo '<ul class="ulNone">';
-                  zoekRubriek($dbh, $_POST['zoekterm'], $_POST['order']);
+                  zoekRubriek($dbh, $_POST['zoekterm'], $_POST['order'], $_POST['zoekitemkeyword']);
                   echo '</ul>';
                 ?>
               </div>

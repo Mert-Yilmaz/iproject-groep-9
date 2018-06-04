@@ -141,7 +141,7 @@ function cheap_items($dbh){
   echo $output;
 }
 // Zoek naar RUBRIEKEN op hoofdpagina
-function zoekRubriek($dbh, $zoekWoord, $order) {
+function zoekRubriek($dbh, $zoekWoord, $order, $keywords) {
   if($order == "COUNT ASC") {
       $order = 'SELECT *
                           FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
@@ -184,6 +184,7 @@ function zoekRubriek($dbh, $zoekWoord, $order) {
                                WHERE rubriek = -1
                                ORDER BY rubrieknaam ASC');
    }
+   if($keywords == ""){
    try{
      $query->execute();
      $rubriek = $row['rubrieknaam'];
@@ -196,6 +197,25 @@ function zoekRubriek($dbh, $zoekWoord, $order) {
    } catch(PDOException $e) {
        echo "Er is iets mis gegaan. De foutmelding is: $e";
    }
+ }
+ else if ($keywords !== ""){
+   echo "<div class='$zoekWoord'>";
+   $parts = explode(" ", $keywords);
+   echo "U heeft gezocht op: " . $keywords . "</div>";
+   for ($i=0; $i < count($parts); $i++) {
+     $query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
+     try{
+       $query->execute();
+       $item = $row['titel'];
+       while($row = $query->fetch()) {
+           echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
+                ' . $row['titel'];
+       }
+     } catch(PDOException $e) {
+         echo "Er is iets mis gegaan. De foutmelding is: $e";
+     }
+   }
+}
 }
 // Haalt het antal items op in een Rubriek
 function aantalItems($dbh, $rubrieknummer) {
