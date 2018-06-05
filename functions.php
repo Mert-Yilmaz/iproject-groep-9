@@ -78,6 +78,8 @@ function hot_items($dbh){
   }
   echo $output;
 }
+
+
 //Aflopende Items (Selecteert 3 items die het snelst aflopen)
 function ending_items($dbh){
   $output="";
@@ -109,6 +111,8 @@ function ending_items($dbh){
   }
 echo $output;
 }
+
+
 //Laaggeboden Items (Selecteert 3 items met de laagste biedingen)
 function cheap_items($dbh){
   $output="";
@@ -140,6 +144,8 @@ function cheap_items($dbh){
   }
   echo $output;
 }
+
+
 // Zoek naar RUBRIEKEN op hoofdpagina
 function zoekRubriek($dbh, $zoekWoord, $order, $keywords) {
   if($order == "COUNT ASC") {
@@ -225,9 +231,14 @@ foreach($parts as $k){
          echo "Er is iets mis gegaan. De foutmelding is: $e";
      }
    }
+ }
 }
+<<<<<<< HEAD
 //}
 // Haalt het antal items op in een Rubriek
+=======
+// Haalt het aantal items op in een Rubriek
+>>>>>>> 35c4a264915ce85b9c3d81daeecaefb713ef4d48
 function aantalItems($dbh, $rubrieknummer) {
   $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
                           FROM	 Rubriek r INNER JOIN VoorwerpInRubriek v
@@ -258,18 +269,6 @@ function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
       echo $row['Aantal_items'];
       }
     }
-  //   $isAantalItemsLeeg = $query->fetchColumn();
-  //     if(!isset($isAantalItemsLeeg)){
-  //       $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
-  //                               FROM	 Rubriek r INNER JOIN VoorwerpInRubriek v
-  //                               ON r.rubrieknummer = v.rubriekOpLaagsteNiveau
-  //                               WHERE  rubriekOpLaagsteNiveau = :rubriek");
-  //       $query->bindParam(':rubriek', $rubriek);
-  //       $query->execute();
-  //       while($row = $query->fetch()) {
-  //           echo $row['Aantal_items'];
-  //     }
-  // }
 }
 
 
@@ -295,6 +294,8 @@ function toonItems($dbh, $zoekWoord) {
       echo "Er is iets mis gegaan. De foutmelding is: $e";
   }
 }
+
+
 //Toont BREADCRUMBS voor Producten
 function productBreadCrumbs($dbh, $zoekWoord) {
   $breadcrumb;
@@ -320,6 +321,8 @@ function productBreadCrumbs($dbh, $zoekWoord) {
               </nav';
   }
 }
+
+
 //Toont BREADCRUMBS voor de website
 function breadCrumbs($dbh, $zoekWoord) {
   echo '<nav aria-label="You are here: "role="navigation">
@@ -329,6 +332,8 @@ function breadCrumbs($dbh, $zoekWoord) {
         </ul>
         </nav';
 }
+
+
 // Haalt RUBRIEKEN op de Database
 function Category($dbh, $zoekWoord) {
   $query = $dbh->prepare("SELECT *
@@ -342,6 +347,8 @@ function Category($dbh, $zoekWoord) {
     subCategory($dbh, $rubrieknummer, $rubrieknaam);
   }
 }
+
+
 // Haalt SUBRUBRIEKEN op de Database
 function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
   $query = $dbh->prepare("SELECT *
@@ -356,6 +363,8 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
          echo aantalItemsSub($dbh, $row['rubrieknummer'], $row['rubriek']);
   }
 }
+
+
 // Laat de details van een item zien
 function detailPagina($dbh) {
   $voorwerpnummer = $_GET['item'];
@@ -466,6 +475,8 @@ function detailPagina($dbh) {
     </div>";
   }
 }
+
+
 // Toont details van de 3 hoogste biedingen op het Item
 function biedingenItem($dbh) {
   $voorwerpnummer = $_GET['item'];
@@ -582,6 +593,8 @@ function biedOpItem($dbh) {
     }
   }
 }
+
+
 //Versturen van een mail (1 dag voor verloopdatum)
 function zendMailVerloopVeiling($dbh) {
     if(isset($_SESSION['login-token'])) {

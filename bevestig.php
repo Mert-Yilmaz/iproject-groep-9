@@ -74,8 +74,7 @@ $voorwerpid = 1 + $nRows;
   "Verzendinstructies: " . $verzendinstructies . '<br>' .
   "Plaatje: " . $plaatje  . '<br>' .
   "<img  src='img/veilingen/$plaatje'>" .
-  "Hoogste: " . $hoogste  . '<br>' .
-  "Koper: " . $koper  . '<br>'; ?>
+  "Hoogste rubriek: " . $hoogste  . '<br>'; ?>
 
   <form action="#" method="post">
     <div>
@@ -142,8 +141,8 @@ if (isset($_POST["bevestig"])){
     $query->execute();
   }catch(PDOException $e) {
     unlink("img/veilingen/$plaatje");
-    echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
     header('Location: verkooppage.php');
+    echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
   }
   try{
   $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
@@ -154,8 +153,8 @@ if (isset($_POST["bevestig"])){
     if (file_exists("img/veilingen/$plaatje")) {
       unlink("img/veilingen/$plaatje");
     }
-    echo '<script type="text/javascript">alert("Voorwerpnummer niet goed ingevuld")</script>';
     header('Location: verkooppage.php');
+    echo '<script type="text/javascript">alert("Voorwerpnummer niet goed ingevuld")</script>';
   }
 }
 

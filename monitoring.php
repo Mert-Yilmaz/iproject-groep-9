@@ -5,6 +5,9 @@
     error_reporting(E_ALL ^ E_NOTICE);
     if(!isset($_SESSION['WelkomPopUp'])){
     $_SESSION['WelkomPopUp'];}
+    if(!isset($top)){
+      $top = 2;
+    }
 ?>
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -22,12 +25,33 @@
 
     <div class="grid-container fluid text-center">
       <div class="grid-x grid-padding-x">
+        <div class="cell large-3"></div>
         <div class="cell large-6">
 
+          <form method="POST">
+              <h2>Selecteer hier het aantal records dat u wilt zien in de onderstaande tabellen.</h2>
+              <select name="top">
+                  <option value disabled selected>Selecteer het aantal records</option>
+                  <option value=1>1</option>
+                  <option value=3>3</option>
+                  <option value=5>5</option>
+                  <option value=10>10</option>
+                  <option value=15>15</option>
+                  <option value=20>20</option>
+                  <option value=20>50</option>
+                  <option value=20>100</option>
+                  <option value=20>150</option>
+                  <option value=20>200</option>
+              </select>
+              <button type="submit" class="knop" name="top-submit">verzenden</button>
+          </form>
 
           <?php
 
-            $mvg = $dbh->prepare("SELECT TOP 5 VERKOPER, COUNT(VERKOPER) AS VERKOPERS
+            if(isset($_POST['top-submit'])){
+              $top = $_POST['top'];
+            }
+            $mvg = $dbh->prepare("SELECT TOP $top VERKOPER, COUNT(VERKOPER) AS VERKOPERS
                                 	FROM VOORWERP
                                 	GROUP BY VERKOPER
                                 	ORDER BY VERKOPERS DESC");
@@ -36,7 +60,8 @@
             $mvg->execute();
 
           ?>
-          <p>Meest verkopende gebruikers</p>
+          <h2>Meest verkopende gebruikers</h2>
+          <p>Verkopers die de meeste advertenties hebben openstaan.</p>
             <table>
                 <tr>
                     <th>Verkoper</th>
@@ -52,7 +77,7 @@
 
           <?php
 
-              $mbg = $dbh->prepare("SELECT TOP 5 GEBRUIKER, COUNT(GEBRUIKER) AS GEBRUIKERS
+              $mbg = $dbh->prepare("SELECT TOP $top GEBRUIKER, COUNT(GEBRUIKER) AS GEBRUIKERS
           	  FROM BOD
           	  GROUP BY GEBRUIKER
           	  ORDER BY GEBRUIKERS DESC");
@@ -61,7 +86,8 @@
               $mbg->execute();
 
           ?>
-          <p>Meest biedende gebruikers</p>
+          <h2>Meest biedende gebruikers</h2>
+          <p>Gebruikers die het meest hebben geboden.</p>
             <table>
                 <tr>
                     <th>Gebruiker</th>
@@ -77,7 +103,7 @@
 
           <?php
 
-              $mkg = $dbh->prepare("SELECT TOP 5 KOPER, COUNT(KOPER) AS KOPERS
+              $mkg = $dbh->prepare("SELECT TOP $top KOPER, COUNT(KOPER) AS KOPERS
                                     FROM VOORWERP
                                     GROUP BY KOPER
                                     ORDER BY KOPERS DESC");
@@ -86,7 +112,8 @@
               $mkg->execute();
 
             ?>
-            <p>Meest kopende gebruikers</p>
+            <h2>Meest kopende gebruikers</h2>
+            <p>Gebruikers die de meeste veilingen hebben gewonnen.</P>
             <table>
                 <tr>
                     <th>Koper</th>
@@ -100,22 +127,20 @@
                 <?php }?>
             </table>
 
-          </div><div class="cell large-6">
-
-
             <?php
 
-                $mvr = $dbh->prepare("SELECT TOP 5 VOORWERP, COUNT(VOORWERP) AS VOORWERPEN
-                                      FROM BOD
-                                      INNER JOIN VOORWERP ON VOORWERP = VOORWERPNUMMER
-                                      GROUP BY VOORWERP
-                                      ORDER BY VOORWERPEN DESC");
+                $mvr = $dbh->prepare("SELECT TOP $top R.rubrieknaam, COUNT(V.voorwerpnummer) AS aantal
+                                    	FROM Voorwerp V INNER JOIN VoorwerpInRubriek VR ON VR.voorwerp = V.voorwerpnummer
+                                    	INNER JOIN Rubriek R ON R.rubrieknummer = VR.rubriekOpLaagsteNiveau
+                                    	GROUP BY R.rubrieknaam
+                                    	ORDER BY aantal DESC");
 
                 $mvr->setFetchMode(PDO::FETCH_ASSOC);
                 $mvr->execute();
 
             ?>
-              <p>Populairste rubrieken -- UNDER CONSTROCTION --</p>
+              <h2>Populairste rubrieken </h2>
+              <p>Rubrieken waar de meeste lopende advertenties in staan.</p>
                 <table>
                     <tr>
                         <th>Rubrieken</th>
@@ -123,15 +148,15 @@
                     </tr>
                     <?php while ($row = $mvr->fetch()){?>
                     <tr>
-                        <td><?= $row['VOORWERP']?></td>
-                        <td><?= $row['VOORWERPEN']?></td>
+                        <td><?= $row['rubrieknaam']?></td>
+                        <td><?= $row['aantal']?></td>
                     </tr>
                     <?php }?>
                 </table>
 
             <?php
 
-                $mvr = $dbh->prepare("SELECT TOP 5 VOORWERP, TITEL, COUNT(VOORWERP) AS VOORWERPEN
+                $mvr = $dbh->prepare("SELECT TOP $top VOORWERP, TITEL, COUNT(VOORWERP) AS VOORWERPEN
                                   	FROM BOD
                                   	INNER JOIN VOORWERP ON VOORWERP = VOORWERPNUMMER
                                   	GROUP BY VOORWERP, TITEL
@@ -141,12 +166,13 @@
                 $mvr->execute();
 
             ?>
-              <p>Populairste items</p>
+              <h2>Populairste items</h2>
+              <p>Items waar het vaakst op is geboden.</p>
                 <table>
                     <tr>
                         <th>Itemnummer</th>
                         <th>Itemnaam</th>
-                        <th>Aantal</th>
+                        <th>Aantal keer geboden</th>
                     </tr>
                     <?php while ($row = $mvr->fetch()){?>
                     <tr>
@@ -156,8 +182,9 @@
                     </tr>
                     <?php }?>
                 </table>
-
-          </div></div></div>
+            </div>
+        </div>
+      </div>
 
       <?php
           require 'footer.html';
