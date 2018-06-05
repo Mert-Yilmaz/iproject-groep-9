@@ -641,7 +641,7 @@ zendMailVerloopVeiling($dbh);
 function plaatsItem($dbh) {
   $forms = '';
   $forms .= '
-        <form action="#" method="post" enctype="multipart/form-data">
+        <form action="bevestig.php" method="post" enctype="multipart/form-data">
         <div>
            <label>Naam van het Product</label>
            <input type="text" name="titel" placeholder="Titel" maxlength="18">

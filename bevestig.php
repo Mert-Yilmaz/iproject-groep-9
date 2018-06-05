@@ -76,7 +76,7 @@ $voorwerpid = 1 + $nRows;
   "Plaatje: " . $plaatje  . '<br>' .
   "<img  src='img/veilingen/$plaatje'>"; ?>
 
-  <form action="bevestig.php" method="post">
+  <form action="#" method="post">
     <div>
       <input type="hidden" name="titel" value="<?php echo $_POST["titel"] ?>">
       <input type="hidden" name="voorwerpid" value="<?php echo $_POST["voorwerpid"] ?>">
@@ -142,21 +142,18 @@ if (isset($_POST["bevestig"])){
                                    '1-1-2018','12:00:00','$verzendkosten',
                                    '$verzendinstructies','$verkoper',NULL,
                                    '2-1-2018','12:00:01',0,NULL, 1, 0)");
-    $query->execute();
-  }catch(PDOException $e) {
-    unlink("img/veilingen/$plaatje");
-    echo $verkoper;
-  }
-  try{
+  $query->execute();
   $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
                            VALUES ('$voorwerpid','$hoogste','$hoogste')");
   $query2->execute();
+  $query3 = $dbh->prepare("INSERT INTO Bestand
+                           VALUES ('$plaatje','$voorwerpid')");
+  $query3->execute();
   header('Location: succes.php');
   }catch(PDOException $e) {
-    if (file_exists("img/veilingen/$plaatje")) {
-      unlink("img/veilingen/$plaatje");
-    }
-echo $querynaw;  }
+    unlink("img/veilingen/$plaatje");
+    echo $verkoper . $e;
+  }
 }
 
 ?>
