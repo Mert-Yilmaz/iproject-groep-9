@@ -25,70 +25,63 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     $isVerkoper = $querydata['verkoper'];
 
     //Controleer of link mail = db mail, als gelijk
-    if ($getemail == $email) {
+    if ($getemail == $email && $isVerkoper == 0) {
         //Genereer code en verwerk in db
         $verkopercode = md5(rand(0, 1000));
         $insertquery = $dbh->prepare("UPDATE Gebruiker SET verkopercode='$verkopercode' WHERE mailbox = '$getemail' AND verkopercode IS NULL");
         $insertquery->execute();
-
-        if ($isVerkoper == 0) {
-            //Verstuur email met random gegenereerde code
-            $to = $email;
-            $from = "noreply@eenmaalandermaal9.nl";
-            $subject = "Verificatiecode verkoopaccount activatie";
-            $message = '
+        
+        //Verstuur email met random gegenereerde code
+        $to = $email;
+        $from = "noreply@eenmaalandermaal9.nl";
+        $subject = "Verificatiecode verkoopaccount activatie";
+        $message = '
         Beste ' . $voornaam . ',
         Om uw verkoopaccount te activeren, dient u de onderstaande code in het veld "activatiecode" in te vullen:
         ' . $verkopercode . '';
-            $headers = 'From: ' . $from . "\r\n";
-            mail($to, $subject, $message, $headers);
+        $headers = 'From: ' . $from . "\r\n";
+        mail($to, $subject, $message, $headers);
+        
+        //Als er op de knop gedrukt is
+        if (isset($_POST['done'])) {
+            //Haal code op uit veld
+            $getverkopercode = $_POST['verkopercode'];
 
+            //Haal gegevens uit db met db code = gekregen code en db mail = gekregen mail
+            $checkquery = $dbh->prepare("SELECT * FROM Gebruiker WHERE verkopercode = '$getverkopercode' AND mailbox = '$getemail'");
+            $checkquery->setFetchMode(PDO::FETCH_ASSOC);
+            $checkquery->execute();
+            $checkquerydata = $checkquery->fetch();
 
-            //Als er op de knop gedrukt is
-            if (isset($_POST['done'])) {
-                //Haal code op uit veld
-                $getverkopercode = $_POST['verkopercode'];
+            //Haal verkopercode op uit db
+            $verkopercodeDB = $checkquerydata['verkopercode'];
 
-                //Haal gegevens uit db met db code = gekregen code en db mail = gekregen mail
-                $checkquery = $dbh->prepare("SELECT * FROM Gebruiker WHERE verkopercode = '$getverkopercode' AND mailbox = '$getemail'");
-                $checkquery->setFetchMode(PDO::FETCH_ASSOC);
-                $checkquery->execute();
-                $checkquerydata = $checkquery->fetch();
+            //Controleer of veld verkopercode = db verkopercode en link mail = db mail
+            if ($getverkopercode == $verkopercodeDB && $getemail == $email) {
+                //Update gebruiker met verkoper = 1
+                $updatequery = $dbh->prepare("UPDATE Gebruiker SET verkoper=1 WHERE verkoper=0 AND mailbox = '$getemail' AND verkopercode = '$getverkopercode'");
+                $updatequery->execute();
 
-                //Haal verkopercode op uit db
-                $verkopercodeDB = $checkquerydata['verkopercode'];
+                //Haal gegevens uit form
+                $bank = $_POST['bank'];
+                $bankrekening = $_POST['bankrekening'];
+                $controleoptie = $_POST['controle'];
+                $creditcard = $_POST['creditcard'];
 
-                //Controleer of veld verkopercode = db verkopercode en link mail = db mail
-                if ($getverkopercode == $verkopercodeDB && $getemail == $email) {
-                    //Update gebruiker met verkoper = 1
-                    $updatequery = $dbh->prepare("UPDATE Gebruiker SET verkoper=1 WHERE verkoper=0 AND mailbox = '$getemail' AND verkopercode = '$getverkopercode'");
-                    $updatequery->execute();
+                //Stop gegevens in db tabel Verkoper
+                $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
+                $insert->execute();
 
-                    //Haal gegevens uit form
-                    $bank = $_POST['bank'];
-                    $bankrekening = $_POST['bankrekening'];
-                    $controleoptie = $_POST['controle'];
-                    $creditcard = $_POST['creditcard'];
-
-                    //Stop gegevens in db tabel Verkoper
-                    $insert = $dbh->prepare("INSERT INTO Verkoper VALUES ('$gebruikersnaam', '$bank', '$bankrekening', '$controleoptie', '$creditcard')");
-                    $insert->execute();
-
-                    //Ga terug naar persoonlijke pagina
-                    header('location: personpage.php');
-                } else {
-                    echo "<h1>Email en/of code komen niet overeen!</h1>";
-                    echo "<br>";
-                    echo "<a href='http://iproject9.icasites.nl/'>Terug naar de home pagina</a>";
-                }
+                //Ga terug naar persoonlijke pagina
+                header('location: personpage.php');
+            } else {
+                echo "<h1>Email en/of code komen niet overeen!</h1>";
+                echo "<br>";
+                echo "<a href='http://iproject9.icasites.nl/'>Terug naar de home pagina</a>";
             }
-        } else {
-            echo "<h1>U bent al verkoper!</h1>";
-            echo "<br>";
-            echo "<a href='http://iproject9.icasites.nl/'>Terug naar de home pagina</a>";
         }
     } else {
-        echo "<h1>Email komt niet overeen!</h1>";
+        echo "<h1>U bent al verkoper!</h1>";
         echo "<br>";
         echo "<a href='http://iproject9.icasites.nl/'>Terug naar de home pagina</a>";
     }
