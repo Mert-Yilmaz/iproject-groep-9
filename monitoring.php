@@ -53,6 +53,7 @@
             }
             $mvg = $dbh->prepare("SELECT TOP $top VERKOPER, COUNT(VERKOPER) AS VERKOPERS
                                 	FROM VOORWERP
+                                  WHERE YEAR(LooptijdBeginDag) = YEAR(CURRENT_TIMESTAMP)
                                 	GROUP BY VERKOPER
                                 	ORDER BY VERKOPERS DESC");
 
@@ -61,7 +62,7 @@
 
           ?>
           <h2>Meest verkopende gebruikers</h2>
-          <p>Verkopers die de meeste advertenties hebben openstaan.</p>
+          <p>Verkopers die afgelopen jaar de meeste advertenties hebben gepost.</p>
             <table>
                 <tr>
                     <th>Verkoper</th>
@@ -79,6 +80,7 @@
 
               $mbg = $dbh->prepare("SELECT TOP $top GEBRUIKER, COUNT(GEBRUIKER) AS GEBRUIKERS
           	  FROM BOD
+              WHERE YEAR(BodDag) = YEAR(CURRENT_TIMESTAMP)
           	  GROUP BY GEBRUIKER
           	  ORDER BY GEBRUIKERS DESC");
 
@@ -87,7 +89,7 @@
 
           ?>
           <h2>Meest biedende gebruikers</h2>
-          <p>Gebruikers die het meest hebben geboden.</p>
+          <p>Gebruikers die afgelopen jaar het meest hebben geboden.</p>
             <table>
                 <tr>
                     <th>Gebruiker</th>
@@ -105,6 +107,7 @@
 
               $mkg = $dbh->prepare("SELECT TOP $top KOPER, COUNT(KOPER) AS KOPERS
                                     FROM VOORWERP
+                                    WHERE YEAR(LooptijdEindeDag) = YEAR(CURRENT_TIMESTAMP)
                                     GROUP BY KOPER
                                     ORDER BY KOPERS DESC");
 
@@ -113,7 +116,7 @@
 
             ?>
             <h2>Meest kopende gebruikers</h2>
-            <p>Gebruikers die de meeste veilingen hebben gewonnen.</P>
+            <p>Gebruikers die afgelopen jaar de meeste veilingen hebben gewonnen.</P>
             <table>
                 <tr>
                     <th>Koper</th>
