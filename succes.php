@@ -20,9 +20,6 @@ error_reporting(E_ALL ^ E_NOTICE);
     <?php include 'navbar.php'; ?>
     <div class="grid-x">
       <div class="medium-3"></div>
-      <div class="medium-6 text-center">
-        <h1 class=text-center>Plaats item</h1>
-      </div>
       <div class="medium-3"></div>
     </div>
     <div class="grid-x">

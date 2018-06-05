@@ -26,7 +26,7 @@ if(isset($_SESSION['login-token'])) {
                             <div class="cell small-6 medium-8 large-2">
                                 <?php
                                 if($isLoggedIn) {
-                                    echo "<a href='bod.php'>Bied aan</a>";
+                                    echo "<a href='verkooppage.php'>Bied aan</a>";
                                 } else {
                                     echo "<a href='about.php'>Over</a>";
                                 }

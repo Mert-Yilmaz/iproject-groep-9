@@ -72,11 +72,11 @@ $voorwerpid = 1 + $nRows;
   "Looptijd: " . $looptijd  . '<br>' .
   "Verzendkosten: " . $verzendkosten . '<br>' .
   "Verzendinstructies: " . $verzendinstructies . '<br>' .
+  "Hoogste rubriek: " . $hoogste  . '<br>' .
   "Plaatje: " . $plaatje  . '<br>' .
-  "<img  src='img/veilingen/$plaatje'>" .
-  "Hoogste rubriek: " . $hoogste  . '<br>'; ?>
+  "<img  src='img/veilingen/$plaatje'>"; ?>
 
-  <form action="#" method="post">
+  <form action="bevestig.php" method="post">
     <div>
       <input type="hidden" name="titel" value="<?php echo $_POST["titel"] ?>">
       <input type="hidden" name="voorwerpid" value="<?php echo $_POST["voorwerpid"] ?>">
@@ -95,6 +95,9 @@ $voorwerpid = 1 + $nRows;
       <button type="submit" class="knop" name="bevestig">Plaats</button>
     </div>
   </form>
+<br/>
+
+<a href="verkooppage.php">Terug</a>
 
 <?php
 
@@ -118,13 +121,14 @@ if (isset($_POST["bevestig"])){
     $verzendinstructies = $_POST["verzendinstructies"];
     $plaatje = $_POST["plaatje"];
     $hoogste = $_POST["hoogste"];
-    $koper = NULL;
 
     //query om de gebruikersnaam op te halen
-    $usernamemail = $_SESSION['login-token'];
-    $querynaw = $dbh->prepare("SELECT * FROM Gebruiker WHERE gebruikersnaam = '$usernamemail' OR mailbox = '$usernamemail'");
-    $querynaw->setFetchMode(PDO::FETCH_ASSOC);
-    $verkoper = $querynaw->execute();
+    $logintoken = $_SESSION['login-token'];
+    $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
+    $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
+    $sqlquery->execute();
+    $sessionQueryData = $sqlquery->fetch();
+    $verkoper = $sessionQueryData['gebruikersnaam'];
 
     //query om het voorwerpnummer te bepalen
     $nRows = $dbh->query("SELECT count(*) FROM Voorwerp")->fetchColumn();
@@ -136,13 +140,12 @@ if (isset($_POST["bevestig"])){
                                    '$startprijs','$betalingswijze','$betalingsinstructie',
                                    '$plaats','$land','$looptijd',
                                    '1-1-2018','12:00:00','$verzendkosten',
-                                   '$verzendinstructies','$verkoper','$koper',
+                                   '$verzendinstructies','$verkoper',NULL,
                                    '2-1-2018','12:00:01',0,NULL, 1, 0)");
     $query->execute();
   }catch(PDOException $e) {
     unlink("img/veilingen/$plaatje");
-    header('Location: verkooppage.php');
-    echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+    echo $verkoper;
   }
   try{
   $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
@@ -153,9 +156,7 @@ if (isset($_POST["bevestig"])){
     if (file_exists("img/veilingen/$plaatje")) {
       unlink("img/veilingen/$plaatje");
     }
-    header('Location: verkooppage.php');
-    echo '<script type="text/javascript">alert("Voorwerpnummer niet goed ingevuld")</script>';
-  }
+echo $querynaw;  }
 }
 
 ?>
