@@ -20,7 +20,6 @@ catch(PDOException $e)
     echo "Error: " . $e->getMessage();
     }
 }
-
 //Haalt gegevens uit 'Vraag'
 $output;
 function search_item($dbh, $input){
@@ -44,9 +43,7 @@ function search_item($dbh, $input){
   }
   echo $output;
 }
-
 zendMailVerloopVeiling($dbh);
-
 //Hot Items (Selecteert 3 items met de meest recente biedingen)
 function hot_items($dbh){
   $output="";
@@ -141,7 +138,7 @@ function cheap_items($dbh){
   echo $output;
 }
 // Zoek naar RUBRIEKEN op hoofdpagina
-function zoekRubriek($dbh, $zoekWoord, $order) {
+function zoekRubriek($dbh, $zoekWoord, $order, $keywords) {
   if($order == "COUNT ASC") {
       $order = 'SELECT *
                           FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
@@ -184,6 +181,7 @@ function zoekRubriek($dbh, $zoekWoord, $order) {
                                WHERE rubriek = -1
                                ORDER BY rubrieknaam ASC');
    }
+   if($keywords == ""){
    try{
      $query->execute();
      $rubriek = $row['rubrieknaam'];
@@ -196,6 +194,25 @@ function zoekRubriek($dbh, $zoekWoord, $order) {
    } catch(PDOException $e) {
        echo "Er is iets mis gegaan. De foutmelding is: $e";
    }
+ }
+ else if ($keywords !== ""){
+   echo "<div class='$zoekWoord'>";
+   $parts = explode(" ", $keywords);
+   echo "U heeft gezocht op: " . $keywords . "</div>";
+   for ($i=0; $i < count($parts); $i++) {
+     $query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
+     try{
+       $query->execute();
+       $item = $row['titel'];
+       while($row = $query->fetch()) {
+           echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
+                ' . $row['titel'];
+       }
+     } catch(PDOException $e) {
+         echo "Er is iets mis gegaan. De foutmelding is: $e";
+     }
+   }
+}
 }
 // Haalt het antal items op in een Rubriek
 function aantalItems($dbh, $rubrieknummer) {
@@ -211,8 +228,6 @@ function aantalItems($dbh, $rubrieknummer) {
       echo $row['Aantal_items'];
   }
 }
-
-
 // Haalt het antal items op in een Rubriek
 function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
   $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
@@ -241,8 +256,6 @@ function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
   //     }
   // }
 }
-
-
 // Toont PRODUCTEN op producten.php
 function toonItems($dbh, $zoekWoord) {
   try{
@@ -461,8 +474,6 @@ function biedingenItem($dbh) {
           </ul>";
   }
 }
-
-
 // Gebruiker plaatst een bod binnen de richtlijnen
 function biedOpItem($dbh) {
     echo "<form action='#' method='POST'>
@@ -611,7 +622,7 @@ zendMailVerloopVeiling($dbh);
 function plaatsItem($dbh) {
   $forms = '';
   $forms .= '
-        <form action="#" method="post" enctype="multipart/form-data">
+        <form action="bevestig.php" method="post" enctype="multipart/form-data">
         <div>
            <label>Naam van het Product</label>
            <input type="text" name="titel" placeholder="Titel" maxlength="18">
@@ -711,64 +722,14 @@ function plaatsItem($dbh) {
           <input name="plaatje3" type="file" accept=".jpg, .jpeg, .bpem, .png">
         </div>
         <div>
-          <button type="submit" class="knop" name="submit">Plaats</button>
+          <button type="submit" class="knop" name="submit">Naar Bevestigen</button>
         </div>
         <input type="hidden" name="time" value="' . date("H:i:s") . '">
       </form>
       </div>
       <div class="medium-3 large-4"></div>';
     echo $forms;
-    if (isset($_POST["submit"])){
-      $target_dir = "img/veilingen/";
-      $target_file = $target_dir . basename($_FILES["plaatje"]["name"]);
-      $uploadOk = 1;
-      $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
-        $begindag = date("Y/m/d");// Deze drie dingen nog verbeteren
-        $einddag = date("Y-M-D");
-        $plaatstijd = $_POST['time'];
-        $veilinggesloten = 0;
-        is_null($verkoopprijs);
-
-        $titel = $_POST["titel"];
-        $beschrijving = $_POST["beschrijving"];
-        $startprijs = $_POST["startprijs"];
-        $betalingswijze = $_POST["betalingswijze"];
-        $betalingsinstructie = $_POST["betalingsinstructie"];
-        $plaats = $_POST["plaats"];
-        $land = $_POST["land"];
-        $looptijd = $_POST["looptijd"];
-        $verzendkosten = $_POST["verzendkosten"];
-        $verzendinstructies = $_POST["verzendinstructies"];
-        $plaatje = $_POST["plaatje"];
-        $hoogste = $_POST["rij1"];
-        $koper = 'Gebruiker5'; // Dit nog aanpassen naar session
-
-        //query om het voorwerpnummer te bepalen
-        $nRows = $dbh->query("SELECT count(*) FROM Voorwerp")->fetchColumn();
-        $voorwerpid = 1 + $nRows;
-
-        try{
-        $query = $dbh->prepare("INSERT INTO Voorwerp
-                              	VALUES ('$voorwerpid','$titel','$beschrijving',
-                                         '$startprijs','$betalingswijze','$betalingsinstructie',
-                                         '$plaats','$land','$looptijd',
-                                         '1-1-2018','12:00:00','$verzendkosten',
-                                         '$verzendinstructies','Admin','$koper',
-                                         '2-1-2018','12:00:01',0,NULL, 1, 0)");
-          $query->execute();
-        }catch(PDOException $e) {
-          echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-        }
-        try{
-        $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
-                              	 VALUES ('$voorwerpid','$hoogste','$hoogste')");
-        $query2->execute();
-        }catch(PDOException $e) {
-          echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-        }
-        move_uploaded_file($_FILES["plaatje"]["tmp_name"], $target_file);
-    }
 }
+
 
 ?>
