@@ -53,7 +53,7 @@ $data2 = $queryv2->fetch();
                     $isVerkoper = 'Ja';
                 }
                 ?>
-                <h1 class="aboutkop text-center">Hallo, <?= $rownaw['voornaam'] . ' ' . $rownaw['achternaam'] ?></h1>
+                <h1 class="aboutkop">Hallo, <?= $rownaw['voornaam'] . ' ' . $rownaw['achternaam'] ?></h1>
                 <h3>Dit zijn uw NAW-gegevens</h3>
 
                 <table id="infoTable">
@@ -81,14 +81,18 @@ $data2 = $queryv2->fetch();
                         <th>Verkoper?</th>
                         <td><?= $isVerkoper ?></td>
                     </tr>
-                    <tr>
-                        <th><a href="editPersonpage.php?edit_account=<?= $rownaw['mailbox'] ?>">Wijzig NAW-gegevens</a>
-                        </th>
-                    </tr>
                 </table>
             <?php } ?>
-            <?php if($getUsername == 'Admin') { echo "<a class='knop' href='admin/dashboard.php'>Beheeromgeving</a>
-                                                      <a class='knop' href='monitoring.php'>Monitoring activiteit gebruikers</a>";}?>
+            <div class=knoppenbalk>
+                <ul>
+                  <li><a class= "knop" href="editPersonpage.php?edit_account=<?= $rownaw['mailbox']?>">Wijzig NAW-gegevens</a></li><br>
+                <?php
+                    if ($data['verkoper'] == 1) { echo "<li><a class='knop' href='verkooppage.php'>Klik hier om te verkopen</a></li><br>";}
+                    if($getUsername == 'Admin') { echo "<li><a class='knop' href='admin/dashboard.php'>Beheeromgeving</a><li><br>
+                                                        <li><a class='knop' href='monitoring.php'>Monitoring activiteit gebruikers</a></li>";}
+                ?>
+                </ul>
+            </div>
             <?php
             if ($data['verkoper'] == 1) {
 
@@ -137,7 +141,7 @@ $data2 = $queryv2->fetch();
 
                 <p>
                 <h3>Dit zijn uw veilingen</h3>
-                <a class='knop' href='verkooppage.php'>Klik hier om te verkopen</a>
+                <!-- <a class='knop' href='verkooppage.php'>Klik hier om te verkopen</a> -->
                 </p>
 
                 <?php

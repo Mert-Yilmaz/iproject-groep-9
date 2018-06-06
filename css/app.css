@@ -23,7 +23,7 @@ a, a:visited {
 }
 
 a:hover {
-    color: rgb(242, 85, 44);
+    color: #3487d1; /*e8eaed;rgb(242, 85, 44);*/
 }
 
 .knop {
@@ -36,7 +36,7 @@ a:hover {
 }
 
 .knop:hover {
-    background: rgb(242, 85, 44);
+    background: #3487d1; /*rgb(242, 85, 44);*/
     color:white;
 }
 
@@ -47,7 +47,7 @@ a:hover {
 }
 
 .navbar a {
-    color: white;
+    color: black;
 }
 
 .navbar img {
@@ -59,8 +59,9 @@ a:hover {
     color: #F2552C;
 }
 
-.navbar a:hover, .backtotop a:hover {
-    color: black;
+.navbar a:hover
+ {
+    color: white;
     transition: 0.4s;
 }
 
@@ -135,7 +136,7 @@ border-radius: 5px;
 }
 
 .rubrieken:hover{
-  background-color: #e8eaed;
+  background-color: #3487d1; /*e8eaed;*/
   border-radius: 5px;
   transition: 0.4s;
 }
