@@ -219,7 +219,7 @@ foreach($parts as $k){
        //$item = $row['titel'];
        while($row = $sql->fetch()) {
            echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
-                ' . $row['titel'];
+                ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
        }
      } catch(PDOException $e) {
          echo "Er is iets mis gegaan. De foutmelding is: $e";
@@ -247,7 +247,7 @@ foreach($parts as $k){
          //$item = $row['titel'];
          while($row = $sql->fetch()) {
              echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
-                  ' . $row['titel'];
+                  ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
          }
        } catch(PDOException $e) {
            echo "Er is iets mis gegaan. De foutmelding is: $e";
@@ -275,7 +275,7 @@ foreach($parts as $k){
              //$item = $row['titel'];
              while($row = $sql->fetch()) {
                  echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
-                      ' . $row['titel'];
+                      ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
              }
            } catch(PDOException $e) {
                echo "Er is iets mis gegaan. De foutmelding is: $e";
@@ -303,7 +303,7 @@ foreach($parts as $k){
                     //$item = $row['titel'];
                     while($row = $sql->fetch()) {
                         echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
-                             ' . $row['titel'];
+                             ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
                     }
                   } catch(PDOException $e) {
                       echo "Er is iets mis gegaan. De foutmelding is: $e";
