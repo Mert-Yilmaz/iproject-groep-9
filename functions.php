@@ -103,7 +103,7 @@ function ending_items($dbh){
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
-            ><a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
+            <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
      </div>';
   }
@@ -457,7 +457,7 @@ function detailPagina($dbh) {
     $file = "img/veilingen/" . $row['filenaam'];
     $endtime = date_create($row['looptijdEindeTijdstip']);
     echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
-    <div class='grid-x grid-padding-x'>
+    <div class='grid-x grid-padding-x imageborder'>
       <div class='small-12'>
         <div class='orbit' role='region' aria-label='Favorite Space Pictures' data-orbit>
           <div class='orbit-wrapper'>
