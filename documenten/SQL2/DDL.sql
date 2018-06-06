@@ -235,7 +235,7 @@ CREATE TABLE Voorwerp (
 	/*--- Eigen constraint - Looptijd begin < eind ---*/
 	CONSTRAINT ckLooptijdBeginEind CHECK (looptijdEindeDag >= looptijdBeginDag AND looptijdEindeTijdstip >= looptijdBeginTijdstip),
 	/*--- Eigen constraint - Startprijs > 1 ---*/
-	CONSTRAINT ckStartprijs CHECK (startprijs > 1)
+	CONSTRAINT ckStartprijs CHECK (startprijs > 0)
 )
 
 CREATE TABLE Feedback (
