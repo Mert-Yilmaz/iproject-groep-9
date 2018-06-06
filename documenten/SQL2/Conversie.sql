@@ -1,4 +1,5 @@
 /* Conversiescript */
+USE iproject9
 
 /* Users in Gebruiker en Verkoper */
 INSERT INTO iproject9.dbo.Gebruiker(gebruikersnaam, voornaam, achternaam, adresregel1, postcode, plaatsnaam, land, geboortedatum, mailbox, wachtwoord, vraag, antwoordtekst, verkoper, actief)
@@ -26,17 +27,9 @@ SELECT	CAST(Username AS VARCHAR(20)) AS gebruiker,
 		creditcard = '12345-67890'
 FROM iproject9.dbo.Users
 
-/*
-CREATE TABLE Users ( 
-  --Username VARCHAR(200),
-  --Postalcode VARCHAR(9),
-  --Location VARCHAR(MAX),
-  Country VARCHAR(100),
-  Rating NUMERIC(4,1) 
-)
-*/
 
 /* Categorieen in Rubriek */
+-- Dit staat in commentaar omdat we de huidige rubriekenlijst al handmatig in onze database hadden gezet
 /*
 INSERT INTO iproject9.dbo.Rubriek
 SELECT	ID AS rubrieknummer,
@@ -45,14 +38,6 @@ SELECT	ID AS rubrieknummer,
 FROM iproject9.dbo.Categorieen
 */
 
-/*
-CREATE TABLE Categorieen (
-	ID int NOT NULL,
-	Name varchar(100) NULL,
-	Parent int NULL,
-	CONSTRAINT PK_Categorieen PRIMARY KEY (ID)
-)
-*/
 
 /* Items en Illustraties in Voorwerp, VoorwerpInRubriek Bestand */
 INSERT INTO iproject9.dbo.Voorwerp(voorwerpnummer, titel, beschrijving, land, verkoper, startprijs,  betalingswijze, plaatsnaam, looptijdBeginDag, looptijdBeginTijdstip, looptijdEindeDag, looptijdEindeTijdstip, veilingGesloten)
@@ -75,46 +60,13 @@ FROM iproject9.dbo.Items
 INSERT INTO iproject9.dbo.VoorwerpInRubriek(voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau)
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerp,
 		Categorie AS rubriekOpLaagsteNiveau,
-		(SELECT rubriekOpHoogsteNiveau FROM Rubriek WHERE rubriek = 
-			(SELECT rubriekOpHoogsteNiveau FROM Rubriek WHERE rubriek = 
-				(SELECT rubriekOpHoogsteNiveau FROM Rubriek WHERE rubriek = -1))
+		rubriekOpHoogsteNiveau = -1
+		/*(SELECT rubrieknummer FROM Rubriek WHERE rubriek = 
+			(SELECT rubrieknummer FROM Rubriek WHERE rubriek = 
+				(SELECT rubrieknummer FROM Rubriek WHERE rubriek = -1)))*/
 FROM iproject9.dbo.Items
 
-/*INSERT INTO iproject9.dbo.Bestand
-SELECT	CAST(Thumbnail AS CHAR(25)) AS filenaam,
-		CAST(ID AS NUMERIC(10)) AS voorwerp
-FROM iproject9.dbo.Items*/
-
-/*
-CREATE TABLE Items (
-	--ID bigint NOT NULL,
-	--Titel varchar(max) NULL,
-	--Beschrijving nvarchar(max) NULL,
-	--Categorie int NULL,
-	Postcode varchar(max) NULL,
-	--Locatie varchar(max) NULL,
-	Land varchar(max) NULL,
-	--Verkoper varchar(max) NULL,
-	--Prijs varchar(max) NULL,
-	Valuta varchar(max) NULL,
-	Conditie varchar(max) NULL,
-	--?Thumbnail varchar(max) NULL,
-	CONSTRAINT PK_Items PRIMARY KEY (ID),
-	CONSTRAINT FK_Items_In_Categorie FOREIGN KEY (Categorie) REFERENCES Categorieen (ID)
-)
-*/
-
-/* === OF === */
-INSERT INTO iproject9.dbo.Bestand
+INSERT INTO iproject9.dbo.Bestand(voorwerp, filenaam)
 SELECT	CAST(ItemID AS NUMERIC(20)) AS voorwerp,
 		CAST(IllustratieFile AS CHAR(25)) AS filenaam
 FROM iproject9.dbo.Illustraties
-
-/*
-CREATE TABLE Illustraties (
-	ItemID bigint NOT NULL,
-	IllustratieFile varchar(100) NOT NULL,
-    CONSTRAINT PK_ItemPlaatjes PRIMARY KEY (ItemID, IllustratieFile),
-	CONSTRAINT [ItemsVoorPlaatje] FOREIGN KEY(ItemID) REFERENCES Items (ID)
-)
-*/
