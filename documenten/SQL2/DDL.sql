@@ -40,9 +40,6 @@ IF OBJECT_ID('dbo.Vraag') IS NOT NULL
 IF OBJECT_ID ('fControleerGebruikerIsVerkoper') IS NOT NULL
 DROP FUNCTION fControleerGebruikerIsVerkoper
 
-IF OBJECT_ID ('fCheckVeiling') IS NOT NULL
-DROP FUNCTION fCheckVeiling
-
 /*IF OBJECT_ID ('fControleoptieCreditcard') IS NOT NULL
 DROP FUNCTION fControleoptieCreditcard*/
 
@@ -61,19 +58,6 @@ BEGIN
 	ELSE 
 		RETURN 0 -- false
 	RETURN 0
-END
-GO
-
-GO
-CREATE FUNCTION fCheckVeiling(@voorwerpNummer NUMERIC(20, 0), @dag date, @tijd time)
-RETURNS BIT
-AS
-BEGIN
-	IF (@dag >= (SELECT CONVERT(date, GETDATE())) AND @tijd >= (SELECT CONVERT(time(0), getDate())))
-	BEGIN
-	UPDATE Voorwerp SET veilingGesloten = 1, isToegestaan = 0 WHERE voorwerpnummer = @voorwerpNummer
-	END
-RETURN 0
 END
 GO
 
@@ -239,7 +223,6 @@ CREATE TABLE Voorwerp (
 	CONSTRAINT fkVoorwerpGebruiker FOREIGN KEY (koper) REFERENCES Gebruiker(gebruikersnaam)
 		ON UPDATE NO ACTION
 		ON DELETE NO ACTION,
-	CONSTRAINT ckCheckVeiling CHECK (dbo.fCheckVeiling(voorwerpnummer, looptijdEindeDag, looptijdEindeTijdstip) = 1),
 	-- Subset Constraint!!!
 		/*CONSTRAINT fkVoorwerpVoorwerpInRubriek FOREIGN KEY (voorwerpnummer) REFERENCES VoorwerpInRubriek(voorwerp)
 			--ON UPDATE,
