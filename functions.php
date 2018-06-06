@@ -103,7 +103,7 @@ function ending_items($dbh){
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong><p>
         <div class="homepage-items-img">
-            ><a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
+            <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
      </div>';
   }
@@ -141,7 +141,7 @@ function cheap_items($dbh){
   echo $output;
 }
 // Zoek naar RUBRIEKEN op hoofdpagina
-function zoekRubriek($dbh, $zoekWoord, $order, $keywords) {
+function zoekRubriek($dbh, $zoekWoord, $order, $keywords, $minprijs, $maxprijs) {
   if($order == "COUNT ASC") {
       $order = 'SELECT *
                           FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
@@ -198,7 +198,7 @@ function zoekRubriek($dbh, $zoekWoord, $order, $keywords) {
        echo "Er is iets mis gegaan. De foutmelding is: $e";
    }
  }
- else if ($keywords !== ""){
+ else if ($keywords !== "" && $minprijs == "" && $maxprijs == ""){
    echo "<div class='$zoekWoord'>";
    $parts = explode(" ", $keywords);
    echo "U heeft gezocht op: " . $keywords . "</div>";
@@ -219,12 +219,99 @@ foreach($parts as $k){
        //$item = $row['titel'];
        while($row = $sql->fetch()) {
            echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
-                ' . $row['titel'];
+                ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
        }
      } catch(PDOException $e) {
          echo "Er is iets mis gegaan. De foutmelding is: $e";
      }
    }
+ else if ($keywords !== "" && $minprijs !== "" && $maxprijs == ""){
+     echo "<div class='$zoekWoord'>";
+     $parts = explode(" ", $keywords);
+     echo "U heeft gezocht op: " . $keywords . "</div>";
+     //for ($i=0; $i < count($parts); $i++) {
+       //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
+
+       $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+
+  foreach($parts as $k){
+      $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
+  }
+      $sql .= " AND (startprijs >= $minprijs)";
+
+  //$result = mysql_query($sql);
+
+       try{
+         $sql = $dbh->query($sql);
+         $sql->execute();
+         //$item = $row['titel'];
+         while($row = $sql->fetch()) {
+             echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
+                  ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
+         }
+       } catch(PDOException $e) {
+           echo "Er is iets mis gegaan. De foutmelding is: $e";
+       }
+     }
+  else if ($keywords !== "" && $minprijs == "" && $maxprijs !== ""){
+         echo "<div class='$zoekWoord'>";
+         $parts = explode(" ", $keywords);
+         echo "U heeft gezocht op: " . $keywords . "</div>";
+         //for ($i=0; $i < count($parts); $i++) {
+           //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
+
+           $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+
+      foreach($parts as $k){
+          $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
+      }
+          $sql .= " AND (startprijs <= $maxprijs)";
+
+      //$result = mysql_query($sql);
+
+           try{
+             $sql = $dbh->query($sql);
+             $sql->execute();
+             //$item = $row['titel'];
+             while($row = $sql->fetch()) {
+                 echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
+                      ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
+             }
+           } catch(PDOException $e) {
+               echo "Er is iets mis gegaan. De foutmelding is: $e";
+           }
+         }
+         else if ($keywords !== "" && $minprijs !== "" && $maxprijs !== "" && $minprijs <= $maxprijs){
+                echo "<div class='$zoekWoord'>";
+                $parts = explode(" ", $keywords);
+                echo "U heeft gezocht op: " . $keywords . "</div>";
+                //for ($i=0; $i < count($parts); $i++) {
+                  //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
+
+                  $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+
+             foreach($parts as $k){
+                 $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
+             }
+                 $sql .= " AND (startprijs >= $minprijs AND startprijs <= $maxprijs)";
+
+             //$result = mysql_query($sql);
+
+                  try{
+                    $sql = $dbh->query($sql);
+                    $sql->execute();
+                    //$item = $row['titel'];
+                    while($row = $sql->fetch()) {
+                        echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
+                             ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
+                    }
+                  } catch(PDOException $e) {
+                      echo "Er is iets mis gegaan. De foutmelding is: $e";
+                  }
+                }
+         else if ($keywords !== "" && $minprijs !== "" && $maxprijs !== "" && $minprijs > $maxprijs){
+           header("Location: index.php");
+         }
 }
 //}
 // Haalt het antal items op in een Rubriek
@@ -370,7 +457,7 @@ function detailPagina($dbh) {
     $file = "img/veilingen/" . $row['filenaam'];
     $endtime = date_create($row['looptijdEindeTijdstip']);
     echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
-    <div class='grid-x grid-padding-x'>
+    <div class='grid-x grid-padding-x imageborder'>
       <div class='small-12'>
         <div class='orbit' role='region' aria-label='Favorite Space Pictures' data-orbit>
           <div class='orbit-wrapper'>
