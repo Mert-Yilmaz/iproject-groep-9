@@ -26,11 +26,7 @@ error_reporting(E_ALL ^ E_NOTICE);
       <div class="large-4 medium-3"></div>
       <div class="medium-6 small-12 large-4">
 
-
-
-<h1> VEILING SUCCESVOL GEUPLOAD! </h1>
-
-<?php header('index.php'); ?>
+<?php uploadItem($dbh); ?>
 
 </div>
 </div>

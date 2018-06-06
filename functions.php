@@ -744,6 +744,7 @@ function plaatsItem($dbh) {
           <button type="submit" class="knop" name="submit">Plaats</button>
         </div>
         <input type="hidden" name="time" value="' . date("H:i:s") . '">
+        <input type="hidden" name="day" value="' . date("m-d-Y") . '">
       </form>
       </div>
       <div class="medium-3 large-4"></div>';
@@ -799,6 +800,66 @@ function plaatsItem($dbh) {
         }
         move_uploaded_file($_FILES["plaatje"]["tmp_name"], $target_file);
     }
+}
+
+
+function uploadItem($dbh) {
+  if (isset($_POST["bevestig"])){
+    $veilinggesloten = 0;
+    is_null($verkoopprijs);
+
+    $titel = $_POST["titel"];
+    $beschrijving = $_POST["beschrijving"];
+    $startprijs = $_POST["startprijs"];
+    $betalingswijze = $_POST["betalingswijze"];
+    $betalingsinstructie = $_POST["betalingsinstructie"];
+    $plaats = $_POST["plaats"];
+    $land = $_POST["land"];
+    $looptijd = $_POST["looptijd"];
+    $verzendkosten = $_POST["verzendkosten"];
+    $verzendinstructies = $_POST["verzendinstructies"];
+    $plaatje = $_POST["plaatje"];
+    $hoogste = $_POST["hoogste"];
+    $tijd = $_POST["tijd"];
+    $begindag = $_POST["dag"];
+    $date1 = str_replace('-', '/', $begindag);
+    $einddag = date('m-d-Y',strtotime($date1 . "+$looptijd days"));
+
+    //query om de gebruikersnaam op te halen
+    $logintoken = $_SESSION['login-token'];
+    $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
+    $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
+    $sqlquery->execute();
+    $sessionQueryData = $sqlquery->fetch();
+    $verkoper = $sessionQueryData['gebruikersnaam'];
+
+    //query om het voorwerpnummer te bepalen
+    $nRows = $dbh->query("SELECT count(*) FROM Voorwerp")->fetchColumn();
+    $voorwerpid = 1 + $nRows;
+
+    try{
+    $query = $dbh->prepare("INSERT INTO Voorwerp
+                            VALUES ('$voorwerpid','$titel','$beschrijving',
+                                     '$startprijs','$betalingswijze','$betalingsinstructie',
+                                     '$plaats','$land','$looptijd',
+                                     '$begindag','$tijd','$verzendkosten',
+                                     '$verzendinstructies','$verkoper',NULL,
+                                     '$einddag','$tijd',0,NULL, 1, 0)");
+    $query->execute();
+    $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
+                             VALUES ('$voorwerpid','$hoogste','$hoogste')");
+    $query2->execute();
+    $query3 = $dbh->prepare("INSERT INTO Bestand
+                             VALUES ('$plaatje','$voorwerpid')");
+    $query3->execute();
+    echo "<h1> VEILING SUCCESVOL GEUPLOAD! </h1>";
+    header('refresh: 3; url=index.php');
+    }catch(PDOException $e) {
+      unlink("img/veilingen/$plaatje");
+      echo '<h1> VEILING NIET GEUPLOAD! </h1>
+            <a href="verkooppage.php">Terug</a>';
+    }
+  }
 }
 
 ?>

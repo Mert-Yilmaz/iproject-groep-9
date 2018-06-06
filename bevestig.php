@@ -59,7 +59,10 @@ $voorwerpid = 1 + $nRows;
   $plaatje = basename($_FILES["plaatje"]["name"]);
   $hoogstenummer = $_POST["rij1"];
   $hoogste = $dbh->query("SELECT rubrieknaam FROM Rubriek WHERE rubrieknummer = '$hoogstenummer'")->fetchColumn();
-  $koper = NULL; // Dit nog aanpassen naar session
+  $tijd = $_POST["time"];
+  $dag = $_POST['day'];
+  $date1 = str_replace('-', '/', $begindag);
+  $einddag = date('m-d-Y',strtotime($date1 . "+$looptijd days"));
 
   echo "Titel: " . $titel . '<br>' .
   "VoorwerpID: " . $voorwerpid . '<br>' .
@@ -74,9 +77,12 @@ $voorwerpid = 1 + $nRows;
   "Verzendinstructies: " . $verzendinstructies . '<br>' .
   "Hoogste rubriek: " . $hoogste  . '<br>' .
   "Plaatje: " . $plaatje  . '<br>' .
+  "Tijd: " . $tijd . '<br>' .
+  "Dag: " . $dag . '<br>' .
+  "Einddag: " . $einddag . '<br>' .
   "<img  src='img/veilingen/$plaatje'>"; ?>
 
-  <form action="#" method="post">
+  <form action="succes.php" method="post">
     <div>
       <input type="hidden" name="titel" value="<?php echo $_POST["titel"] ?>">
       <input type="hidden" name="voorwerpid" value="<?php echo $_POST["voorwerpid"] ?>">
@@ -92,71 +98,14 @@ $voorwerpid = 1 + $nRows;
       <input type="hidden" name="plaatje" value="<?php echo $_FILES["plaatje"]["name"] ?>">
       <input type="hidden" name="hoogste" value="<?php echo $_POST["rij1"] ?>">
       <input type="hidden" name="koper" value="<?php echo $_POST["koper"] ?>">
+      <input type="hidden" name="tijd" value="<?php echo $_POST["time"] ?>">
+      <input type="hidden" name="dag" value="<?php echo $_POST["day"] ?>">
       <button type="submit" class="knop" name="bevestig">Plaats</button>
     </div>
   </form>
 <br/>
 
 <a href="verkooppage.php">Terug</a>
-
-<?php
-
-if (isset($_POST["bevestig"])){
-    $begindag = date("Y/m/d");// Deze drie dingen nog verbeteren
-    $einddag = date("Y-M-D");// Deze dus ook
-    $plaatstijd = $_POST['time'];// En deze
-    $veilinggesloten = 0;
-    is_null($verkoopprijs);
-    $plaatjeverwijdert;
-
-    $titel = $_POST["titel"];
-    $beschrijving = $_POST["beschrijving"];
-    $startprijs = $_POST["startprijs"];
-    $betalingswijze = $_POST["betalingswijze"];
-    $betalingsinstructie = $_POST["betalingsinstructie"];
-    $plaats = $_POST["plaats"];
-    $land = $_POST["land"];
-    $looptijd = $_POST["looptijd"];
-    $verzendkosten = $_POST["verzendkosten"];
-    $verzendinstructies = $_POST["verzendinstructies"];
-    $plaatje = $_POST["plaatje"];
-    $hoogste = $_POST["hoogste"];
-
-    //query om de gebruikersnaam op te halen
-    $logintoken = $_SESSION['login-token'];
-    $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
-    $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
-    $sqlquery->execute();
-    $sessionQueryData = $sqlquery->fetch();
-    $verkoper = $sessionQueryData['gebruikersnaam'];
-
-    //query om het voorwerpnummer te bepalen
-    $nRows = $dbh->query("SELECT count(*) FROM Voorwerp")->fetchColumn();
-    $voorwerpid = 1 + $nRows;
-
-  try{
-  $query = $dbh->prepare("INSERT INTO Voorwerp
-                          VALUES ('$voorwerpid','$titel','$beschrijving',
-                                   '$startprijs','$betalingswijze','$betalingsinstructie',
-                                   '$plaats','$land','$looptijd',
-                                   '1-1-2018','12:00:00','$verzendkosten',
-                                   '$verzendinstructies','$verkoper',NULL,
-                                   '2-1-2018','12:00:01',0,NULL, 1, 0)");
-  $query->execute();
-  $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
-                           VALUES ('$voorwerpid','$hoogste','$hoogste')");
-  $query2->execute();
-  $query3 = $dbh->prepare("INSERT INTO Bestand
-                           VALUES ('$plaatje','$voorwerpid')");
-  $query3->execute();
-  header('Location: succes.php');
-  }catch(PDOException $e) {
-    unlink("img/veilingen/$plaatje");
-    echo $verkoper . $e;
-  }
-}
-
-?>
 
     </div>
   </div>
