@@ -25,23 +25,25 @@
             <div class="grid-y">
               <div class="cell small-6 medium-8 large-2"><br>
                 <form method="post" action="">
-                  <input type="text" name="zoekterm" placeholder="Zoeken..."/>
-                  <input type="text" name="zoekitemkeyword" placeholder="Zoek items"/>
-                  <div class="dertig"><input type="text" name="minprijs" placeholder="minprijs..."/></div>
-                  <div class="dertig"><input type="text" name="maxprijs" placeholder="maxprijs..."/></div>
+                  <label>Rubrieken</label>
+                  <input type="text" name="zoekterm" placeholder="Zoek rubrieken"/>
                   <select name="order">
                     <option value="rubrieknaam ASC">A-Z</option>
                     <option value="rubrieknaam DESC">Z-A</option>
                     <option value="COUNT ASC">Groot-Klein</option>
                     <option value="COUNT DESC">Klein-Groot</option>
                   </select>
+                  <label>Items</label>
+                  <input type="text" name="zoekitemkeyword" placeholder="Zoek items"/>
+                  <div class="dertig"><input type="number" name="minprijs" placeholder="minprijs..."/></div>
+                  <div class="dertig"><input type="number" name="maxprijs" placeholder="maxprijs..."/></div>
                   <input type="submit" name="zoeken" value="Zoek / Order" class="knop">
                 </form>
                 <br>
                 <h1>Groepen</h1>
                 <?php
                   echo '<ul class="ulNone">';
-                  zoekRubriek($dbh, $_POST['zoekterm'], $_POST['order'], $_POST['zoekitemkeyword']);
+                  zoekRubriek($dbh, $_POST['zoekterm'], $_POST['order'], $_POST['zoekitemkeyword'], $_POST['minprijs'], $_POST['maxprijs']);
                   echo '</ul>';
                 ?>
               </div>
