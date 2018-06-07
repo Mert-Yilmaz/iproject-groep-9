@@ -71,7 +71,7 @@ DECLARE @i INT = 0;
 WHILE(@i < @aantal)
 BEGIN
 	INSERT INTO iproject9.dbo.Bestand
-	SELECT TOP 4	'http://iproject9.icasites.nl/pics/' + IllustratieFile AS filenaam,
+	SELECT TOP 4	IllustratieFile AS filenaam,
 					CAST(ItemID AS NUMERIC(20)) AS voorwerp
 	FROM iproject9.dbo.Illustraties
 	WHERE ItemID IN (
