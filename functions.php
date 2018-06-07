@@ -482,28 +482,51 @@ function detailPagina($dbh) {
               <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
               <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
             </div>
-            <ul class='orbit-container'>
-              <li class='is-active orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-            </ul>
+            <ul class='orbit-container'>";
+
+    $imagesQuery = $dbh->prepare("SELECT filenaam FROM Bestand WHERE voorwerp = '$voorwerpnummer'");
+    $imagesQuery->setFetchMode(PDO::FETCH_ASSOC);
+    $imagesQuery->execute();
+      while($imgdata = $imagesQuery->fetch()){
+          $image = $imgdata['filenaam'];
+
+          $nImagesQuery = $dbh->prepare("SELECT COUNT(DISTINCT filenaam) FROM Bestand WHERE voorwerp = '$voorwerpnummer'");
+          $nImagesQuery->setFetchMode(PDO::FETCH_ASSOC);
+          $nImagesQuery->execute();
+          while($queryData = $nImagesQuery->fetch()) {
+              $nImages = $queryData[''];
+
+              $index = 0;
+              for($index = 0; $index < $nImages; $index++) {
+                  echo "<li class='orbit-slide'>
+                            <figure class='orbit-figure'>
+                                <img class='orbit-image' src= " . $image . " alt='Space'>
+                            </figure>
+                        </li>";
+              }
+          }
+      }
+//              <li class='is-active orbit-slide'>
+//                <figure class='orbit-figure'>
+//                  <img class='orbit-image' src= " . $file . " alt='Space'>
+//                  </figure>
+//              </li>
+//              <li class='orbit-slide'>
+//                <figure class='orbit-figure'>
+//                  <img class='orbit-image' src= " . $file . " alt='Space'>
+//                  </figure>
+//              </li>
+//              <li class='orbit-slide'>
+//                <figure class='orbit-figure'>
+//                  <img class='orbit-image' src= " . $file . " alt='Space'>
+//                  </figure>
+//              </li>
+//              <li class='orbit-slide'>
+//                <figure class='orbit-figure'>
+//                  <img class='orbit-image' src= " . $file . " alt='Space'>
+//                  </figure>
+//              </li>
+      echo "  
           </div>
           <nav class='orbit-bullets'>
             <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>
