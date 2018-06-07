@@ -79,7 +79,7 @@ END
 GO*/
 
 GO
-CREATE FUNCTION fCKMaxAfbeeldingen(@filenaam CHAR(25), @voorwerp NUMERIC(20))
+CREATE FUNCTION fCKMaxAfbeeldingen(@filenaam VARCHAR(100), @voorwerp NUMERIC(20))
 RETURNS BIT
 AS
 BEGIN
@@ -235,7 +235,7 @@ CREATE TABLE Voorwerp (
 	/*--- Eigen constraint - Looptijd begin < eind ---*/
 	CONSTRAINT ckLooptijdBeginEind CHECK (looptijdEindeDag >= looptijdBeginDag AND looptijdEindeTijdstip >= looptijdBeginTijdstip),
 	/*--- Eigen constraint - Startprijs > 1 ---*/
-	CONSTRAINT ckStartprijs CHECK (startprijs > 0)
+	CONSTRAINT ckStartprijs CHECK (startprijs >= 1)
 )
 
 CREATE TABLE Feedback (
@@ -271,7 +271,7 @@ CREATE TABLE Bod (
 )
 
 CREATE TABLE Bestand (
-	filenaam	CHAR(25)		NOT NULL,	-- WAS CHAR(13)
+	filenaam	VARCHAR(100)	NOT NULL,	-- WAS CHAR(13)
 	voorwerp	NUMERIC(20)		NOT NULL,	-- WAS 10
 
 	/*--- Constraints Appendix D ---*/
