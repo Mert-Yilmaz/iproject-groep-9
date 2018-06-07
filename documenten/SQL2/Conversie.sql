@@ -42,8 +42,8 @@ FROM iproject9.dbo.Categorieen
 /* Items en Illustraties in Voorwerp, VoorwerpInRubriek en Bestand */
 INSERT INTO iproject9.dbo.Voorwerp(voorwerpnummer, titel, beschrijving, land, verkoper, startprijs,  betalingswijze, plaatsnaam, looptijdBeginDag, looptijdBeginTijdstip, looptijdEindeDag, looptijdEindeTijdstip, veilingGesloten)
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerpnummer,
-		CAST(Titel AS CHAR(18)) AS titel,
-		CAST(Beschrijving AS CHAR(22)) AS beschrijving,
+		CAST(Titel AS VARCHAR(25)) AS titel,
+		CAST(Beschrijving AS VARCHAR(50)) AS beschrijving,
 		CAST(Locatie AS CHAR(20)) AS land,
 		CAST(Verkoper AS VARCHAR(20)) AS verkoper,
 		CAST(Prijs AS NUMERIC(20,2)) AS startprijs,
