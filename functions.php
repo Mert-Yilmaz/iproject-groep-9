@@ -453,13 +453,6 @@ function detailPagina($dbh) {
           $directory = 'img/veilingen';
       }
       $file = $directory . $file1;
-
-      $itemBeschrijving = $row['beschrijving'];
-      $itemBeschrijving = strip_tags($itemBeschrijving,"<style>");
-      $substring = substr($itemBeschrijving,strpos($itemBeschrijving,"<style>"),strpos($itemBeschrijving,"<style>")+2);
-      $itemBeschrijving = str_replace($substring,"",$itemBeschrijving);
-      $itemBeschrijving = str_replace(array("\t","\r","\n"),"",$itemBeschrijving);
-      $itemBeschrijving = trim($itemBeschrijving);
     $endtime = date_create($row['looptijdEindeTijdstip']);
     echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
     <div class='grid-x grid-padding-x imageborder'>
@@ -471,46 +464,27 @@ function detailPagina($dbh) {
               <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
             </div>
             <ul class='orbit-container'>
-            <ul class='orbit-container'>";
-          $query2 = $dbh->prepare("SELECT * FROM Bestand
-                                  WHERE voorwerp = $voorwerpnummer");
-          $query2->setFetchMode(PDO::FETCH_ASSOC);
-          $query2->execute();
-          while($row2 = $query2->fetch()){
-            $numberofpics++;
-            $file = "img/veilingen/" . $row2['filenaam'];
-            echo "<li class='is-active orbit-slide'>
+              <li class='is-active orbit-slide'>
+                <figure class='orbit-figure'>
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
               <li class='orbit-slide'>
                 <figure class='orbit-figure'>
-                </li>";
-                      }
-                      echo "
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
+              <li class='orbit-slide'>
+                <figure class='orbit-figure'>
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
+              <li class='orbit-slide'>
+                <figure class='orbit-figure'>
+                  <img class='orbit-image' src= " . $file . " alt='Space'>
+                  </figure>
+              </li>
             </ul>
-            <ul class='orbit-container'>";
-
-    $imagesQuery = $dbh->prepare("SELECT filenaam FROM Bestand WHERE voorwerp = '$voorwerpnummer'");
-    $imagesQuery->setFetchMode(PDO::FETCH_ASSOC);
-    $imagesQuery->execute();
-      while($imgdata = $imagesQuery->fetch()){
-          $image = $imgdata['filenaam'];
-
-          $nImagesQuery = $dbh->prepare("SELECT COUNT(DISTINCT filenaam) FROM Bestand WHERE voorwerp = '$voorwerpnummer'");
-          $nImagesQuery->setFetchMode(PDO::FETCH_ASSOC);
-          $nImagesQuery->execute();
-          while($queryData = $nImagesQuery->fetch()) {
-              $nImages = $queryData[''];
-
-              $index = 0;
-              for($index = 0; $index < $nImages; $index++) {
-                  echo "<li class='orbit-slide'>
-                            <figure class='orbit-figure'>
-                                <img class='orbit-image' src= " . $image . " alt='Space'>
-                            </figure>
-                        </li>";
-              }
-          }
-      }
-      echo "
           </div>
           <nav class='orbit-bullets'>
           <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>";
@@ -537,7 +511,6 @@ function detailPagina($dbh) {
           <tr>
             <th>Beschrijving</th>
             <td>" . htmlspecialchars($row['beschrijving']) . "</td>
-            <td>" . htmlspecialchars($itemBeschrijving) . "</td>
           </tr>
           <tr>
             <th>Plaats</th>
