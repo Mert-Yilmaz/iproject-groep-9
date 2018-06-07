@@ -345,18 +345,6 @@ function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
       echo $row['Aantal_items'];
       }
     }
-  //   $isAantalItemsLeeg = $query->fetchColumn();
-  //     if(!isset($isAantalItemsLeeg)){
-  //       $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
-  //                               FROM	 Rubriek r INNER JOIN VoorwerpInRubriek v
-  //                               ON r.rubrieknummer = v.rubriekOpLaagsteNiveau
-  //                               WHERE  rubriekOpLaagsteNiveau = :rubriek");
-  //       $query->bindParam(':rubriek', $rubriek);
-  //       $query->execute();
-  //       while($row = $query->fetch()) {
-  //           echo $row['Aantal_items'];
-  //     }
-  // }
 }
 
 
@@ -456,11 +444,7 @@ function detailPagina($dbh) {
   $query->setFetchMode(PDO::FETCH_ASSOC);
   $query->execute();
   while($row = $query->fetch()){
-<<<<<<< HEAD
     $numberofpics = 0;
-=======
-    //$file = "img/veilingen/" . $row['filenaam'];
-      
       $directory = '';
       $file1 = $row['filenaam'];
       if(substr( $file1, 0, 3 ) === "dt_") {
@@ -469,15 +453,13 @@ function detailPagina($dbh) {
           $directory = 'img/veilingen';
       }
       $file = $directory . $file1;
-      
+
       $itemBeschrijving = $row['beschrijving'];
       $itemBeschrijving = strip_tags($itemBeschrijving,"<style>");
       $substring = substr($itemBeschrijving,strpos($itemBeschrijving,"<style>"),strpos($itemBeschrijving,"<style>")+2);
       $itemBeschrijving = str_replace($substring,"",$itemBeschrijving);
       $itemBeschrijving = str_replace(array("\t","\r","\n"),"",$itemBeschrijving);
       $itemBeschrijving = trim($itemBeschrijving);
-      
->>>>>>> 16e69e552bb54cb85d313a2727bc29f1cf443b94
     $endtime = date_create($row['looptijdEindeTijdstip']);
     echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
     <div class='grid-x grid-padding-x imageborder'>
@@ -488,7 +470,6 @@ function detailPagina($dbh) {
               <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
               <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
             </div>
-<<<<<<< HEAD
             <ul class='orbit-container'>
             <ul class='orbit-container'>";
           $query2 = $dbh->prepare("SELECT * FROM Bestand
@@ -505,7 +486,6 @@ function detailPagina($dbh) {
                       }
                       echo "
             </ul>
-=======
             <ul class='orbit-container'>";
 
     $imagesQuery = $dbh->prepare("SELECT filenaam FROM Bestand WHERE voorwerp = '$voorwerpnummer'");
@@ -530,28 +510,7 @@ function detailPagina($dbh) {
               }
           }
       }
-//              <li class='is-active orbit-slide'>
-//                <figure class='orbit-figure'>
-//                  <img class='orbit-image' src= " . $file . " alt='Space'>
-//                  </figure>
-//              </li>
-//              <li class='orbit-slide'>
-//                <figure class='orbit-figure'>
-//                  <img class='orbit-image' src= " . $file . " alt='Space'>
-//                  </figure>
-//              </li>
-//              <li class='orbit-slide'>
-//                <figure class='orbit-figure'>
-//                  <img class='orbit-image' src= " . $file . " alt='Space'>
-//                  </figure>
-//              </li>
-//              <li class='orbit-slide'>
-//                <figure class='orbit-figure'>
-//                  <img class='orbit-image' src= " . $file . " alt='Space'>
-//                  </figure>
-//              </li>
-      echo "  
->>>>>>> 16e69e552bb54cb85d313a2727bc29f1cf443b94
+      echo "
           </div>
           <nav class='orbit-bullets'>
           <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>";
@@ -577,11 +536,8 @@ function detailPagina($dbh) {
           </tr>
           <tr>
             <th>Beschrijving</th>
-<<<<<<< HEAD
             <td>" . htmlspecialchars($row['beschrijving']) . "</td>
-=======
             <td>" . htmlspecialchars($itemBeschrijving) . "</td>
->>>>>>> 16e69e552bb54cb85d313a2727bc29f1cf443b94
           </tr>
           <tr>
             <th>Plaats</th>
@@ -812,6 +768,7 @@ function zendMailVerloopVeiling($dbh) {
     }
 }
 zendMailVerloopVeiling($dbh);
+
 
 
 function plaatsItem($dbh) {
