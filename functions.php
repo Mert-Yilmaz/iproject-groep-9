@@ -433,28 +433,27 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
 }
 // Laat de details van een item zien
 function detailPagina($dbh) {
-  $voorwerpnummer = $_GET['item'];
-  $query = $dbh->prepare("SELECT * FROM Voorwerp v
-                          INNER JOIN Bestand b
-                          ON v.voorwerpnummer = b.voorwerp
-                          WHERE v.voorwerpnummer = :voorwerpnummer ");
-  $query->bindParam(':voorwerpnummer', $voorwerpnummer);
-  $query = $dbh->prepare("SELECT * FROM Voorwerp
-                          WHERE voorwerpnummer = $voorwerpnummer");
-  $query->setFetchMode(PDO::FETCH_ASSOC);
-  $query->execute();
-  while($row = $query->fetch()){
-    $numberofpics = 0;
-      $directory = '';
-      $file1 = $row['filenaam'];
-      if(substr( $file1, 0, 3 ) === "dt_") {
-          $directory = 'http://iproject9.icasites.nl/pics/';
-      } else {
-          $directory = 'img/veilingen';
-      }
-      $file = $directory . $file1;
-    $endtime = date_create($row['looptijdEindeTijdstip']);
-    echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
+    $getNummer = $_GET['item'];
+
+    $queryVoorwerpgegevens = $dbh->prepare("SELECT * FROM Voorwerp WHERE voorwerpnummer = '$getNummer'"); //voorwerpnummer = :voorwerpnummer?
+    //$queryVoorwerpgegevens->bindParam(':voorwerpnummer',$getNummer);?
+    $queryVoorwerpgegevens->setFetchMode(PDO::FETCH_ASSOC);
+    $queryVoorwerpgegevens->execute();
+    while($voorwerpData = $queryVoorwerpgegevens->fetch()) {
+        $titel = $voorwerpData['titel'];
+        $verkoper = $voorwerpData['verkoper'];
+        $beschrijving = $voorwerpData['beschrijving'];
+        $plaats = $voorwerpData['plaatsnaam'];
+        $betalingsinstructie = $voorwerpData['betalingsinstructie'];
+        $betalingswijze = $voorwerpData['betalingswijze'];
+        $land = $voorwerpData['land'];
+        $vraagprijs = $voorwerpData['verkoopprijs'];
+        $startprijs = $voorwerpData['startprijs'];
+        $looptijddagen = $voorwerpData['looptijd'];
+        $einddatum = $voorwerpData['looptijdEindeDag'];
+        $eindtijd = $endtime = date_create($voorwerpData['looptijdEindeTijdstip']);
+
+        echo "<h1 class= 'aboutkop'> " . $titel  . "</h1><br>
     <div class='grid-x grid-padding-x imageborder'>
       <div class='small-12'>
         <div class='orbit' role='region' aria-label='Favorite Space Pictures' data-orbit>
@@ -463,41 +462,42 @@ function detailPagina($dbh) {
               <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
               <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
             </div>
-            <ul class='orbit-container'>
-              <li class='is-active orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-            </ul>
+            <ul class='orbit-container'>";
+
+        //slider
+        $bestandQuery = $dbh->prepare("SELECT * FROM Bestand WHERE voorwerp = '$getNummer'");
+        $bestandQuery->setFetchMode(PDO::FETCH_ASSOC);
+        $bestandQuery->execute();
+        while($bestandData = $bestandQuery->fetch()) {
+            $directory = '';
+            $file1 = $bestandData['filenaam'];
+            if(substr( $file1, 0, 3 ) === "dt_") {
+                $directory = 'http://iproject9.icasites.nl/pics/';
+            } else {
+                $directory = 'img/veilingen/';
+            }
+            $file = $directory . $file1;
+
+            $illustratieArray['filenaam'] = $file;
+
+            foreach($illustratieArray as $image) {
+                echo "<li class='orbit-slide'>
+                        <figure class='orbit-figure'>
+                            <img class='orbit-image' src= " . $image . " alt='Space'>
+                        </figure>
+                    </li>";
+            }
+        }
+
+        echo "
+        </ul>
           </div>
           <nav class='orbit-bullets'>
-          <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>";
-          if($numberofpics > 1){
-            echo "<button data-slide='2'><span class='show-for-sr'>Second slide details.</span></button>";
-          }
-          if($numberofpics > 2){
-            echo "<button data-slide='3'><span class='show-for-sr'>Third slide details.</span></button>";
-          }
-          if($numberofpics > 3){
-            echo "<button data-slide='4'><span class='show-for-sr'>Fourth slide details.</span></button>";
-          }
-        echo "</nav>
+            <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>
+            <button data-slide='1'><span class='show-for-sr'>Second slide details.</span></button>
+            <button data-slide='2'><span class='show-for-sr'>Third slide details.</span></button>
+            <button data-slide='3'><span class='show-for-sr'>Fourth slide details.</span></button>
+          </nav>
         </div>
       </div>
     </div>
@@ -506,27 +506,27 @@ function detailPagina($dbh) {
         <table>
           <tr>
             <th>Verkoper</th>
-            <td>" . $row['verkoper'] . "</td>
+            <td>" . $verkoper . "</td>
           </tr>
           <tr>
             <th>Beschrijving</th>
-            <td>" . htmlspecialchars($row['beschrijving']) . "</td>
+            <td>" . htmlspecialchars($beschrijving) . "</td>
           </tr>
           <tr>
             <th>Plaats</th>
-            <td>" . $row['plaatsnaam'] . "</td>
+            <td>" . $plaats . "</td>
           </tr>
           <tr>
             <th>Betalingsinstructie</th>
-            <td>" . $row['betalingsinstructie'] . "</td>
+            <td>" . $betalingsinstructie . "</td>
           </tr>
           <tr>
             <th>Betalingswijze</th>
-            <td>" . $row['betalingswijze'] . "</td>
+            <td>" . $betalingswijze . "</td>
          </tr>
           <tr>
             <th>Land</th>
-            <td>" . $row['land'] . "</td>
+            <td>" . $land . "</td>
           </tr>
         </table>
       </div>
@@ -534,28 +534,28 @@ function detailPagina($dbh) {
         <table>
           <tr>
             <th>Vraagprijs</th>
-            <td> €" . $row['verkoopprijs'] . ",- </td>
+            <td> €" . $vraagprijs . ",- </td>
           </tr>
           <tr>
             <th>Startprijs</th>
-            <td> €" . $row['startprijs'] . ",- </td>
+            <td> €" . $startprijs . ",- </td>
           </tr>
           <tr>
             <th>Looptijd</th>
-            <td>" . $row['looptijd'] . " dagen</td>
+            <td>" . $looptijddagen . " dagen</td>
           </tr>
           <tr>
             <th>Einddatum</th>
-            <td>" . $row['looptijdEindeDag'] . "</td>
+            <td>" . $einddatum . "</td>
           </tr>
             <tr>
             <th>Tijdstip einde</th>
-            <td>" . date_format($endtime, "H:i:s") . "</td>
+            <td>" . date_format($eindtijd, "H:i:s") . "</td>
           </tr>
         </table>
       </div>
     </div>";
-  }
+    }
 }
 // Toont details van de 3 hoogste biedingen op het Item
 function biedingenItem($dbh) {
