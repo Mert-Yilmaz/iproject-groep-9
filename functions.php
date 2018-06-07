@@ -446,6 +446,11 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
 // Laat de details van een item zien
 function detailPagina($dbh) {
   $voorwerpnummer = $_GET['item'];
+  $query = $dbh->prepare("SELECT * FROM Voorwerp v
+                          INNER JOIN Bestand b
+                          ON v.voorwerpnummer = b.voorwerp
+                          WHERE v.voorwerpnummer = :voorwerpnummer ");
+  $query->bindParam(':voorwerpnummer', $voorwerpnummer);
   $query = $dbh->prepare("SELECT * FROM Voorwerp
                           WHERE voorwerpnummer = $voorwerpnummer");
   $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -462,34 +467,35 @@ function detailPagina($dbh) {
               <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
               <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
             </div>
+            <ul class='orbit-container'>
             <ul class='orbit-container'>";
-            $query2 = $dbh->prepare("SELECT * FROM Bestand
-                                    WHERE voorwerp = $voorwerpnummer");
-            $query2->setFetchMode(PDO::FETCH_ASSOC);
-            $query2->execute();
-            while($row2 = $query2->fetch()){
-              $numberofpics++;
-              $file = "img/veilingen/" . $row2['filenaam'];
-              echo "<li class='is-active orbit-slide'>
+          $query2 = $dbh->prepare("SELECT * FROM Bestand
+                                  WHERE voorwerp = $voorwerpnummer");
+          $query2->setFetchMode(PDO::FETCH_ASSOC);
+          $query2->execute();
+          while($row2 = $query2->fetch()){
+            $numberofpics++;
+            $file = "img/veilingen/" . $row2['filenaam'];
+            echo "<li class='is-active orbit-slide'>
+              <li class='orbit-slide'>
                 <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>";
-            }
-            echo "</ul>
+                </li>";
+                      }
+                      echo "
+            </ul>
           </div>
           <nav class='orbit-bullets'>
-            <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>";
-            if($numberofpics > 1){
-              echo "<button data-slide='2'><span class='show-for-sr'>Second slide details.</span></button>";
-            }
-            if($numberofpics > 2){
-              echo "<button data-slide='3'><span class='show-for-sr'>Third slide details.</span></button>";
-            }
-            if($numberofpics > 3){
-              echo "<button data-slide='4'><span class='show-for-sr'>Fourth slide details.</span></button>";
-            }
-          echo "</nav>
+          <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>";
+          if($numberofpics > 1){
+            echo "<button data-slide='2'><span class='show-for-sr'>Second slide details.</span></button>";
+          }
+          if($numberofpics > 2){
+            echo "<button data-slide='3'><span class='show-for-sr'>Third slide details.</span></button>";
+          }
+          if($numberofpics > 3){
+            echo "<button data-slide='4'><span class='show-for-sr'>Fourth slide details.</span></button>";
+          }
+        echo "</nav>
         </div>
       </div>
     </div>
@@ -715,29 +721,43 @@ function zendMailVerloopVeiling($dbh) {
                                    WHERE voorwerpnummer=$voorwerpnummer");
             $sql->setFetchMode(PDO::FETCH_ASSOC);
             $sql->execute();
+
+            $getdata = $dbh->prepare("SELECT * FROM Voorwerp v inner join Gebruiker g on g.gebruikersnaam = v.koper WHERE v.veilingGesloten=1 AND v.isMailVerstuurdFeedback = 0");
+            $getdata->execute();
+            while ($row = $getdata->fetch()){
+            $to = $row['mailbox'];
+            $from = 'noreply@eenmaalandermaal9.nl';
+            $subject = 'Geef feedback op uw gewonnen veiling';
+            $message = 'Beste ' . $row['voornaam'] . ',
+            Gefeliciteerd met het winnen van de veiling ' . $row['titel'] . '! Met behulp van de onderstaande link kunt u feedback geven op de veiling.
+            http://iproject9.icasites.nl/feedback.php?item=' . $row['voorwerpnummer'] . '';
+            $headers = 'From: ' . $from . "\r\n";
+            mail($to, $subject, $message, $headers);
+
+          }
         }
     }
 }
 zendMailVerloopVeiling($dbh);
 
-// Toont het formulier voor het plaatsen van een veilingitem
+
 function plaatsItem($dbh) {
   $forms = '';
   $forms .=
-  '<form action="bevestig.php" method="post" enctype="multipart/form-data">
-  <div>
-   <label>Naam van het Product</label>
-   <input type="text" name="titel" placeholder="Titel" maxlength="18">
-  </div>
-  <label>Hoofdrubriek<label>
-    <select name = rij1>';
-    $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
-    $query->execute();
-    while($row = $query->fetch()) {
-      $forms .= "<option value = ". $row['rubrieknummer'] .">" . $row['rubrieknaam'] . "</option>";
-    }
-  $forms .=
-  '</select>
+  $forms .= '
+        <form action="bevestig.php" method="post" enctype="multipart/form-data">
+        <div>
+           <label>Naam van het Product</label>
+           <input type="text" name="titel" placeholder="Titel" maxlength="18">
+         </div>';
+         $forms .= "<label>Hoofdrubriek<label>
+                    <select name = rij1>";
+         $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
+         $query->execute();
+         while($row = $query->fetch()) {
+             $forms .= "<option value = ". $row['rubrieknummer'] .">" . $row['rubrieknaam'] . "</option>";
+         }
+  $forms .= '</select>
   <div>
     <label>Voeg een kleine beschrijving toe</label>
     <textarea rows="4" name="beschrijving" placeholder="Geef hier de beschrijving van het product.. (optioneel)" maxlength="22" required></textarea>
@@ -819,7 +839,7 @@ function plaatsItem($dbh) {
   echo $forms;
 }
 
-// Upload het item wanneer alles correct is ingevuld
+
 function uploadItem($dbh) {
   if (isset($_POST["bevestig"])){
     $veilinggesloten = 0;
@@ -888,9 +908,9 @@ function uploadItem($dbh) {
     }
     if (isset($_POST["plaatje4"])){
       if($_POST["plaatje4"] !== ""){
-        $query5 = $dbh->prepare("INSERT INTO Bestand
+        $query6 = $dbh->prepare("INSERT INTO Bestand
                                  VALUES ('$plaatje4','$voorwerpid')");
-        $query5->execute();
+        $query6->execute();
       }
     }
     echo "<h1> VEILING SUCCESVOL GEUPLOAD! </h1>";
@@ -913,7 +933,7 @@ function uploadItem($dbh) {
         }
       }
       echo '<h1>Uploaden mislukt!</h1>
-            <p><a href="verkooppage.php">Klik hier om terug te gaan.</a></p>';
+      <p><a href="verkooppage.php">Klik hier om terug te gaan.</a></p>';
     }
   }
 }
