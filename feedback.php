@@ -37,6 +37,7 @@
                 </div>
             <div>
                 <input type="text" name="feedbackdesc" placeholder="commentaar (optioneel)" maxlength="12">
+                <input type="hidden" name="item" value=" <?php echo $_GET['item'] ?> ">
             </div>
             <div>
                 <button type="submit" class="knop" name="geef_feedback">Geef feedback</button>
@@ -44,8 +45,8 @@
         </form>
     </div>
     <?php
-        $feedback = $_POST['feedback']
-        $voorwerp = $_GET['item'];
+        $feedback = $_POST['feedback'];
+        $voorwerp = $_POST['item'];
         $soortgebruiker = 'koper';
         $dag = date("Y-m-d");
         $tijd = date("H:i:s");
