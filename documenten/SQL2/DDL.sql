@@ -4,6 +4,8 @@ USE iproject9
 ----- ----- ----- -----
 --- Droppen tables ---
 ---- ----- ----- -----
+IF OBJECT_ID('tblIMAOLand') IS NOT NULL
+	DROP TABLE tblIMAOLand;
 IF OBJECT_ID('dbo.Illustraties') IS NOT NULL
 	DROP TABLE Illustraties;
 IF OBJECT_ID('dbo.Items') IS NOT NULL
@@ -79,7 +81,7 @@ END
 GO*/
 
 GO
-CREATE FUNCTION fCKMaxAfbeeldingen(@filenaam CHAR(25), @voorwerp NUMERIC(20))
+CREATE FUNCTION fCKMaxAfbeeldingen(@filenaam VARCHAR(100), @voorwerp NUMERIC(20))
 RETURNS BIT
 AS
 BEGIN
@@ -214,6 +216,7 @@ CREATE TABLE Voorwerp (
 	verkoopprijs			NUMERIC(20,2)			NULL,	-- WAS CHAR(5)
 	isToegestaan			BIT DEFAULT 1		NOT NULL,	-- EIGEN
 	isMailVerstuurd			BIT DEFAULT 0		NOT NULL,	-- EIGEN
+	isMailVerstuurdFeedback BIT DEFAULT 0		NOT NULL,	-- EIGEN
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkVoorwerp PRIMARY KEY (voorwerpnummer),
@@ -235,16 +238,16 @@ CREATE TABLE Voorwerp (
 	/*--- Eigen constraint - Looptijd begin < eind ---*/
 	CONSTRAINT ckLooptijdBeginEind CHECK (looptijdEindeDag >= looptijdBeginDag AND looptijdEindeTijdstip >= looptijdBeginTijdstip),
 	/*--- Eigen constraint - Startprijs > 1 ---*/
-	CONSTRAINT ckStartprijs CHECK (startprijs > 0)
+	CONSTRAINT ckStartprijs CHECK (startprijs >= 1)
 )
 
 CREATE TABLE Feedback (
-	voorwerp			NUMERIC(20)	NOT NULL,	-- WAS 10
-	soortgebruiker		CHAR(8)		NOT NULL,
-	feedbacksoort		CHAR(8)		NOT NULL,
-	dag					DATE		NOT NULL,	-- WAS CHAR(10)
-	tijdstip			TIME		NOT NULL,	-- WAS CHAR(8)
-	commentaar			CHAR(12)		NULL,
+	voorwerp			NUMERIC(20)		NOT NULL,	-- WAS 10
+	soortgebruiker		CHAR(8)			NOT NULL,
+	feedbacksoort		CHAR(8)			NOT NULL,
+	dag					DATE			NOT NULL,	-- WAS CHAR(10)
+	tijdstip			TIME			NOT NULL,	-- WAS CHAR(8)
+	commentaar			CHAR(12)			NULL
 
 	/*--- Constraints Appendix D ---*/
 	CONSTRAINT pkFeedback PRIMARY KEY (voorwerp, soortgebruiker),
@@ -271,7 +274,7 @@ CREATE TABLE Bod (
 )
 
 CREATE TABLE Bestand (
-	filenaam	CHAR(25)		NOT NULL,	-- WAS CHAR(13)
+	filenaam	VARCHAR(100)	NOT NULL,	-- WAS CHAR(13)
 	voorwerp	NUMERIC(20)		NOT NULL,	-- WAS 10
 
 	/*--- Constraints Appendix D ---*/
@@ -315,7 +318,8 @@ CREATE TABLE Categorieen (
 	ID int NOT NULL,
 	Name varchar(100) NULL,
 	Parent int NULL,
-	CONSTRAINT PK_Categorieen PRIMARY KEY (ID)
+	CONSTRAINT PK_Categorieen PRIMARY KEY (ID),
+	CONSTRAINT FK_ParentCategorie FOREIGN KEY(Parent) REFERENCES Categorieen(ID)
 )
 
 CREATE TABLE Items (
@@ -344,5 +348,18 @@ CREATE TABLE Illustraties (
 
 CREATE INDEX IX_Items_Categorie ON Items (Categorie)
 CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)
+
+CREATE TABLE tblIMAOLand (
+  GBA_CODE CHAR(4) NOT NULL,
+  NAAM_LAND VARCHAR(40) NOT NULL,
+  BEGINDATUM DATE NULL,
+  EINDDATUM DATE NULL,
+  EER_Lid BIT NOT NULL DEFAULT 0,
+  CONSTRAINT PK_tblIMAOLand PRIMARY KEY (NAAM_LAND),
+  CONSTRAINT UQ_tblIMAOLand UNIQUE (GBA_CODE),
+  CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
+  CONSTRAINT CHK_DATUM CHECK ( BEGINDATUM < EINDDATUM )
+)
+
 
 PRINT('Tables in iproject9 have been created')
