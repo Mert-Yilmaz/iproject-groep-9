@@ -4,6 +4,8 @@ USE iproject9
 ----- ----- ----- -----
 --- Droppen tables ---
 ---- ----- ----- -----
+IF OBJECT_ID('tblIMAOLand') IS NOT NULL
+	DROP TABLE tblIMAOLand;
 IF OBJECT_ID('dbo.Illustraties') IS NOT NULL
 	DROP TABLE Illustraties;
 IF OBJECT_ID('dbo.Items') IS NOT NULL
@@ -346,5 +348,18 @@ CREATE TABLE Illustraties (
 
 CREATE INDEX IX_Items_Categorie ON Items (Categorie)
 CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)
+
+CREATE TABLE tblIMAOLand (
+  GBA_CODE CHAR(4) NOT NULL,
+  NAAM_LAND VARCHAR(40) NOT NULL,
+  BEGINDATUM DATE NULL,
+  EINDDATUM DATE NULL,
+  EER_Lid BIT NOT NULL DEFAULT 0,
+  CONSTRAINT PK_tblIMAOLand PRIMARY KEY (NAAM_LAND),
+  CONSTRAINT UQ_tblIMAOLand UNIQUE (GBA_CODE),
+  CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
+  CONSTRAINT CHK_DATUM CHECK ( BEGINDATUM < EINDDATUM )
+)
+
 
 PRINT('Tables in iproject9 have been created')

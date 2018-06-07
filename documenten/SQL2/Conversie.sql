@@ -61,9 +61,6 @@ INSERT INTO iproject9.dbo.VoorwerpInRubriek(voorwerp, rubriekOpLaagsteNiveau, ru
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerp,
 		Categorie AS rubriekOpLaagsteNiveau,
 		rubriekOpHoogsteNiveau = -1
-		/*(SELECT rubrieknummer FROM Rubriek WHERE rubriek = 
-			(SELECT rubrieknummer FROM Rubriek WHERE rubriek = 
-				(SELECT rubrieknummer FROM Rubriek WHERE rubriek = -1)))*/
 FROM iproject9.dbo.Items
 
 
