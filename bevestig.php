@@ -29,31 +29,16 @@ error_reporting(E_ALL ^ E_NOTICE);
       <div class="large-4 medium-3"></div>
       <div class="medium-6 small-12 large-4">
 
+
+
 <?php
 if (isset($_POST["submit"])){
   $target_dir = "img/veilingen/";
   $target_file = $target_dir . basename($_FILES["plaatje"]["name"]);
   $uploadOk = 1;
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
   move_uploaded_file($_FILES["plaatje"]["tmp_name"], $target_file);
-
-  $target_dir = "img/veilingen/";
-  $target_file2 = $target_dir . basename($_FILES["plaatje2"]["name"]);
-  $uploadOk = 1;
-  $imageFileType2 = strtolower(pathinfo($target_file2,PATHINFO_EXTENSION));
-  move_uploaded_file($_FILES["plaatje2"]["tmp_name"], $target_file2);
-
-  $target_dir = "img/veilingen/";
-  $target_file3 = $target_dir . basename($_FILES["plaatje3"]["name"]);
-  $uploadOk = 1;
-  $imageFileType3 = strtolower(pathinfo($target_file3,PATHINFO_EXTENSION));
-  move_uploaded_file($_FILES["plaatje3"]["tmp_name"], $target_file3);
-
-  $target_dir = "img/veilingen/";
-  $target_file4 = $target_dir . basename($_FILES["plaatje4"]["name"]);
-  $uploadOk = 1;
-  $imageFileType4 = strtolower(pathinfo($target_file4,PATHINFO_EXTENSION));
-  move_uploaded_file($_FILES["plaatje4"]["tmp_name"], $target_file4);
 }
 
 
@@ -72,9 +57,6 @@ $voorwerpid = 1 + $nRows;
   $verzendkosten = $_POST["verzendkosten"];
   $verzendinstructies = $_POST["verzendinstructies"];
   $plaatje = basename($_FILES["plaatje"]["name"]);
-  $plaatje2 = basename($_FILES["plaatje2"]["name"]);
-  $plaatje3 = basename($_FILES["plaatje3"]["name"]);
-  $plaatje4 = basename($_FILES["plaatje4"]["name"]);
   $hoogstenummer = $_POST["rij1"];
   $hoogste = $dbh->query("SELECT rubrieknaam FROM Rubriek WHERE rubrieknummer = '$hoogstenummer'")->fetchColumn();
   $tijd = $_POST["time"];
@@ -94,24 +76,11 @@ $voorwerpid = 1 + $nRows;
   "Verzendkosten: " . $verzendkosten . '<br>' .
   "Verzendinstructies: " . $verzendinstructies . '<br>' .
   "Hoogste rubriek: " . $hoogste  . '<br>' .
+  "Plaatje: " . $plaatje  . '<br>' .
   "Tijd: " . $tijd . '<br>' .
   "Dag: " . $dag . '<br>' .
   "Einddag: " . $einddag . '<br>' .
-  "Foto: " . $plaatje  . '<br>' .
-  "<img src='img/veilingen/$plaatje'>" . '<br>';
-  if(!empty($plaatje2)) {
-    echo "Foto 2: " . $plaatje2  . '<br>';
-    echo "<img src='img/veilingen/$plaatje2'>" . '<br>';
-  }
-  if(!empty($plaatje3)) {
-    echo "Foto 3: " . $plaatje3  . '<br>';
-    echo "<img src='img/veilingen/$plaatje3'>" . '<br>';
-  }
-  if(!empty($plaatje4)) {
-    echo "Foto 4: " . $plaatje4  . '<br>';
-    echo "<img src='img/veilingen/$plaatje4'>" . '<br>';
-  }
-  ?>
+  "<img  src='img/veilingen/$plaatje'>"; ?>
 
   <form action="succes.php" method="post">
     <div>
@@ -127,9 +96,6 @@ $voorwerpid = 1 + $nRows;
       <input type="hidden" name="verzendkosten" value="<?php echo $_POST["verzendkosten"] ?>">
       <input type="hidden" name="verzendinstructies" value="<?php echo $_POST["verzendinstructies"] ?>">
       <input type="hidden" name="plaatje" value="<?php echo $_FILES["plaatje"]["name"] ?>">
-      <input type="hidden" name="plaatje2" value="<?php echo $_FILES["plaatje2"]["name"] ?>">
-      <input type="hidden" name="plaatje3" value="<?php echo $_FILES["plaatje3"]["name"] ?>">
-      <input type="hidden" name="plaatje4" value="<?php echo $_FILES["plaatje4"]["name"] ?>">
       <input type="hidden" name="hoogste" value="<?php echo $_POST["rij1"] ?>">
       <input type="hidden" name="koper" value="<?php echo $_POST["koper"] ?>">
       <input type="hidden" name="tijd" value="<?php echo $_POST["time"] ?>">
