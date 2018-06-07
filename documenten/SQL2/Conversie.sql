@@ -19,7 +19,7 @@ SELECT 	CAST(Username AS VARCHAR(20)) AS gebruikersnaam,
 		actief = 1
 FROM iproject9.dbo.Users
 
-INSERT INTO iproject9.dbo.Verkoper(gebruiker, bank, bankrekening, controleoptie, creditcard)
+INSERT INTO iproject9.dbo.Verkoper
 SELECT	CAST(Username AS VARCHAR(20)) AS gebruiker,
 		bank = 'Rabobank',
 		bankrekening = 123456,
@@ -39,7 +39,7 @@ FROM iproject9.dbo.Categorieen
 */
 
 
-/* Items en Illustraties in Voorwerp, VoorwerpInRubriek Bestand */
+/* Items en Illustraties in Voorwerp, VoorwerpInRubriek en Bestand */
 INSERT INTO iproject9.dbo.Voorwerp(voorwerpnummer, titel, beschrijving, land, verkoper, startprijs,  betalingswijze, plaatsnaam, looptijdBeginDag, looptijdBeginTijdstip, looptijdEindeDag, looptijdEindeTijdstip, veilingGesloten)
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerpnummer,
 		CAST(Titel AS CHAR(18)) AS titel,
@@ -61,12 +61,36 @@ INSERT INTO iproject9.dbo.VoorwerpInRubriek(voorwerp, rubriekOpLaagsteNiveau, ru
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerp,
 		Categorie AS rubriekOpLaagsteNiveau,
 		rubriekOpHoogsteNiveau = -1
-		/*(SELECT rubrieknummer FROM Rubriek WHERE rubriek = 
-			(SELECT rubrieknummer FROM Rubriek WHERE rubriek = 
-				(SELECT rubrieknummer FROM Rubriek WHERE rubriek = -1)))*/
 FROM iproject9.dbo.Items
 
-INSERT INTO iproject9.dbo.Bestand(voorwerp, filenaam)
-SELECT	CAST(ItemID AS NUMERIC(20)) AS voorwerp,
-		CAST(IllustratieFile AS CHAR(25)) AS filenaam
-FROM iproject9.dbo.Illustraties
+GO
+DECLARE @aantal INT;
+SELECT @aantal = COUNT(DISTINCT ItemID) + 1 FROM iproject9.dbo.Illustraties;
+DECLARE @i INT = 0;
+
+WHILE(@i < @aantal)
+BEGIN
+	INSERT INTO iproject9.dbo.Bestand
+	SELECT TOP 4	'http://iproject9.icasites.nl/pics/' + IllustratieFile AS filenaam,
+					CAST(ItemID AS NUMERIC(20)) AS voorwerp
+	FROM iproject9.dbo.Illustraties
+	WHERE ItemID IN (
+		SELECT ItemID
+		FROM (SELECT ROW_NUMBER() OVER (ORDER BY IllustratieFile) AS rij, ItemID FROM Illustraties)Illustraties
+		WHERE rij = @i
+		GROUP BY ItemID
+	)
+	SET @i += 1;
+END
+GO
+
+DELETE FROM Illustraties
+DELETE FROM Items
+DELETE FROM Categorieen
+DELETE FROM Users
+
+/*SELECT * FROM Gebruiker
+SELECT * FROM Verkoper
+SELECT * FROM Voorwerp
+SELECT * FROM VoorwerpInRubriek
+SELECT * FROM Bestand*/
