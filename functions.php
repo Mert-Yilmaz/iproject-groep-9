@@ -454,7 +454,17 @@ function detailPagina($dbh) {
   $query->setFetchMode(PDO::FETCH_ASSOC);
   $query->execute();
   while($row = $query->fetch()){
-    $file = "img/veilingen/" . $row['filenaam'];
+    //$file = "img/veilingen/" . $row['filenaam'];
+      
+      $directory = '';
+      $file1 = $row['filenaam'];
+      if(substr( $file1, 0, 3 ) === "dt_") {
+          $directory = 'http://iproject9.icasites.nl/pics/';
+      } else {
+          $directory = 'img/veilingen';
+      }
+      $file = $directory . $file1;
+      
     $endtime = date_create($row['looptijdEindeTijdstip']);
     echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
     <div class='grid-x grid-padding-x imageborder'>
