@@ -446,15 +446,12 @@ function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
 // Laat de details van een item zien
 function detailPagina($dbh) {
   $voorwerpnummer = $_GET['item'];
-  $query = $dbh->prepare("SELECT * FROM Voorwerp v
-                          INNER JOIN Bestand b
-                          ON v.voorwerpnummer = b.voorwerp
-                          WHERE v.voorwerpnummer = :voorwerpnummer ");
-  $query->bindParam(':voorwerpnummer', $voorwerpnummer);
+  $query = $dbh->prepare("SELECT * FROM Voorwerp
+                          WHERE voorwerpnummer = $voorwerpnummer");
   $query->setFetchMode(PDO::FETCH_ASSOC);
   $query->execute();
   while($row = $query->fetch()){
-    $file = "img/veilingen/" . $row['filenaam'];
+    $numberofpics = 0;
     $endtime = date_create($row['looptijdEindeTijdstip']);
     echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
     <div class='grid-x grid-padding-x imageborder'>
@@ -465,35 +462,34 @@ function detailPagina($dbh) {
               <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
               <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
             </div>
-            <ul class='orbit-container'>
-              <li class='is-active orbit-slide'>
+            <ul class='orbit-container'>";
+            $query2 = $dbh->prepare("SELECT * FROM Bestand
+                                    WHERE voorwerp = $voorwerpnummer");
+            $query2->setFetchMode(PDO::FETCH_ASSOC);
+            $query2->execute();
+            while($row2 = $query2->fetch()){
+              $numberofpics++;
+              $file = "img/veilingen/" . $row2['filenaam'];
+              echo "<li class='is-active orbit-slide'>
                 <figure class='orbit-figure'>
                   <img class='orbit-image' src= " . $file . " alt='Space'>
                   </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-              <li class='orbit-slide'>
-                <figure class='orbit-figure'>
-                  <img class='orbit-image' src= " . $file . " alt='Space'>
-                  </figure>
-              </li>
-            </ul>
+              </li>";
+            }
+            echo "</ul>
           </div>
           <nav class='orbit-bullets'>
-            <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>
-            <button data-slide='1'><span class='show-for-sr'>Second slide details.</span></button>
-            <button data-slide='2'><span class='show-for-sr'>Third slide details.</span></button>
-            <button data-slide='3'><span class='show-for-sr'>Fourth slide details.</span></button>
-          </nav>
+            <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>";
+            if($numberofpics > 1){
+              echo "<button data-slide='2'><span class='show-for-sr'>Second slide details.</span></button>";
+            }
+            if($numberofpics > 2){
+              echo "<button data-slide='3'><span class='show-for-sr'>Third slide details.</span></button>";
+            }
+            if($numberofpics > 3){
+              echo "<button data-slide='4'><span class='show-for-sr'>Fourth slide details.</span></button>";
+            }
+          echo "</nav>
         </div>
       </div>
     </div>
@@ -724,172 +720,125 @@ function zendMailVerloopVeiling($dbh) {
 }
 zendMailVerloopVeiling($dbh);
 
-
+// Toont het formulier voor het plaatsen van een veilingitem
 function plaatsItem($dbh) {
   $forms = '';
-  $forms .= '
-        <form action="bevestig.php" method="post" enctype="multipart/form-data">
-        <div>
-           <label>Naam van het Product</label>
-           <input type="text" name="titel" placeholder="Titel" maxlength="18">
-         </div>';
-         $forms .= "<label>Hoofdrubriek<label>
-                    <select name = rij1>";
-         $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
-         $query->execute();
-         while($row = $query->fetch()) {
-             $forms .= "<option value = ". $row['rubrieknummer'] .">" . $row['rubrieknaam'] . "</option>";
-         }
-         $forms .= "</select>";
-         $forms .= '<div>
-          <label>Voeg een kleine beschrijving toe</label>
-          <textarea rows="4" name="beschrijving" placeholder="Geef hier de beschrijving van het product.. (optioneel)" maxlength="22" required></textarea>
-        </div>
-        <div>
-          <label>Prijs in: €</label>
-          <input type="text" name="startprijs" placeholder="99999.99 (Startprijs)" maxlength="8" required>
-        </div>
-        <div>
-          <label>Hoe wil je worden betaald?</label>
-          <select name="betalingswijze">
-            <option value disabled selected>Kies een betalingswijze</option>
-            <option value="IDeal/PayPal">IDeal/Paypal</option>
-            <option value="Creditcard">Creditcard</option>
-          </select>
-        </div>
-        <div>
-          <label>Geef hier nog wat extra betaalinstructies</label>
-          <input type="text" name="betalingsinstructie" placeholder="Geef hier aanvullende betaal instructies" maxlength="30">
-        </div>
-        <div>
-          <label>Waar wil je het item aanbieden?</label>
-          <input type="text" name="plaats" placeholder="Plaats naam" maxlength="12">
-        </div>
-        <div>
-          <label>In welk land wil je het item aanbieden?</label>
-          <select name="land">
-            <option value disabled selected>Selecteer een land</option>
-            <option value = "Afghanistan"> Afghanistan </option>
-            <option value = "Albania"> Albanië </option>
-            <option value = "Algerije"> Algerije </option>
-            <option value = "Amerikaans Samoa"> Amerikaans Samoa </option>
-            <option value = "Andorra"> Andorra </option>
-            <option value = "Angola"> Angola </option>
-            <option value = "Anguilla"> Anguilla </option>
-            <option value = "Antartica"> Antarctica </option>
-            <option value = "Antigua en Barbuda"> Antigua en Barbuda </option>
-            <option value = "Argentina"> Argentinië </option>
-            <option value = "Armenia"> Armenië </option>
-            <option value = "Aruba"> Aruba </option>
-            <option value = "Nederland"> Nederland </option>
-            <option value = "Czech Republic"> Czech Republic </option>
-            <option value = "Denemarken"> Denemarken </option>
-            <option value = "Djibouti"> Djibouti </option>
-            <option value = "Dominica"> Dominica </option>
-            <option value = "Guatemala"> Guatemala </option>
-            <option value = "Guinea"> Guinea </option>
-            <option value = "Guinee-Bissau"> Guinee-Bissau </option>
-            <option value = "Guyana"> Guyana </option>
-            <option value = "Haiti"> Haïti </option>
-            <option value = "Heilige Stoel"> Heilige Stoel (Vaticaanstad) </option>
-            <option value = "Honduras"> Honduras </option>
-            <option value = "Anders"> Overig </option>
-          </select>
-        </div>
-        <div>
-          <label>Hoe lang wil je het product aanbieden?</label>
-          <select name="looptijd">
-            <option value selected disabled>Selecteer de looptijd in dagen</option>
-            <option value = "3"> 1 </option>
-            <option value = "3"> 3 </option>
-            <option value = "5"> 5 </option>
-            <option value = "7" selected="selected"> 7 (Standaard) </option>
-            <option value = "10"> 10 </option>
-          </select>
-        </div>
-        <div>
-          <label>Hoe hoog zijn de verzendkosten</label>
-          <input type="text" name="verzendkosten" placeholder="99.99 (Verzendkosten)" maxlength="5">
-        </div>
-        <div>
-          <label>Eventuele verdere verzendinstructies?</label>
-          <textarea rows="4" name="verzendinstructies" placeholder="Geef hier instructies voor het verzenden.. (optioneel)" maxlength="30"></textarea>
-        </div>
-        <div>
-          <label>Upload hier je image</label>
-          <input name="plaatje" type="file" accept=".jpg, .jpeg, .bpem, .png" required>
-        </div>
-        <div>
-          <label>Upload hier je image</label>
-          <input name="plaatje2" type="file" accept=".jpg, .jpeg, .bpem, .png">
-        </div>
-        <div>
-          <label>Upload hier je image</label>
-          <input name="plaatje3" type="file" accept=".jpg, .jpeg, .bpem, .png">
-        </div>
-        <div>
-          <button type="submit" class="knop" name="submit">Plaats</button>
-        </div>
-        <input type="hidden" name="time" value="' . date("H:i:s") . '">
-        <input type="hidden" name="day" value="' . date("m-d-Y") . '">
-      </form>
-      </div>
-      <div class="medium-3 large-4"></div>';
-    echo $forms;
-    if (isset($_POST["submit"])){
-      $target_dir = "img/veilingen/";
-      $target_file = $target_dir . basename($_FILES["plaatje"]["name"]);
-      $uploadOk = 1;
-      $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
-        $begindag = date("Y/m/d");// Deze drie dingen nog verbeteren
-        $einddag = date("Y-M-D");
-        $plaatstijd = $_POST['time'];
-        $veilinggesloten = 0;
-        is_null($verkoopprijs);
-
-        $titel = $_POST["titel"];
-        $beschrijving = $_POST["beschrijving"];
-        $startprijs = $_POST["startprijs"];
-        $betalingswijze = $_POST["betalingswijze"];
-        $betalingsinstructie = $_POST["betalingsinstructie"];
-        $plaats = $_POST["plaats"];
-        $land = $_POST["land"];
-        $looptijd = $_POST["looptijd"];
-        $verzendkosten = $_POST["verzendkosten"];
-        $verzendinstructies = $_POST["verzendinstructies"];
-        $plaatje = $_POST["plaatje"];
-        $hoogste = $_POST["rij1"];
-        $koper = 'Gebruiker5'; // Dit nog aanpassen naar session
-
-        //query om het voorwerpnummer te bepalen
-        $nRows = $dbh->query("SELECT count(*) FROM Voorwerp")->fetchColumn();
-        $voorwerpid = 1 + $nRows;
-
-        try{
-        $query = $dbh->prepare("INSERT INTO Voorwerp
-                              	VALUES ('$voorwerpid','$titel','$beschrijving',
-                                         '$startprijs','$betalingswijze','$betalingsinstructie',
-                                         '$plaats','$land','$looptijd',
-                                         '1-1-2018','12:00:00','$verzendkosten',
-                                         '$verzendinstructies','Admin','$koper',
-                                         '2-1-2018','12:00:01',0,NULL, 1, 0)");
-          $query->execute();
-        }catch(PDOException $e) {
-          echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-        }
-        try{
-        $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
-                              	 VALUES ('$voorwerpid','$hoogste','$hoogste')");
-        $query2->execute();
-        }catch(PDOException $e) {
-          echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-        }
-        move_uploaded_file($_FILES["plaatje"]["tmp_name"], $target_file);
+  $forms .=
+  '<form action="bevestig.php" method="post" enctype="multipart/form-data">
+  <div>
+   <label>Naam van het Product</label>
+   <input type="text" name="titel" placeholder="Titel" maxlength="18">
+  </div>
+  <label>Hoofdrubriek<label>
+    <select name = rij1>';
+    $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
+    $query->execute();
+    while($row = $query->fetch()) {
+      $forms .= "<option value = ". $row['rubrieknummer'] .">" . $row['rubrieknaam'] . "</option>";
     }
+  $forms .=
+  '</select>
+  <div>
+    <label>Voeg een kleine beschrijving toe</label>
+    <textarea rows="4" name="beschrijving" placeholder="Geef hier de beschrijving van het product.. (optioneel)" maxlength="22" required></textarea>
+  </div>
+  <div>
+    <label>Prijs in: €</label>
+    <input type="text" name="startprijs" placeholder="99999.99 (Startprijs)" maxlength="8" required>
+  </div>
+  <div>
+    <label>Hoe wil je worden betaald?</label>
+    <select name="betalingswijze">
+      <option value disabled selected>Kies een betalingswijze</option>
+      <option value="IDeal/PayPal">IDeal/Paypal</option>
+      <option value="Creditcard">Creditcard</option>
+    </select>
+  </div>
+  <div>
+    <label>Geef hier nog wat extra betaalinstructies</label>
+    <input type="text" name="betalingsinstructie" placeholder="Geef hier aanvullende betaal instructies" maxlength="30">
+  </div>
+  <div>
+    <label>Waar wil je het item aanbieden?</label>
+    <input type="text" name="plaats" placeholder="Plaats naam" maxlength="12">
+  </div>
+  <div>
+    <label>In welk land wil je het item aanbieden?</label>
+    <select name="land">
+      <option value disabled selected>Selecteer een land</option>
+      <option value = "Afghanistan"> Afghanistan </option>
+      <option value = "Albania"> Albanië </option>
+      <option value = "Algerije"> Algerije </option>
+      <option value = "Amerikaans Samoa"> Amerikaans Samoa </option>
+      <option value = "Andorra"> Andorra </option>
+      <option value = "Angola"> Angola </option>
+      <option value = "Anguilla"> Anguilla </option>
+      <option value = "Antartica"> Antarctica </option>
+      <option value = "Antigua en Barbuda"> Antigua en Barbuda </option>
+      <option value = "Argentina"> Argentinië </option>
+      <option value = "Armenia"> Armenië </option>
+      <option value = "Aruba"> Aruba </option>
+      <option value = "Nederland"> Nederland </option>
+      <option value = "Czech Republic"> Czech Republic </option>
+      <option value = "Denemarken"> Denemarken </option>
+      <option value = "Djibouti"> Djibouti </option>
+      <option value = "Dominica"> Dominica </option>
+      <option value = "Guatemala"> Guatemala </option>
+      <option value = "Guinea"> Guinea </option>
+      <option value = "Guinee-Bissau"> Guinee-Bissau </option>
+      <option value = "Guyana"> Guyana </option>
+      <option value = "Haiti"> Haïti </option>
+      <option value = "Heilige Stoel"> Heilige Stoel (Vaticaanstad) </option>
+      <option value = "Honduras"> Honduras </option>
+      <option value = "Anders"> Overig </option>
+    </select>
+  </div>
+  <div>
+    <label>Hoe lang wil je het product aanbieden?</label>
+    <select name="looptijd">
+      <option value selected disabled>Selecteer de looptijd in dagen</option>
+      <option value = "3"> 1 </option>
+      <option value = "3"> 3 </option>
+      <option value = "5"> 5 </option>
+      <option value = "7" selected="selected"> 7 (Standaard) </option>
+        <option value = "10"> 10 </option>
+    </select>
+  </div>
+  <div>
+    <label>Hoe hoog zijn de verzendkosten</label>
+    <input type="text" name="verzendkosten" placeholder="99.99 (Verzendkosten)" maxlength="5">
+  </div>
+    <div>
+    <label>Eventuele verdere verzendinstructies?</label>
+    <textarea rows="4" name="verzendinstructies" placeholder="Geef hier instructies voor het verzenden.. (optioneel)" maxlength="30"></textarea>
+  </div>
+    <div>
+  <label>Upload hier je image</label>
+    <input name="plaatje" type="file" accept=".jpg, .jpeg, .bpem, .png" required>
+  </div>
+  <div>
+    <label>Upload hier je image</label>
+    <input name="plaatje2" type="file" accept=".jpg, .jpeg, .bpem, .png">
+  </div>
+  <div>
+    <label>Upload hier je image</label>
+    <input name="plaatje3" type="file" accept=".jpg, .jpeg, .bpem, .png">
+  </div>
+  <div>
+    <label>Upload hier je image</label>
+    <input name="plaatje4" type="file" accept=".jpg, .jpeg, .bpem, .png">
+  </div>
+  <div>
+    <button type="submit" class="knop" name="submit">Plaats</button>
+  </div>
+  <input type="hidden" name="time" value="' . date("H:i:s") . '">
+  <input type="hidden" name="day" value="' . date("m-d-Y") . '">
+  </form>
+  <div class="medium-3 large-4"></div>';
+  echo $forms;
 }
 
-
+// Upload het item wanneer alles correct is ingevuld
 function uploadItem($dbh) {
   if (isset($_POST["bevestig"])){
     $veilinggesloten = 0;
@@ -906,6 +855,9 @@ function uploadItem($dbh) {
     $verzendkosten = $_POST["verzendkosten"];
     $verzendinstructies = $_POST["verzendinstructies"];
     $plaatje = $_POST["plaatje"];
+    $plaatje2 = $_POST["plaatje2"];
+    $plaatje3 = $_POST["plaatje3"];
+    $plaatje4 = $_POST["plaatje4"];
     $hoogste = $_POST["hoogste"];
     $tijd = $_POST["tijd"];
     $begindag = $_POST["dag"];
@@ -931,7 +883,7 @@ function uploadItem($dbh) {
                                      '$plaats','$land','$looptijd',
                                      '$begindag','$tijd','$verzendkosten',
                                      '$verzendinstructies','$verkoper',NULL,
-                                     '$einddag','$tijd',0,NULL, 1, 0)");
+                                     '$einddag','$tijd',0,NULL, 1, 0, 0)");
     $query->execute();
     $query2 = $dbh->prepare("INSERT INTO VoorwerpInRubriek
                              VALUES ('$voorwerpid','$hoogste','$hoogste')");
@@ -939,12 +891,48 @@ function uploadItem($dbh) {
     $query3 = $dbh->prepare("INSERT INTO Bestand
                              VALUES ('$plaatje','$voorwerpid')");
     $query3->execute();
+    if (isset($_POST["plaatje2"])){
+      if($_POST["plaatje2"] !== ""){
+        $query4 = $dbh->prepare("INSERT INTO Bestand
+                                 VALUES ('$plaatje2','$voorwerpid')");
+        $query4->execute();
+      }
+    }
+    if (isset($_POST["plaatje3"])){
+      if($_POST["plaatje3"] !== ""){
+        $query5 = $dbh->prepare("INSERT INTO Bestand
+                                 VALUES ('$plaatje3','$voorwerpid')");
+        $query5->execute();
+      }
+    }
+    if (isset($_POST["plaatje4"])){
+      if($_POST["plaatje4"] !== ""){
+        $query5 = $dbh->prepare("INSERT INTO Bestand
+                                 VALUES ('$plaatje4','$voorwerpid')");
+        $query5->execute();
+      }
+    }
     echo "<h1> VEILING SUCCESVOL GEUPLOAD! </h1>";
     header('refresh: 3; url=index.php');
     }catch(PDOException $e) {
       unlink("img/veilingen/$plaatje");
-      echo '<h1> VEILING NIET GEUPLOAD! </h1>
-            <a href="verkooppage.php">Terug</a>';
+      if (isset($_POST["plaatje2"])){
+        if($_POST["plaatje2"] !== ""){
+          unlink("img/veilingen/$plaatje2");
+        }
+      }
+      if (isset($_POST["plaatje3"])){
+        if($_POST["plaatje3"] !== ""){
+          unlink("img/veilingen/$plaatje3");
+        }
+      }
+      if (isset($_POST["plaatje4"])){
+        if($_POST["plaatje4"] !== ""){
+          unlink("img/veilingen/$plaatje4");
+        }
+      }
+      echo '<h1>Uploaden mislukt!</h1>
+            <p><a href="verkooppage.php">Klik hier om terug te gaan.</a></p>';
     }
   }
 }
