@@ -465,6 +465,13 @@ function detailPagina($dbh) {
       }
       $file = $directory . $file1;
       
+      $itemBeschrijving = $row['beschrijving'];
+      $itemBeschrijving = strip_tags($itemBeschrijving,"<style>");
+      $substring = substr($itemBeschrijving,strpos($itemBeschrijving,"<style>"),strpos($itemBeschrijving,"<style>")+2);
+      $itemBeschrijving = str_replace($substring,"",$itemBeschrijving);
+      $itemBeschrijving = str_replace(array("\t","\r","\n"),"",$itemBeschrijving);
+      $itemBeschrijving = trim($itemBeschrijving);
+      
     $endtime = date_create($row['looptijdEindeTijdstip']);
     echo "<h1 class= 'aboutkop'> " . $row['titel']  . "</h1><br>
     <div class='grid-x grid-padding-x imageborder'>
@@ -516,7 +523,7 @@ function detailPagina($dbh) {
           </tr>
           <tr>
             <th>Beschrijving</th>
-            <td>" . htmlspecialchars($row['beschrijving']) . "</td>
+            <td>" . htmlspecialchars($itemBeschrijving) . "</td>
           </tr>
           <tr>
             <th>Plaats</th>
