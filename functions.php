@@ -502,7 +502,7 @@ function detailPagina($dbh) {
           </tr>
           <tr>
             <th>Beschrijving</th>
-            <td>" . $row['beschrijving'] . "</td>
+            <td>" . htmlspecialchars($row['beschrijving']) . "</td>
           </tr>
           <tr>
             <th>Plaats</th>
@@ -764,32 +764,13 @@ function plaatsItem($dbh) {
   </div>
   <div>
     <label>In welk land wil je het item aanbieden?</label>
-    <select name="land">
-      <option value disabled selected>Selecteer een land</option>
-      <option value = "Afghanistan"> Afghanistan </option>
-      <option value = "Albania"> Albanië </option>
-      <option value = "Algerije"> Algerije </option>
-      <option value = "Amerikaans Samoa"> Amerikaans Samoa </option>
-      <option value = "Andorra"> Andorra </option>
-      <option value = "Angola"> Angola </option>
-      <option value = "Anguilla"> Anguilla </option>
-      <option value = "Antartica"> Antarctica </option>
-      <option value = "Antigua en Barbuda"> Antigua en Barbuda </option>
-      <option value = "Argentina"> Argentinië </option>
-      <option value = "Armenia"> Armenië </option>
-      <option value = "Aruba"> Aruba </option>
-      <option value = "Nederland"> Nederland </option>
-      <option value = "Czech Republic"> Czech Republic </option>
-      <option value = "Denemarken"> Denemarken </option>
-      <option value = "Djibouti"> Djibouti </option>
-      <option value = "Dominica"> Dominica </option>
-      <option value = "Guatemala"> Guatemala </option>
-      <option value = "Guinea"> Guinea </option>
-      <option value = "Guinee-Bissau"> Guinee-Bissau </option>
-      <option value = "Guyana"> Guyana </option>
-      <option value = "Haiti"> Haïti </option>
-      <option value = "Heilige Stoel"> Heilige Stoel (Vaticaanstad) </option>
-      <option value = "Honduras"> Honduras </option>
+    <select name="land">';
+    $query2 = $dbh->prepare("SELECT * FROM tblIMAOLand");
+    $query2->execute();
+    while($row = $query2->fetch()) {
+      $forms .= "<option value = ". $row['NAAM_LAND'] .">" . $row['NAAM_LAND'] . "</option>";
+    }
+    $forms .='
       <option value = "Anders"> Overig </option>
     </select>
   </div>
