@@ -196,7 +196,7 @@ CREATE TABLE Verkoper (
 
 CREATE TABLE Voorwerp (
 	voorwerpnummer			NUMERIC(20)			NOT NULL,	-- WAS 10
-	titel					CHAR(18)			NOT NULL,
+	titel					VARCHAR(25)			NOT NULL,	-- WAS CHAR(18)
 	beschrijving			VARCHAR(50)			NOT NULL,	-- WAS CHAR(22)
 	startprijs				NUMERIC(20,2)		NOT NULL,	-- WAS CHAR(5)
 	betalingswijze			CHAR(15)			NOT NULL,	-- WAS 9
