@@ -506,7 +506,7 @@ function detailPagina($dbh) {
           </tr>
           <tr>
             <th>Beschrijving</th>
-            <td>" . $row['beschrijving'] . "</td>
+            <td>" . htmlspecialchars($row['beschrijving']) . "</td>
           </tr>
           <tr>
             <th>Plaats</th>
