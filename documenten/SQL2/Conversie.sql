@@ -30,6 +30,7 @@ FROM iproject9.dbo.Users
 
 /* Categorieen in Rubriek */
 -- Dit staat in commentaar omdat we de huidige rubriekenlijst al handmatig in onze database hadden gezet
+-- Daarnaast moeten er waarden in Rubriek staan, omdat de voorwerpen anders niet geplaatst kunnen worden.
 /*
 INSERT INTO iproject9.dbo.Rubriek
 SELECT	ID AS rubrieknummer,
