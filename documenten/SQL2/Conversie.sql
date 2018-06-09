@@ -60,7 +60,11 @@ FROM iproject9.dbo.Items
 INSERT INTO iproject9.dbo.VoorwerpInRubriek(voorwerp, rubriekOpLaagsteNiveau, rubriekOpHoogsteNiveau)
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerp,
 		Categorie AS rubriekOpLaagsteNiveau,
-		rubriekOpHoogsteNiveau = -1
+		rubriekOpHoogsteNiveau = 1188
+		-- Hiervoor dient nog een functie geschreven te worden die de hoofdcategorie ophaalt, om zo de breadcrumbs te laten werken.
+		-- Omdat onze externe populatie zich op dit moment bevindt in de categorie 'Modelbouw en miniaturen',
+		-- is de hoogste rubriek 1188
+		-- Kan ook op -1 (Root), maar worden dan niet getoond achter de hoofdrubriek.
 FROM iproject9.dbo.Items
 
 GO
