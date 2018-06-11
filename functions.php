@@ -1265,7 +1265,7 @@ function biedOpItem($dbh) {
  }
        
  function sluitVeilingen($dbh) {
-    date_default_timezone_get("Europe/Amsterdam");
+    //date_default_timezone_get("Europe/Amsterdam");
 
     $query = $dbh->prepare("SELECT * FROM Voorwerp");
     $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -1292,7 +1292,7 @@ function biedOpItem($dbh) {
 
         if((($todayDate == $formattedDate && $todayTime >= $formattedTime) || $todayDate > $formattedDate) && $veilingGesloten == 0){
             //DB date is vandaag en tijd > vandaag, of de date is al geweest.
-            $update = $dbh->prepare("UPDATE Voorwerp SET veilingGesloten = 1 WHERE voorwerpnummer = '$itemID' AND veilingGesloten = 0");
+            $update = $dbh->prepare("UPDATE Voorwerp SET veilingGesloten = 1 WHERE voorwerpnummer = '$itemID'");
             $update->execute();
         }
     }
