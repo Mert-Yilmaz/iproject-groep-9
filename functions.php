@@ -492,16 +492,10 @@ function detailPagina($dbh) {
         echo "
         </ul>
           </div>
-          <nav class='orbit-bullets'>
-            <button class='is-active' data-slide='0'><span class='show-for-sr'>First slide details.</span><span class='show-for-sr'>Current Slide</span></button>
-            <button data-slide='1'><span class='show-for-sr'>Second slide details.</span></button>
-            <button data-slide='2'><span class='show-for-sr'>Third slide details.</span></button>
-            <button data-slide='3'><span class='show-for-sr'>Fourth slide details.</span></button>
-          </nav>
         </div>
       </div>
     </div>
-    <div class= 'grid-x grid-padding-x'>
+    <div class= 'grid-x grid-padding-x' style='padding-top: 2%;'>
       <div class= 'cell large-8 medium-7'>
         <table>
           <tr>
