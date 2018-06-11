@@ -1277,16 +1277,16 @@ function biedOpItem($dbh) {
         $endtime = $data['looptijdEindeTijdstip'];
         $veilingGesloten = $data['veilingGesloten']; //0 = false, 1 = true
 
-//         $day = date('d', strtotime($enddate));
-//         $month = date('m', strtotime($enddate));
-//         $year = date('Y', strtotime($enddate));
-//         $hour = date('H', strtotime($endtime));
-//         $minute = date('i', strtotime(($endtime)));
-//         $seconds = date('s', strtotime($endtime));
-//         $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
+        $day = date('d', strtotime($enddate));
+        $month = date('m', strtotime($enddate));
+        $year = date('Y', strtotime($enddate));
+        $hour = date('H', strtotime($endtime));
+        $minute = date('i', strtotime(($endtime)));
+        $seconds = date('s', strtotime($endtime));
+        $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
 
-        $formattedDate = date("Y-m-d", $enddate);    //DB
-        $formattedTime = date("H:i:s", $endtime);    //DB
+        $formattedDate = date("Y-m-d", $from_unix_time);    //DB
+        $formattedTime = date("H:i:s", $from_unix_time);    //DB
         $todayDate = date("Y-m-d");                         //today
         $todayTime = date("H:i:s");                         //today
 
