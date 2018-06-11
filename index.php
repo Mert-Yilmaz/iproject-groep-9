@@ -1,17 +1,8 @@
-/**
- * Created by Atom
- * User: Jeffrey Kragten
- * Date: 25-5-2018
- * Time: 12:34
- */
 <?php
     session_start();
     require 'functions.php';
     require 'db.php';
     error_reporting(E_ALL ^ E_NOTICE);
-    if(!isset($_SESSION['WelkomPopUp'])){
-      $_SESSION['WelkomPopUp'];
-    }
 ?>
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -40,11 +31,11 @@
                     <option value="COUNT ASC">Groot-Klein</option>
                     <option value="COUNT DESC">Klein-Groot</option>
                   </select>
-                    <label>Items</label>
-                    <input type="text" name="zoekitemkeyword" placeholder="Zoek items"/>
-                    <div class="dertig"><input type="number" name="minprijs" placeholder="minprijs..."/></div>
-                    <div class="dertig"><input type="number" name="maxprijs" placeholder="maxprijs..."/></div>
-                    <input type="submit" name="zoeken" value="Zoek / Order" class="knop">
+                  <label>Items</label>
+                  <input type="text" name="zoekitemkeyword" placeholder="Zoek items"/>
+                  <div class="dertig"><input type="number" name="minprijs" placeholder="minprijs..."/></div>
+                  <div class="dertig"><input type="number" name="maxprijs" placeholder="maxprijs..."/></div>
+                  <input type="submit" name="zoeken" value="Zoek / Order" class="knop">
                 </form>
                 <br>
                 <h1>Groepen</h1>
@@ -99,8 +90,7 @@
           require 'footer.html';
           if (!isset($_SESSION['WelkomPopUp'])){
               echo '<script type="text/javascript">alert("Welkom, zie ons privacybeleid")</script>';
-              $_SESSION['WelkomPopUp'] = 1;
-          }
+              $_SESSION['WelkomPopUp'] = 1;}
         ?>
     </body>
   </html>
