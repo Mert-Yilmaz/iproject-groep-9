@@ -935,4 +935,42 @@ function uploadItem($dbh) {
   }
 }
 
+function sluitVeilingen($dbh) {
+    date_default_timezone_get("Europe/Amsterdam");
+
+    $query = $dbh->prepare("SELECT * FROM Voorwerp");
+    $query->setFetchMode(PDO::FETCH_ASSOC);
+    $query->execute();
+
+    while ($data = $query->fetch()) {
+        $itemID = $data['voorwerpnummer'];
+        $enddate = $data['looptijdEindeDag'];
+        $endtime = $data['looptijdEindeTijdstip'];
+        $veilingGesloten = $data['veilingGesloten']; //0 = false, 1 = true
+
+        $day = date('d', strtotime($enddate));
+        $month = date('m', strtotime($enddate));
+        $year = date('Y', strtotime($enddate));
+        $hour = date('H', strtotime($endtime));
+        $minute = date('i', strtotime(($endtime)));
+        $seconds = date('s', strtotime($endtime));
+        $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
+
+        $formattedDate = date("Y-m-d", $from_unix_time);    //DB
+        $formattedTime = date("H:i:s", $from_unix_time);    //DB
+        $todayDate = date("Y-m-d");                         //today
+        $todayTime = date("H:i:s");                         //today
+
+        //echo "<p>" . $todayDate . " " . $todayTime . "</p>";
+
+        if ((($todayDate == $formattedDate && $todayTime >= $formattedTime) || $todayDate > $formattedDate) && $veilingGesloten == 0) {
+            //DB date is vandaag en tijd > vandaag, of de date is al geweest.
+            $update = $dbh->prepare("UPDATE Voorwerp SET veilingGesloten = 1 WHERE voorwerpnummer = '$itemID'");
+            $update->execute();
+        }
+    }
+}
+
+sluitVeilingen($dbh);
+
 ?>
