@@ -49,7 +49,10 @@
    }
    echo $output;
  }
- zendMailVerloopVeiling($dbh);
+
+zendMailVerloopVeiling($dbh);
+sluitVeilingen($dbh);
+
  //Hot Items (Selecteert 3 items met de meest recente biedingen)
  function hot_items($dbh){
    $output="";
@@ -1294,6 +1297,4 @@ function biedOpItem($dbh) {
         }
     }
 }
-
-sluitVeilingen($dbh);      
  ?>
