@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
   session_start();
   include 'functions.php';

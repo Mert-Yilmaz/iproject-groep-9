@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
 session_start();
 include 'functions.php';
@@ -118,7 +124,8 @@ error_reporting(E_ALL ^ E_NOTICE);
               $query->execute();
             }catch(PDOException $e) {
               echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-            }}
+            }
+            }
             include("footer.html");
         ?>
 </body>

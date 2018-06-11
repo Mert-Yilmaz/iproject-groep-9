@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
 session_start();
 include 'functions.php';
@@ -16,9 +22,10 @@ $data = $query->fetch();
 $gebruikersnaam = $data['gebruikersnaam'];
 
 $queryv2 = $dbh->prepare("SELECT *
-                                            FROM Verkoper vk
-                                            INNER JOIN Voorwerp vw ON vk.gebruiker = vw.verkoper
-                                            WHERE vk.gebruiker = '$gebruikersnaam'");
+                          FROM Verkoper vk
+                          INNER JOIN Voorwerp vw
+                          ON vk.gebruiker = vw.verkoper
+                          WHERE vk.gebruiker = '$gebruikersnaam'");
 $queryv2->setFetchMode(PDO::FETCH_ASSOC);
 $queryv2->execute();
 $data2 = $queryv2->fetch();

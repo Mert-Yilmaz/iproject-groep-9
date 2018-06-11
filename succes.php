@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
 session_start();
 include 'functions.php';
@@ -25,11 +31,9 @@ error_reporting(E_ALL ^ E_NOTICE);
     <div class="grid-x">
       <div class="large-4 medium-3"></div>
       <div class="medium-6 small-12 large-4">
-
-<?php uploadItem($dbh); ?>
-
-</div>
-</div>
+        <?php uploadItem($dbh); ?>
+      </div>
+    </div>
 
 <?php include("footer.html"); ?>
 </body>

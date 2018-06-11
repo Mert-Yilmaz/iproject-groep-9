@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <div class="grid-x grid-padding-x">
   <div class="small-12">
     <div class="orbit" role="region" aria-label="Favorite Space Pictures" data-orbit>

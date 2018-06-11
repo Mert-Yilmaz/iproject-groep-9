@@ -44,10 +44,10 @@ while ($itemData = $getData->fetch()) {
     $itemConditie = $itemData['Conditie'];
     $itemThumbnail = $itemData['Thumbnail'];
 
-    $stripHTMLBeschrijving = $dbh->prepare("UPDATE Items 
-                                                     SET Beschrijving = (SELECT [dbo].[udf_StripHTML]((SELECT Beschrijving 
-                                                                                                       FROM Items 
-                                                                                                       WHERE ID = '$itemID'))) WHERE ID='$itemID'");
+    $stripHTMLBeschrijving = $dbh->prepare("UPDATE Items
+                                            SET Beschrijving = (SELECT [dbo].[udf_StripHTML]((SELECT Beschrijving
+                                            FROM Items
+                                            WHERE ID = '$itemID'))) WHERE ID='$itemID'");
     $stripHTMLBeschrijving->execute();
 
     echo "
