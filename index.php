@@ -33,8 +33,8 @@
                   </select>
                   <label>Items</label>
                   <input type="text" name="zoekitemkeyword" placeholder="Zoek items"/>
-                  <div class="dertig"><input type="number" name="minprijs" placeholder="minprijs..."/></div>
-                  <div class="dertig"><input type="number" name="maxprijs" placeholder="maxprijs..."/></div>
+                  <div class="dertig"><input type="number" name="minprijs" placeholder="minprijs..."/ min="0"></div>
+                  <div class="dertig"><input type="number" name="maxprijs" placeholder="maxprijs..."/ min="0"></div>
                   <input type="submit" name="zoeken" value="Zoek / Order" class="knop">
                 </form>
                 <br>
