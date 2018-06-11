@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Metusah Boermans
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
 $isLoggedIn = false;
 if(isset($_SESSION['login-token'])) {

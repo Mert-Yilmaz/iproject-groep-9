@@ -20,13 +20,12 @@ try {
     if(isset($_POST['done']))
     {
 
-
         $bank = $_POST['bank'];
         $bankrekening = $_POST['bankrekening'];
         $controleoptie = $_POST['controle'];
         $creditcard = $_POST['creditcard'];
 
-        $update = $dbh->prepare("UPDATE Verkoper 
+        $update = $dbh->prepare("UPDATE Verkoper
                                           SET bank='$bank',
                                               bankrekening='$bankrekening',
                                               controleoptie='$controleoptie',

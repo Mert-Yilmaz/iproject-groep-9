@@ -1,7 +1,15 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
-    require 'functions.php';
-    require 'db.php';
-    error_reporting(E_ALL ^ E_NOTICE);
+require 'functions.php';
+
+require 'db.php';
+
+error_reporting(E_ALL ^ E_NOTICE);
 ?>
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
@@ -15,7 +23,10 @@
     <link rel="icon" href="img/logo2.PNG">
 </head>
 <body>
-    <?php include 'navbar.php'; ?>
+    <?php
+include 'navbar.php';
+
+?>
         <div class="grid-container">
             <div class="grid-y">
                 <h1 class="aboutkop">Over ons</h1>
@@ -29,11 +40,11 @@
                 een grote verscheidenheid van groepen, van Antiek en Kunst tot Zakelijke goederen.</p>
             <div class="cell">
                 <h1 class="aboutkop">Info</h1>
-                <p>EenmaalAndermaal-hoofdkantoor<br>
-                EenmaalAndermaal BV<br>
-                Ruitenberglaan 00<br>
-                1234 AB Arnhem<br>
-                Nederland<br></p>
+                <p>EenmaalAndermaal-hoofdkantoor<br />
+                EenmaalAndermaal BV<br />
+                Ruitenberglaan 00<br />
+                1234 AB Arnhem<br />
+                Nederland<br /></p>
             </div>
             </div>
             <div class="cell">
@@ -49,7 +60,8 @@
             </div>
         </div>
         <?php
-            include("footer.html");
-        ?>
+include ("footer.html");
+
+?>
 </body>
 </html>

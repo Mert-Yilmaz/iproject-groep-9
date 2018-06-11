@@ -12,14 +12,19 @@ session_start();
 if(isset($_SESSION['login-token'])) {
     $logintoken = $_SESSION['login-token'];
 
-    $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
+    $sqlquery = $dbh->prepare("SELECT gebruikersnaam
+                               FROM Gebruiker
+                               WHERE gebruikersnaam = '$logintoken'
+                               OR mailbox = '$logintoken'");
     $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
     $sqlquery->execute();
     $sessionQueryData = $sqlquery->fetch();
 
     $sessionGebruikersnaam = $sessionQueryData['gebruikersnaam'];
 
-    $getGebruikersnaamQuery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$sessionGebruikersnaam'");
+    $getGebruikersnaamQuery = $dbh->prepare("SELECT gebruikersnaam
+                                             FROM Gebruiker
+                                             WHERE gebruikersnaam = '$sessionGebruikersnaam'");
     $getGebruikersnaamQuery->setFetchMode(PDO::FETCH_ASSOC);
     $getGebruikersnaamQuery->execute();
     $getGebruikersnaamData = $getGebruikersnaamQuery->fetch();
@@ -27,9 +32,11 @@ if(isset($_SESSION['login-token'])) {
     $getGebruikersnaam = $getGebruikersnaamData['gebruikersnaam'];
     echo "<h1>$getGebruikersnaam</h1>";
 
-    $query = $dbh->prepare("SELECT V.voorwerpnummer, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox 
-                                 FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam
-                                 WHERE V.verkoper='$getGebruikersnaam'");
+    $query = $dbh->prepare("SELECT V.voorwerpnummer, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox
+                            FROM Voorwerp V
+                            INNER JOIN Gebruiker G
+                            ON v.verkoper = G.gebruikersnaam
+                            WHERE V.verkoper='$getGebruikersnaam'");
     $query->setFetchMode(PDO::FETCH_ASSOC);
     $query->execute();
     $data = $query->fetch();
@@ -74,9 +81,9 @@ if(isset($_SESSION['login-token'])) {
         $headers = 'From: ' . $from . "\r\n";
         mail($to, $subject, $message, $headers);
 
-        $sql = $dbh->prepare("UPDATE Voorwerp 
-                                   SET isMailVerstuurd=1 
-                                   WHERE voorwerpnummer=$voorwerpnummer");
+        $sql = $dbh->prepare("UPDATE Voorwerp
+                              SET isMailVerstuurd=1
+                              WHERE voorwerpnummer=$voorwerpnummer");
         $sql->setFetchMode(PDO::FETCH_ASSOC);
         $sql->execute();
     }

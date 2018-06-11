@@ -1,10 +1,17 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
     session_start();
     require 'functions.php';
     require 'db.php';
     error_reporting(E_ALL ^ E_NOTICE);
     if(!isset($_SESSION['WelkomPopUp'])){
-    $_SESSION['WelkomPopUp'];}
+      $_SESSION['WelkomPopUp'];
+    }
     if(!isset($top)){
       $top = 2;
     }

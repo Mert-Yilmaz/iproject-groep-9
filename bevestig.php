@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
 session_start();
 include 'functions.php';
@@ -57,9 +63,6 @@ error_reporting(E_ALL ^ E_NOTICE);
           move_uploaded_file($_FILES["plaatje4"]["tmp_name"], $target_file4);
         }
 
-$voorwerpid = 1 + $nRows;
-
-
           $titel = $_POST["titel"];
           $voorwerpid = $_POST["voorwerpid"];
           $beschrijving = $_POST["beschrijving"];
@@ -78,10 +81,10 @@ $voorwerpid = 1 + $nRows;
           $hoogstenummer = $_POST["rij1"];
           $hoogste = $dbh->query("SELECT rubrieknaam FROM Rubriek WHERE rubrieknummer = '$hoogstenummer'")->fetchColumn();
           $tijd = $_POST["time"];
-$voorwerpid = 1 + $nRows;
+          $voorwerpid = 1 + $nRows;
           $dag = $_POST['day'];
           $date1 = str_replace('-', '/', $begindag);
-  $einddag = date('m-d-Y',strtotime($date1 . "+$looptijd days"));
+          $einddag = date('m-d-Y',strtotime($date1 . "+$looptijd days"));
 
           echo
           "Titel: " . $titel . '<br>' .

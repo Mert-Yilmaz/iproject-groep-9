@@ -1,3 +1,9 @@
+/**
+ * Created by Atom
+ * User: Jeffrey Kragten
+ * Date: 25-5-2018
+ * Time: 12:34
+ */
 <?php
     require "functions.php";
     require "db.php";
@@ -52,13 +58,16 @@
         $tijd = date("H:i:s");
 
         if (!isset($_POST['feedbackdesc'])){
-            $commentaar = "";}
-        else { $commentaar = $_POST['feedbackdesc'];}
+            $commentaar = "";
+        }
+        else { $commentaar = $_POST['feedbackdesc'];
+        }
 
         if (isset($_POST['geef_feedback'])){
             $sql = "INSERT INTO Feedback VALUES (?,?,?,?,?,?)";
             $stmt = $dbh->prepare($sql);
-            $stmt->execute(array($voorwerp,$soortgebruiker,$feedback,$dag,$tijd,$commentaar));}
+            $stmt->execute(array($voorwerp,$soortgebruiker,$feedback,$dag,$tijd,$commentaar));
+        }
 
         require "footer.html";
     ?>

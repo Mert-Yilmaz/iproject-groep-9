@@ -27,7 +27,7 @@ if(isset($_GET['email']) && !empty($_GET['email']) && isset($_GET['code']) && !e
         $updatestmt->execute();
         header("Location: index.php");
     }
-} else {
+    } else {
     echo "<h3>Error, use link</h3>";
-}
+    }
 ?>

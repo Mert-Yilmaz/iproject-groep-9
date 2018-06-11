@@ -27,13 +27,13 @@ $editAccount = $_GET['edit_account'];
             $newZipcode = $_POST['zipcode'];
             $newCountry = $_POST['country'];
 
-            $update = $dbh->prepare("UPDATE Gebruiker 
-                                          SET mailbox='$newEmail',
-                                              adresregel1='$newAddress',
-                                              plaatsnaam='$newCity',
-                                              postcode='$newZipcode',
-                                              land='$newCountry'
-                                          WHERE mailbox='$editAccount'");
+            $update = $dbh->prepare("UPDATE Gebruiker
+                                     SET mailbox='$newEmail',
+                                         adresregel1='$newAddress',
+                                         plaatsnaam='$newCity',
+                                         postcode='$newZipcode',
+                                         land='$newCountry'
+                                     WHERE mailbox='$editAccount'");
 
             $update->execute();
         header('location: personpage.php');
