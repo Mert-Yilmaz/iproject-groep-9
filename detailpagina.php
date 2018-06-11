@@ -43,9 +43,20 @@
                 <?php biedingenItem($dbh); ?>
               </div>
               <div class="cell large-4 medium-5">
-                <?php if(isset($_SESSION['login-token'])) {
-                biedOpItem($dbh);}
-                else{
+                <?php
+                $itemID = $_GET['item'];
+                $geslotenQuery = $dbh->prepare("SELECT * FROM Voorwerp WHERE voorwerpnummer = '$itemID'");
+                $geslotenQuery->setFetchMode(PDO::FETCH_ASSOC);
+                $geslotenQuery->execute();
+                $queryData = $geslotenQuery->fetch();
+                $veilingGesloten = $queryData['veilingGesloten'];
+
+                if(isset($_SESSION['login-token'])) {
+                biedOpItem($dbh);
+                    if($veilingGesloten == 1) {
+                        echo "<p>Deze veiling is gesloten!</p>";
+                    }
+                } else {
                   echo "<a href='login-page.php'>Log in om te kunnen bieden</a>";
                 } ?>
               </div>
