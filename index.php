@@ -3,8 +3,6 @@
     require 'functions.php';
     require 'db.php';
     error_reporting(E_ALL ^ E_NOTICE);
-    if(!isset($_SESSION['WelkomPopUp'])){
-    $_SESSION['WelkomPopUp'];}
 ?>
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
