@@ -8,8 +8,8 @@ if(isset($_SESSION['login_token'])){
 unset($_SESSION['login_token']);
 
 if(session_destroy()) {
+    $_SESSION['WelkomPopUp'] = 1;
     header("Location: index.php");
 }
 
-$_SESSION['WelkomPopUp'] = 1;
 ?>
