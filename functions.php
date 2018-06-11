@@ -705,21 +705,383 @@
              mail($to, $subject, $message, $headers);
            }
          }
-     }
- }
- zendMailVerloopVeiling($dbh);
- function plaatsItem($dbh) {
-   $forms = '';
-   $forms .=
-   $forms .= '
-         <form action="bevestig.php" method="post" enctype="multipart/form-data">
-         <div>
-            <label>Naam van het Product</label>
-            <input type="text" name="titel" placeholder="Titel" maxlength="18">
-          </div>';
-          $forms .= "<label>Hoofdrubriek<label>
-                     <select name = rij1>";
-          $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
+         else if ($keywords !== "" && $minprijs !== "" && $maxprijs !== "" && $minprijs <= $maxprijs){
+                echo "<div class='$zoekWoord'>";
+                $parts = explode(" ", $keywords);
+                echo "U heeft gezocht op: " . $keywords . "</div>";
+                //for ($i=0; $i < count($parts); $i++) {
+                  //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
+
+                  $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+
+             foreach($parts as $k){
+                 $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
+             }
+                 $sql .= " AND (startprijs >= $minprijs AND startprijs <= $maxprijs)";
+
+             //$result = mysql_query($sql);
+
+                  try{
+                    $sql = $dbh->query($sql);
+                    $sql->execute();
+                    //$item = $row['titel'];
+                    while($row = $sql->fetch()) {
+                        echo '<li><a href="detailpagina.php?item=' . $row['voorwerpnummer'] . '">
+                             ' . $row['titel'] . '(€' . $row['startprijs'] . ')';
+                    }
+                  } catch(PDOException $e) {
+                      echo "Er is iets mis gegaan. De foutmelding is: $e";
+                  }
+                }
+         else if ($keywords !== "" && $minprijs !== "" && $maxprijs !== "" && $minprijs > $maxprijs){
+           header("Location: index.php");
+         }
+}
+//}
+// Haalt het antal items op in een Rubriek
+function aantalItems($dbh, $rubrieknummer) {
+  $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
+                          FROM	 Rubriek r INNER JOIN VoorwerpInRubriek v
+                          ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
+                          INNER JOIN Voorwerp vv
+                          ON v.voorwerp = vv.voorwerpnummer
+                          WHERE vv.isToegestaan = 1 AND rubriekOpHoogsteNiveau = :rubrieknummer");
+  $query->bindParam(':rubrieknummer', $rubrieknummer);
+  $query->execute();
+  while($row = $query->fetch()) {
+      echo $row['Aantal_items'];
+  }
+}
+
+
+// Haalt het antal items op in een Rubriek
+function aantalItemsSub($dbh, $rubrieknummer, $rubriek) {
+  $query = $dbh->prepare("SELECT COUNT(rubrieknummer) AS Aantal_items
+                          FROM	 Rubriek r INNER JOIN VoorwerpInRubriek v
+                          ON r.rubrieknummer = v.rubriekOpLaagsteNiveau
+                          INNER JOIN Voorwerp vv
+                          ON v.voorwerp = vv.voorwerpnummer
+                          WHERE vv.isToegestaan = 1 AND rubriekOpLaagsteNiveau = :rubrieknummer");
+  $query->bindParam(':rubrieknummer', $rubrieknummer);
+  $query->execute();
+  while($row = $query->fetch()) {
+    if($row['Aantal_items'] != 0){
+      echo $row['Aantal_items'];
+      }
+    }
+}
+
+
+// Toont PRODUCTEN op producten.php
+function toonItems($dbh, $zoekWoord) {
+  try{
+      $query = $dbh->prepare("SELECT *, v.voorwerpnummer
+                              FROM	Voorwerp v
+                              INNER JOIN VoorwerpInRubriek vi
+                              ON v.voorwerpnummer = vi.voorwerp
+                              INNER JOIN Rubriek r
+                              ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
+                              WHERE v.isToegestaan = 1 AND vi.rubriekOpLaagsteNiveau IN (SELECT rubrieknummer
+                                                                  FROM Rubriek
+                                                                  WHERE rubrieknaam LIKE :zoekwoord)
+                              ORDER BY v.looptijdEindeTijdstip ASC");
+      $query->bindParam(':zoekwoord', $zoekWoord);
+      $query->execute();
+      while($row = $query->fetch()) {
+          echo "<li><a href='detailpagina.php?item=". $row['voorwerpnummer'] . "'><strong>" . $row['titel'] . '</strong></a> ||' . ' startprijs: ' . $row['startprijs'] . '</li>';
+      }
+  } catch(PDOException $e) {
+      echo "Er is iets mis gegaan. De foutmelding is: $e";
+  }
+}
+//Toont BREADCRUMBS voor Producten
+function productBreadCrumbs($dbh, $zoekWoord) {
+  $breadcrumb;
+  if(isset($_GET['rubriek'])) {
+    $breadcrumb .= '<nav aria-label="You are here: "role="navigation">
+                   <ul class="breadcrumbs">
+                   <li><a href="index.php">Home</a></li>';
+                   if(isset($_GET['rubriek2'])) {
+                    $breadcrumb .=  '<li><a href="producten.php?rubriek='
+                                    . $_GET['rubriek2'] . '">' . $_GET['rubriek2']
+                                    . '</a></li>';
+                   }
+                   $breadcrumb .= '<li>' . $_GET['rubriek'] . '</li>
+                                  </ul></nav';
+    echo $breadcrumb;
+    echo Category($dbh, $zoekWoord);
+}
+  else { echo '<nav aria-label="You are here: "role="navigation">
+              <ul class="breadcrumbs">
+              <li><a href="index.php">Home</a></li>
+              <li>Producten</li>
+              </ul>
+              </nav';
+  }
+}
+//Toont BREADCRUMBS voor de website
+function breadCrumbs($dbh, $zoekWoord) {
+  echo '<nav aria-label="You are here: "role="navigation">
+        <ul class="breadcrumbs">
+        <li><a href="index.php">Home</a></li>
+        <li>' . $zoekWoord . '</li>
+        </ul>
+        </nav';
+}
+// Haalt RUBRIEKEN op de Database
+function Category($dbh, $zoekWoord) {
+  $query = $dbh->prepare("SELECT *
+                          FROM	 Rubriek
+                          WHERE rubrieknaam = :zoekwoord");
+  $query->bindParam(':zoekwoord', $zoekWoord);
+  $query->execute();
+  while($row = $query->fetch()) {
+    $rubrieknummer = $row['rubrieknummer'];
+    $rubrieknaam = $row['rubrieknaam'];
+    subCategory($dbh, $rubrieknummer, $rubrieknaam);
+  }
+}
+// Haalt SUBRUBRIEKEN op de Database
+function subCategory($dbh, $rubrieknummer, $rubrieknaam) {
+  $query = $dbh->prepare("SELECT *
+                          FROM	 Rubriek
+                          WHERE rubriek = :rubrieknummer");
+  $query->bindParam(':rubrieknummer', $rubrieknummer);
+  $query->execute();
+  while($row = $query->fetch()) {
+    echo '<li><a href="producten.php?rubriek=' . $row['rubrieknaam'] .
+         '&rubriek2=' . $rubrieknaam . '" class="rubrieken">
+         ' . $row['rubrieknaam'] . '</a></li>';
+         echo aantalItemsSub($dbh, $row['rubrieknummer'], $row['rubriek']);
+  }
+}
+// Laat de details van een item zien
+function detailPagina($dbh) {
+    $getNummer = $_GET['item'];
+
+    $queryVoorwerpgegevens = $dbh->prepare("SELECT * FROM Voorwerp WHERE voorwerpnummer = '$getNummer'"); //voorwerpnummer = :voorwerpnummer?
+    //$queryVoorwerpgegevens->bindParam(':voorwerpnummer',$getNummer);?
+    $queryVoorwerpgegevens->setFetchMode(PDO::FETCH_ASSOC);
+    $queryVoorwerpgegevens->execute();
+    while($voorwerpData = $queryVoorwerpgegevens->fetch()) {
+        $titel = $voorwerpData['titel'];
+        $verkoper = $voorwerpData['verkoper'];
+        $beschrijving = $voorwerpData['beschrijving'];
+        $plaats = $voorwerpData['plaatsnaam'];
+        $betalingsinstructie = $voorwerpData['betalingsinstructie'];
+        $betalingswijze = $voorwerpData['betalingswijze'];
+        $land = $voorwerpData['land'];
+        $vraagprijs = $voorwerpData['verkoopprijs'];
+        $startprijs = $voorwerpData['startprijs'];
+        $looptijddagen = $voorwerpData['looptijd'];
+        $einddatum = $voorwerpData['looptijdEindeDag'];
+        $eindtijd = $endtime = date_create($voorwerpData['looptijdEindeTijdstip']);
+
+        echo "<h1 class= 'aboutkop'> " . $titel  . "</h1><br>
+    <div class='grid-x grid-padding-x imageborder'>
+      <div class='small-12'>
+        <div class='orbit' role='region' aria-label='Favorite Space Pictures' data-orbit>
+          <div class='orbit-wrapper'>
+            <div class='orbit-controls'>
+              <button class='orbit-previous'><span class='show-for-sr'>Previous Slide</span>&#9664;&#xFE0E;</button>
+              <button class='orbit-next'><span class='show-for-sr'>Next Slide</span>&#9654;&#xFE0E;</button>
+            </div>
+            <ul class='orbit-container'>";
+
+        //slider
+        $bestandQuery = $dbh->prepare("SELECT * FROM Bestand WHERE voorwerp = '$getNummer'");
+        $bestandQuery->setFetchMode(PDO::FETCH_ASSOC);
+        $bestandQuery->execute();
+        while($bestandData = $bestandQuery->fetch()) {
+            $directory = '';
+            $file1 = $bestandData['filenaam'];
+            if(substr( $file1, 0, 3 ) === "dt_") {
+                $directory = 'http://iproject9.icasites.nl/pics/';
+            } else {
+                $directory = 'img/veilingen/';
+            }
+            $file = $directory . $file1;
+
+            $illustratieArray['filenaam'] = $file;
+
+            foreach($illustratieArray as $image) {
+                echo "<li class='orbit-slide'>
+                        <figure class='orbit-figure'>
+                            <img class='orbit-image' src= " . $image . " alt='Space'>
+                        </figure>
+                    </li>";
+            }
+        }
+
+        echo "
+        </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class= 'grid-x grid-padding-x' style='padding-top: 2%;'>
+      <div class= 'cell large-8 medium-7'>
+        <table>
+          <tr>
+            <th>Verkoper</th>
+            <td>" . $verkoper . "</td>
+          </tr>
+          <tr>
+            <th>Beschrijving</th>
+            <td>" . htmlspecialchars($beschrijving) . "</td>
+          </tr>
+          <tr>
+            <th>Plaats</th>
+            <td>" . $plaats . "</td>
+          </tr>
+          <tr>
+            <th>Betalingsinstructie</th>
+            <td>" . $betalingsinstructie . "</td>
+          </tr>
+          <tr>
+            <th>Betalingswijze</th>
+            <td>" . $betalingswijze . "</td>
+         </tr>
+          <tr>
+            <th>Land</th>
+            <td>" . $land . "</td>
+          </tr>
+        </table>
+      </div>
+      <div class='cell large-4 medium-5 right'>
+        <table>
+          <tr>
+            <th>Vraagprijs</th>
+            <td> €" . $vraagprijs . ",- </td>
+          </tr>
+          <tr>
+            <th>Startprijs</th>
+            <td> €" . $startprijs . ",- </td>
+          </tr>
+          <tr>
+            <th>Looptijd</th>
+            <td>" . $looptijddagen . " dagen</td>
+          </tr>
+          <tr>
+            <th>Einddatum</th>
+            <td>" . $einddatum . "</td>
+          </tr>
+            <tr>
+            <th>Tijdstip einde</th>
+            <td>" . date_format($eindtijd, "H:i:s") . "</td>
+          </tr>
+        </table>
+      </div>
+    </div>";
+    }
+}
+// Toont details van de 3 hoogste biedingen op het Item
+function biedingenItem($dbh) {
+  $voorwerpnummer = $_GET['item'];
+  try{
+    $query = $dbh->prepare("SELECT TOP(3) *
+                            FROM Bod
+                            WHERE voorwerp = $voorwerpnummer
+                            ORDER BY bodbedrag DESC");
+    $query->execute();
+  } catch(PDOException $e) {
+      echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+  }
+  while($row = $query->fetch()){
+    $bodbedrag = $row['bodbedrag'];
+    $gebruiker = $row['gebruiker'];
+    $boddag = $row['boddag'];
+    $bodtijdstip = date_create($row['bodtijdstip']);
+    echo "<ul>
+          <li>Geboden bodbedrag: €$bodbedrag,-</li>
+          <li>Geboden door: $gebruiker<li>
+          <li>Datum: $boddag</li>
+          <li>Tijdstip: " . date_format($bodtijdstip, 'H:i:s'). " </li>
+          </ul>";
+  }
+}
+
+
+// Gebruiker plaatst een bod binnen de richtlijnen
+function biedOpItem($dbh) {
+    echo "<form action='#' method='POST'>
+            <input type='text' name='bodbedrag' placeholder='Vul hier uw gewenste bod in.'>
+            <input type='hidden' name='datum' value=" . date("m/d/Y") . ">
+            <input type='hidden' name='tijd' value=" . date("H:i") . ">
+            <input type='submit' class='knop' value='Bied' name='submit'>
+          </form>";
+    if (isset($_POST["submit"])){
+    $voorwerpnummer = $_GET['item'];
+    $bodbedrag = $_POST["bodbedrag"];
+    $boddag = $_POST["datum"];
+    $bodtijdstip = $_POST["tijd"];
+    $usernamemail = $_SESSION['login-token'];
+    try{
+      $query = $dbh->prepare("SELECT *
+                              FROM Gebruiker
+                              WHERE gebruikersnaam = '$usernamemail'
+                              OR mailbox = '$usernamemail'");
+      $query->setFetchMode(PDO::FETCH_ASSOC);
+      $query->execute();
+      $data = $query->fetch();
+      $gebruiker = $data['gebruikersnaam'];
+    } catch(PDOException $e) {
+        echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+    }
+    try {
+      $query = $dbh->prepare("SELECT TOP(1) *
+                              FROM Bod
+                              WHERE voorwerp = $voorwerpnummer
+                              ORDER BY bodbedrag DESC");
+      $query->setFetchMode(PDO::FETCH_ASSOC);
+      $query->execute();
+      $data = $query->fetch();
+      $hoogstebod = $data['bodbedrag'];
+    } catch(PDOException $e) {
+        echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+    }
+    try{
+      if($bodbedrag < 50) {
+        if($bodbedrag >= $hoogstebod + 0.5) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ("Bedrag te laag!");
+      }
+      if($bodbedrag > 50 && $bodbedrag < 500) {
+        if($bodbedrag >= $hoogstebod + 1) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ($e);
+      }
+      if($bodbedrag > 500 && $bodbedrag < 1000) {
+        if($bodbedrag >= $hoogstebod + 5) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ($e);
+      }
+      if($bodbedrag > 1000 && $bodbedrag < 5000) {
+        if($bodbedrag >= $hoogstebod + 10) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+          $query->execute();
+        }
+        else throw new PDOException ($e);
+      }
+      if($bodbedrag > 5000) {
+        if($bodbedrag >= $hoogstebod + 50) {
+          $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
           $query->execute();
           while($row = $query->fetch()) {
               $forms .= "<option value = ". $row['rubrieknummer'] .">" . $row['rubrieknaam'] . "</option>";

@@ -30,6 +30,7 @@ FROM iproject9.dbo.Users
 
 /* Categorieen in Rubriek */
 -- Dit staat in commentaar omdat we de huidige rubriekenlijst al handmatig in onze database hadden gezet
+-- Daarnaast moeten er waarden in Rubriek staan, omdat de voorwerpen anders niet geplaatst kunnen worden.
 /*
 INSERT INTO iproject9.dbo.Rubriek
 SELECT	ID AS rubrieknummer,
@@ -42,8 +43,8 @@ FROM iproject9.dbo.Categorieen
 /* Items en Illustraties in Voorwerp, VoorwerpInRubriek en Bestand */
 INSERT INTO iproject9.dbo.Voorwerp(voorwerpnummer, titel, beschrijving, land, verkoper, startprijs,  betalingswijze, plaatsnaam, looptijdBeginDag, looptijdBeginTijdstip, looptijdEindeDag, looptijdEindeTijdstip, veilingGesloten)
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerpnummer,
-		CAST(Titel AS CHAR(18)) AS titel,
-		CAST(Beschrijving AS CHAR(22)) AS beschrijving,
+		CAST(Titel AS VARCHAR(25)) AS titel,
+		CAST(Beschrijving AS VARCHAR(50)) AS beschrijving,
 		CAST(Locatie AS CHAR(20)) AS land,
 		CAST(Verkoper AS VARCHAR(20)) AS verkoper,
 		CAST(Prijs AS NUMERIC(20,2)) AS startprijs,
@@ -61,6 +62,10 @@ INSERT INTO iproject9.dbo.VoorwerpInRubriek(voorwerp, rubriekOpLaagsteNiveau, ru
 SELECT	CAST(ID AS NUMERIC(20)) AS voorwerp,
 		Categorie AS rubriekOpLaagsteNiveau,
 		rubriekOpHoogsteNiveau = -1
+		-- Hiervoor dient nog een functie geschreven te worden die de hoofdcategorie ophaalt, om zo de breadcrumbs te laten werken.
+		-- Omdat onze externe populatie zich op dit moment bevindt in de categorie 'Modelbouw en miniaturen',
+		-- is de hoogste rubriek hardcoded op 1188 gezet.
+		-- Op -1 (Root) worden de veilingen niet aan de hoofdrubrieken toegevoegd.
 FROM iproject9.dbo.Items
 
 GO
