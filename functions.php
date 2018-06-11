@@ -1287,7 +1287,7 @@ function biedOpItem($dbh) {
         $todayDate = date("Y-m-d");                         //today
         $todayTime = date("H:i:s");                         //today
 
-        if(($todayDate == $formattedDate && $todayTime >= $formattedTime) || $todayDate > $formattedDate && $veilingGesloten == 0){
+        if((($todayDate == $formattedDate && $todayTime >= $formattedTime) || $todayDate > $formattedDate) && $veilingGesloten == 0){
             //DB date is vandaag en tijd > vandaag, of de date is al geweest.
             $update = $dbh->prepare("UPDATE Voorwerp SET veilingGesloten = 1 WHERE voorwerpnummer = '$itemID' AND veilingGesloten = 0");
             $update->execute();
