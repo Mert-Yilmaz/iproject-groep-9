@@ -1267,7 +1267,7 @@ function biedOpItem($dbh) {
  function sluitVeilingen($dbh) {
     //date_default_timezone_get("Europe/Amsterdam");
 
-    $query = $dbh->prepare("SELECT * FROM Voorwerp");
+    $query = $dbh->prepare("SELECT * FROM Voorwerp WHERE veilingGesloten = 0");
     $query->setFetchMode(PDO::FETCH_ASSOC);
     $query->execute();
 
