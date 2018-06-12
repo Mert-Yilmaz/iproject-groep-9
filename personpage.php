@@ -92,7 +92,7 @@ $data2 = $queryv2->fetch();
             <?php } ?>
             <div class=knoppenbalk>
                 <ul>
-                  <li><a class= "knop" href="editPersonpage.php?edit_account=<?= $rownaw['mailbox']?>">Wijzig NAW-gegevens</a></li><br>
+                  <li><a class= "knop" href="editPersonpage.php?edit_account=<?php echo $getMail; ?>">Wijzig NAW-gegevens</a></li><br>
                 <?php
                     if ($data['verkoper'] == 1) { echo "<li><a class='knop' href='verkooppage.php'>Klik hier om te verkopen</a></li><br>";}
                     if($getUsername == 'Admin') { echo "<li><a class='knop' href='admin/dashboard.php'>Beheeromgeving</a><li><br>
