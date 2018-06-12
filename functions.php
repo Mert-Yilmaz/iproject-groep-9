@@ -745,10 +745,10 @@ function plaatsItem($dbh) {
         <form action="bevestig.php" method="post" enctype="multipart/form-data">
         <div>
            <label>Naam van het Product</label>
-           <input type="text" name="titel" placeholder="Titel" maxlength="18">
+           <input type="text" name="titel" placeholder="Titel" maxlength="18" required>
          </div>';
          $forms .= "<label>Hoofdrubriek<label>
-                    <select name = rij1>";
+                    <select required name = rij1>";
          $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
          $query->execute();
          while($row = $query->fetch()) {
@@ -756,32 +756,32 @@ function plaatsItem($dbh) {
          }
   $forms .= '</select>
   <div>
-    <label>Voeg een kleine beschrijving toe</label>
-    <textarea rows="4" name="beschrijving" placeholder="Geef hier de beschrijving van het product.. (optioneel)" maxlength="22" required></textarea>
+    <label>Voeg een beschrijving toe</label>
+    <textarea rows="4" name="beschrijving" placeholder="Geef hier de beschrijving van het product" maxlength="22" required></textarea>
   </div>
   <div>
-    <label>Prijs in: €</label>
+    <label>Startprijs</label>
     <input type="text" name="startprijs" placeholder="99999.99 (Startprijs)" maxlength="8" required>
   </div>
   <div>
-    <label>Hoe wil je worden betaald?</label>
-    <select name="betalingswijze">
+    <label>Betalingswijze</label>
+    <select name="betalingswijze" required>
       <option value disabled selected>Kies een betalingswijze</option>
       <option value="IDeal/PayPal">IDeal/Paypal</option>
       <option value="Creditcard">Creditcard</option>
     </select>
   </div>
   <div>
-    <label>Geef hier nog wat extra betaalinstructies</label>
-    <input type="text" name="betalingsinstructie" placeholder="Geef hier aanvullende betaal instructies" maxlength="30">
+    <label>Aanvullende betalingsinstructies</label>
+    <input type="text" name="betalingsinstructie" placeholder="Geef hier aanvullende betaal instructies (optioneel)" maxlength="30">
   </div>
   <div>
-    <label>Waar wil je het item aanbieden?</label>
-    <input type="text" name="plaats" placeholder="Plaats naam" maxlength="12">
+    <label>Plaats</label>
+    <input type="text" name="plaats" placeholder="Plaatsnaam" maxlength="12" required>
   </div>
   <div>
-    <label>In welk land wil je het item aanbieden?</label>
-    <select name="land">';
+    <label>Land</label>
+    <select name="land" required>';
     $query2 = $dbh->prepare("SELECT * FROM tblIMAOLand");
     $query2->execute();
     while($row = $query2->fetch()) {
@@ -792,8 +792,8 @@ function plaatsItem($dbh) {
     </select>
   </div>
   <div>
-    <label>Hoe lang wil je het product aanbieden?</label>
-    <select name="looptijd">
+    <label>Selecteer looptijd (in dagen)</label>
+    <select name="looptijd" required>
       <option value selected disabled>Selecteer de looptijd in dagen</option>
       <option value = "3"> 1 </option>
       <option value = "3"> 3 </option>
@@ -803,11 +803,11 @@ function plaatsItem($dbh) {
     </select>
   </div>
   <div>
-    <label>Hoe hoog zijn de verzendkosten</label>
+    <label>Eventuele verzendkosten</label>
     <input type="text" name="verzendkosten" placeholder="99.99 (Verzendkosten)" maxlength="5">
   </div>
     <div>
-    <label>Eventuele verdere verzendinstructies?</label>
+    <label>Eventuele verdere verzendinstructies</label>
     <textarea rows="4" name="verzendinstructies" placeholder="Geef hier instructies voor het verzenden.. (optioneel)" maxlength="30"></textarea>
   </div>
     <div>
