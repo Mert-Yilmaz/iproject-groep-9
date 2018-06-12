@@ -743,10 +743,7 @@ function plaatsItem($dbh) {
   $forms .=
   $forms .= '
         <form action="bevestig.php" method="post" enctype="multipart/form-data">
-        <div>
-           <label>Naam van het Product</label>
-           <input type="text" name="titel" placeholder="Titel" maxlength="18" required>
-         </div>';
+        ';
          $forms .= "<label>Hoofdrubriek<label>
                     <select required name = rij1>";
          $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
