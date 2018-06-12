@@ -678,7 +678,7 @@ function biedOpItem($dbh) {
                         $query->execute();
                     } else throw new PDOException ("Bedrag te laag!");
                 }
-                if ($bodbedrag > 50 && $bodbedrag < 500) {
+                if ($bodbedrag >= 50 && $bodbedrag < 500) {
                     if ($bodbedrag >= $hoogstebod + 1) {
                         $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
@@ -686,7 +686,7 @@ function biedOpItem($dbh) {
                         $query->execute();
                     } else throw new PDOException ($e);
                 }
-                if ($bodbedrag > 500 && $bodbedrag < 1000) {
+                if ($bodbedrag >= 500 && $bodbedrag < 1000) {
                     if ($bodbedrag >= $hoogstebod + 5) {
                         $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
@@ -694,7 +694,7 @@ function biedOpItem($dbh) {
                         $query->execute();
                     } else throw new PDOException ($e);
                 }
-                if ($bodbedrag > 1000 && $bodbedrag < 5000) {
+                if ($bodbedrag >= 1000 && $bodbedrag < 5000) {
                     if ($bodbedrag >= $hoogstebod + 10) {
                         $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
@@ -702,7 +702,7 @@ function biedOpItem($dbh) {
                         $query->execute();
                     } else throw new PDOException ($e);
                 }
-                if ($bodbedrag > 5000) {
+                if ($bodbedrag >= 5000) {
                     if ($bodbedrag >= $hoogstebod + 50) {
                         $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
