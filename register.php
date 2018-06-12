@@ -1,9 +1,3 @@
-/**
- * Created by Atom
- * User: Jeffrey Kragten
- * Date: 25-5-2018
- * Time: 12:34
- */
 <?php
 require "functions.php";
 require "db.php";
@@ -63,34 +57,13 @@ error_reporting(E_ALL ^ E_NOTICE);
                         <input type="text" name="Postcode" placeholder="Postcode, verplicht" maxlength="7" required>
                     </div>
                     <div>
-                        <select name="Land">
-                            <option value disabled selected>Selecteer een land, verplicht</option>
-                            <option value="Afghanistan"> Afghanistan</option>
-                            <option value="Albania"> Albanië</option>
-                            <option value="Algerije"> Algerije</option>
-                            <option value="Amerikaans Samoa"> Amerikaans Samoa</option>
-                            <option value="Andorra"> Andorra</option>
-                            <option value="Angola"> Angola</option>
-                            <option value="Anguilla"> Anguilla</option>
-                            <option value="Antartica"> Antarctica</option>
-                            <option value="Antigua en Barbuda"> Antigua en Barbuda</option>
-                            <option value="Argentina"> Argentinië</option>
-                            <option value="Armenia"> Armenië</option>
-                            <option value="Aruba"> Aruba</option>
-                            <option value="Nederland"> Nederland</option>
-                            <option value="Czech Republic"> Czech Republic</option>
-                            <option value="Denemarken"> Denemarken</option>
-                            <option value="Djibouti"> Djibouti</option>
-                            <option value="Dominica"> Dominica</option>
-                            <option value="Guatemala"> Guatemala</option>
-                            <option value="Guinea"> Guinea</option>
-                            <option value="Guinee-Bissau"> Guinee-Bissau</option>
-                            <option value="Guyana"> Guyana</option>
-                            <option value="Haiti"> Haïti</option>
-                            <option value="Heilige Stoel"> Heilige Stoel (Vaticaanstad)</option>
-                            <option value="Honduras"> Honduras</option>
-                            <option value="Turkije"> Turkije</option>
-                            <option value="Anders"> Overig</option>
+                        <select name="Land" required>
+                            $query2 = $dbh->prepare("SELECT * FROM tblIMAOLand");
+                            $query2->execute();
+                            while($row = $query2->fetch()) {
+                                $forms .= "<option value = ". $row['NAAM_LAND'] .">" . $row['NAAM_LAND'] . "</option>";
+                            }
+                            $forms .='
                         </select>
                     </div>
                     <div>
@@ -147,7 +120,6 @@ error_reporting(E_ALL ^ E_NOTICE);
             $from    = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Verificatie account EenmaalAndermaal';
             $message = '
-
             Beste ' . $voornaam . ',
             Bedankt voor het aanmelden op EenmaalAndermaal!
             Om mee te kunnen bieden en in te kunnen loggen moet u uw account activeren aan de hand van de onderstaande link.
