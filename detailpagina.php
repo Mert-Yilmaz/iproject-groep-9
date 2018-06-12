@@ -40,7 +40,7 @@
                 <?php if(isset($_SESSION['login-token'])) {
                 biedOpItem($dbh);}
                 else{
-                  echo "<a href='login-page.php'>Log in om te kunnen bieden</a>";
+                  echo "<p>Je moet ingelogd zijn om mee te bieden.</p><a href='login-page.php'>Klik hier om in te loggen.</a>";
                 } ?>
               </div>
           </div>
