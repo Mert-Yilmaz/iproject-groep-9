@@ -90,8 +90,8 @@ function hot_items($dbh){
             <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
      </div>';
-      echo $output;
   }
+    echo $output;
 }
 //Aflopende Items (Selecteert 3 items die het snelst aflopen)
 function ending_items($dbh){
