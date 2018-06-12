@@ -1,9 +1,3 @@
-/**
- * Created by Atom
- * User: Jeffrey Kragten
- * Date: 25-5-2018
- * Time: 12:34
- */
 <?php
   session_start();
   include 'functions.php';
@@ -12,12 +6,12 @@
   $usernamemail = $_SESSION['login-token'];
   //is de pagina geblokkeerd?:
   $voorwerpnummer = $_GET['item'];
-  $ItemBlok = $dbh->prepare("SELECT isToegestaan AS antwoord FROM Voorwerp
+  $ItemBlok = $dbh->prepare("SELECT isToegestaan AS antwoord, veilingGesloten FROM Voorwerp
                             WHERE voorwerpnummer = :voorwerpnummer ");
   $ItemBlok->bindParam(':voorwerpnummer', $voorwerpnummer);
   $ItemBlok->execute();
   while($row = $ItemBlok->fetch()){
-    if($row['antwoord'] == 0){
+    if($row['antwoord'] == 0 || $row['veilingGesloten'] == 1){
     header('Location: index.php');
     }
   }
@@ -43,20 +37,9 @@
                 <?php biedingenItem($dbh); ?>
               </div>
               <div class="cell large-4 medium-5">
-                <?php
-                $itemID = $_GET['item'];
-                $geslotenQuery = $dbh->prepare("SELECT * FROM Voorwerp WHERE voorwerpnummer = '$itemID'");
-                $geslotenQuery->setFetchMode(PDO::FETCH_ASSOC);
-                $geslotenQuery->execute();
-                $queryData = $geslotenQuery->fetch();
-                $veilingGesloten = $queryData['veilingGesloten'];
-
-                if(isset($_SESSION['login-token'])) {
-                biedOpItem($dbh);
-                    if($veilingGesloten == 1) {
-                        echo "<p>Deze veiling is gesloten!</p>";
-                    }
-                } else {
+                <?php if(isset($_SESSION['login-token'])) {
+                biedOpItem($dbh);}
+                else{
                   echo "<a href='login-page.php'>Log in om te kunnen bieden</a>";
                 } ?>
               </div>
