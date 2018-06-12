@@ -190,27 +190,27 @@ function zoekRubriek($dbh, $zoekWoord, $order, $keywords, $minprijs, $maxprijs) 
   if($order == "COUNT ASC") {
       $order = 'SELECT *
                           FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
-                          WHERE rubriek = -1
+                          WHERE rubriek = -1 AND r.isToegestaan = 1
                           GROUP BY rubrieknummer, rubrieknaam, rubriek, volgnr, voorwerp, rubriekOpHoogsteNiveau, rubriekOpLaagsteNiveau
                           ORDER BY COUNT(rubrieknummer) ASC';
   }
   if($order == "COUNT DESC") {
       $order = 'SELECT *
                           FROM	Rubriek r INNER JOIN VoorwerpInRubriek v ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
-                          WHERE rubriek = -1
+                          WHERE rubriek = -1 AND r.isToegestaan = 1
                           GROUP BY rubrieknummer, rubrieknaam, rubriek, volgnr, voorwerp, rubriekOpHoogsteNiveau, rubriekOpLaagsteNiveau
                           ORDER BY COUNT(rubrieknummer) DESC';
   }
   if($order == "rubrieknaam ASC") {
       $order = 'SELECT *
                                 FROM	Rubriek
-                                WHERE rubriek = -1
+                                WHERE rubriek = -1 AND isToegestaan = 1
                                 ORDER BY rubrieknaam ASC';
   }
   if($order == "rubrieknaam DESC") {
       $order = 'SELECT *
                                 FROM	Rubriek
-                                WHERE rubriek = -1
+                                WHERE rubriek = -1 AND isToegestaan = 1
                                 ORDER BY rubrieknaam DESC';
   }
   if(isset($_POST['zoeken']) && $_POST['zoekterm'] !== "") {
@@ -219,14 +219,14 @@ function zoekRubriek($dbh, $zoekWoord, $order, $keywords, $minprijs, $maxprijs) 
     $query = $dbh->query("SELECT *
                           FROM	Rubriek
                           WHERE rubriek = -1
-                          AND   rubrieknaam LIKE '%$zoekWoord%'
+                          AND   rubrieknaam LIKE '%$zoekWoord%' AND isToegestaan = 1
                           ORDER BY rubrieknaam ASC");
    } else if(isset($_POST['order'])) {
      $query = $dbh->query($order);
    }
    else { $query = $dbh->query('SELECT *
                                FROM	Rubriek
-                               WHERE rubriek = -1
+                               WHERE rubriek = -1 AND isToegestaan = 1
                                ORDER BY rubrieknaam ASC');
    }
    if($keywords == ""){
