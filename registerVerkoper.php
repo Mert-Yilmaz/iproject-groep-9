@@ -75,7 +75,12 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
                 $bank = $_POST['bank'];
                 $bankrekening = $_POST['bankrekening'];
                 $controleoptie = $_POST['controle'];
-                $creditcard = $_POST['creditcard'];
+                
+                if($controleoptie == 'Creditcard') {
+                    $creditcard = $_POST['creditcard'];
+                } else {
+                    $creditcard = NULL;
+                }
 
                 //Stop gegevens in db tabel Verkoper
                 $insert = $dbh->prepare("INSERT INTO Verkoper
