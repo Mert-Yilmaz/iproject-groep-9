@@ -67,23 +67,23 @@ $getLand = $data['land'];
     </div>
     <div class="input-group">
         <label>Wachtwoord</label>
-        <input type="password" name="password" placeholder="Wachtwoord">
+        <input type="password" name="password" placeholder="Wachtwoord" maxlength="100">
     </div>
     <div class="input-group">
         <label>Adres</label>
-        <input type="text" name="address" placeholder="Adres" value="<?= $data['adresregel1'] ?>">
+        <input type="text" name="address" placeholder="Adres" value="<?= $data['adresregel1'] ?>" maxlength="30" required>
     </div>
     <div class="input-group">
         <label>Plaats</label>
-        <input type="text" name="city" placeholder="Plaats" value="<?= $data['plaatsnaam'] ?>">
+        <input type="text" name="city" placeholder="Plaats" value="<?= $data['plaatsnaam'] ?>" maxlength="15" required>
     </div>
     <div class="input-group">
         <label>Postcode</label>
-        <input type="text" name="zipcode" placeholder="Postcode" value="<?= $data['postcode'] ?>">
+        <input type="text" name="zipcode" placeholder="Postcode" value="<?= $data['postcode'] ?>" maxlength="7" required>
     </div>
     <div class="input-group">
         <label>Land</label>
-        <select name="country">
+        <select name="country" required>
             <option value selected = '<?php echo $getLand; ?>'><?php echo $getLand; ?></option>
             <option value = "Afghanistan"> Afghanistan </option>
             <option value = "Albania"> Albanië </option>
