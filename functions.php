@@ -630,7 +630,7 @@ function biedOpItem($dbh) {
         if($bodbedrag >= $hoogstebod + 1) {
           $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
           $query->execute();
         }
         else throw new PDOException ($e);
@@ -639,7 +639,7 @@ function biedOpItem($dbh) {
         if($bodbedrag >= $hoogstebod + 5) {
           $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
           $query->execute();
         }
         else throw new PDOException ($e);
@@ -648,7 +648,7 @@ function biedOpItem($dbh) {
         if($bodbedrag >= $hoogstebod + 10) {
           $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
           $query->execute();
         }
         else throw new PDOException ($e);
@@ -657,7 +657,7 @@ function biedOpItem($dbh) {
         if($bodbedrag >= $hoogstebod + 50) {
           $query = $dbh->prepare("INSERT INTO Bod
                                   (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','1-1-2018','$bodtijdstip')");
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
           $query->execute();
         }
         else throw new PDOException ($e);
