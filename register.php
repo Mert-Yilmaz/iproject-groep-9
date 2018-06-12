@@ -59,15 +59,32 @@ error_reporting(E_ALL ^ E_NOTICE);
                     <div>
                         <select name="Land" required>
                             <option value disabled selected>Selecteer een land, verplicht</option>
-                            <?php
-                            $query2 = $dbh->prepare("SELECT * FROM tblIMAOLand");
-                            $query2->setFetchMode(PDO::FETCH_ASSOC);
-                            $query2->execute();
-                            while($row = $query2->fetch()) {
-                                $forms .= "<option value = ". $row['NAAM_LAND'] .">" . $row['NAAM_LAND'] . "</option>";
-                            }
-                            $forms .='
-                            ?>
+                            <option value="Afghanistan"> Afghanistan</option>
+                            <option value="Albania"> Albanië</option>
+                            <option value="Algerije"> Algerije</option>
+                            <option value="Amerikaans Samoa"> Amerikaans Samoa</option>
+                            <option value="Andorra"> Andorra</option>
+                            <option value="Angola"> Angola</option>
+                            <option value="Anguilla"> Anguilla</option>
+                            <option value="Antartica"> Antarctica</option>
+                            <option value="Antigua en Barbuda"> Antigua en Barbuda</option>
+                            <option value="Argentina"> Argentinië</option>
+                            <option value="Armenia"> Armenië</option>
+                            <option value="Aruba"> Aruba</option>
+                            <option value="Czech Republic"> Czech Republic</option>
+                            <option value="Denemarken"> Denemarken</option>
+                            <option value="Djibouti"> Djibouti</option>
+                            <option value="Dominica"> Dominica</option>
+                            <option value="Guatemala"> Guatemala</option>
+                            <option value="Guinea"> Guinea</option>
+                            <option value="Guinee-Bissau"> Guinee-Bissau</option>
+                            <option value="Guyana"> Guyana</option>
+                            <option value="Haiti"> Haïti</option>
+                            <option value="Heilige Stoel"> Heilige Stoel (Vaticaanstad)</option>
+                            <option value="Honduras"> Honduras</option>
+                            <option value="Nederland"> Nederland</option>
+                            <option value="Turkije"> Turkije</option>
+                            <option value="Anders"> Overig</option>
                         </select>
                     </div>
                     <div>
