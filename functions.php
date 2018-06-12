@@ -357,7 +357,7 @@ function toonItems($dbh, $zoekWoord) {
                               ON v.voorwerpnummer = vi.voorwerp
                               INNER JOIN Rubriek r
                               ON r.rubrieknummer = vi.rubriekOpHoogsteNiveau
-                              WHERE v.isToegestaan = 1 AND vi.rubriekOpLaagsteNiveau IN (SELECT rubrieknummer
+                              WHERE v.isToegestaan = 1 AND v.veilingGesloten = 0 AND vi.rubriekOpLaagsteNiveau IN (SELECT rubrieknummer
                                                                   FROM Rubriek
                                                                   WHERE rubrieknaam LIKE :zoekwoord)
                               ORDER BY v.looptijdEindeTijdstip ASC");
