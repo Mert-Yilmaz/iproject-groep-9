@@ -739,18 +739,18 @@ zendMailVerloopVeiling($dbh);
 
 
 function plaatsItem($dbh) {
-  $forms = '';
-  $forms .=
-  $forms .= '
-        <form action="bevestig.php" method="post" enctype="multipart/form-data">
-        ';
-         $forms .= "<label>Hoofdrubriek<label>
-                    <select required name = rij1>";
-         $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
-         $query->execute();
-         while($row = $query->fetch()) {
-             $forms .= "<option value = ". $row['rubrieknummer'] .">" . $row['rubrieknaam'] . "</option>";
-         }
+  $forms = '<form action="bevestig.php" method="post" enctype="multipart/form-data">
+                <div>
+                    <label>Veiling titel</label>
+                    <input type="text" name="titel" placeholder="Titel" maxlength="18">
+                </div>';
+  $forms .= "<label>Hoofdrubriek<label>
+                <select required name = rij1>";
+  $query = $dbh->prepare("SELECT * FROM Rubriek WHERE rubriek = -1");
+  $query->execute();
+  while($row = $query->fetch()) {
+      $forms .= "<option value = ". $row['rubrieknummer'] .">" . $row['rubrieknaam'] . "</option>";
+  }
   $forms .= '</select>
   <div>
     <label>Voeg een beschrijving toe</label>
