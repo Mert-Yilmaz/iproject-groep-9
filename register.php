@@ -58,8 +58,10 @@ error_reporting(E_ALL ^ E_NOTICE);
                     </div>
                     <div>
                         <select name="Land" required>
+                            <option value disabled selected>Selecteer een land, verplicht</option>
                             <?php
                             $query2 = $dbh->prepare("SELECT * FROM tblIMAOLand");
+                            $query2->setFetchMode(PDO::FETCH_ASSOC);
                             $query2->execute();
                             while($row = $query2->fetch()) {
                                 $forms .= "<option value = ". $row['NAAM_LAND'] .">" . $row['NAAM_LAND'] . "</option>";
