@@ -53,7 +53,7 @@ function hot_items($dbh){
   $sql = "SELECT TOP (3) * FROM Voorwerp v
           INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
           INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
-          WHERE isToegestaan = 1
+          WHERE isToegestaan = 1 AND v.veilingGesloten = 0
           ORDER BY boddag DESC";
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -84,7 +84,7 @@ function ending_items($dbh){
   $sql = "SELECT TOP (3) * FROM Voorwerp v
           INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
           INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
-          WHERE isToegestaan = 1
+          WHERE isToegestaan = 1 AND v.veilingGesloten = 0
           ORDER BY looptijdEindeDag, looptijdEindeTijdstip ASC";
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -115,7 +115,7 @@ function cheap_items($dbh){
   $sql = "SELECT TOP (3) * FROM Voorwerp v
           INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
           INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
-          WHERE isToegestaan = 1
+          WHERE isToegestaan = 1 AND v.veilingGesloten = 0
           ORDER BY startprijs-bodbedrag DESC";
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -586,87 +586,92 @@ function biedOpItem($dbh) {
             <input type='hidden' name='tijd' value=" . date("H:i") . ">
             <input type='submit' class='knop' value='Bied' name='submit'>
           </form>";
-    if (isset($_POST["submit"])){
-    $voorwerpnummer = $_GET['item'];
-    $bodbedrag = $_POST["bodbedrag"];
-    $boddag = $_POST["datum"];
-    $bodtijdstip = $_POST["tijd"];
-    $usernamemail = $_SESSION['login-token'];
-    try{
-      $query = $dbh->prepare("SELECT *
+    if (isset($_POST["submit"])) {
+        $voorwerpnummer = $_GET['item'];
+        $bodbedrag = $_POST["bodbedrag"];
+        $boddag = $_POST["datum"];
+        $bodtijdstip = $_POST["tijd"];
+        $usernamemail = $_SESSION['login-token'];
+
+        $voorwerpQuery = $dbh->prepare("SELECT * FROM Voorwerp WHERE voorwerpnummer = '$voorwerpnummer'");
+        $voorwerpQuery->setFetchMode(PDO::FETCH_ASSOC);
+        $voorwerpQuery->execute();
+        $voorwerpData = $voorwerpQuery->fetch();
+        $veilingGesloten = $voorwerpData['veilingGesloten'];
+
+        if ($veilingGesloten == 0) {
+            try {
+                $query = $dbh->prepare("SELECT *
                               FROM Gebruiker
                               WHERE gebruikersnaam = '$usernamemail'
                               OR mailbox = '$usernamemail'");
-      $query->setFetchMode(PDO::FETCH_ASSOC);
-      $query->execute();
-      $data = $query->fetch();
-      $gebruiker = $data['gebruikersnaam'];
-    } catch(PDOException $e) {
-        echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
-    }
-    try {
-      $query = $dbh->prepare("SELECT TOP(1) *
+                $query->setFetchMode(PDO::FETCH_ASSOC);
+                $query->execute();
+                $data = $query->fetch();
+                $gebruiker = $data['gebruikersnaam'];
+            } catch (PDOException $e) {
+                echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+            }
+            try {
+                $query = $dbh->prepare("SELECT TOP(1) *
                               FROM Bod
                               WHERE voorwerp = $voorwerpnummer
                               ORDER BY bodbedrag DESC");
-      $query->setFetchMode(PDO::FETCH_ASSOC);
-      $query->execute();
-      $data = $query->fetch();
-      $hoogstebod = $data['bodbedrag'];
-    } catch(PDOException $e) {
-        echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+                $query->setFetchMode(PDO::FETCH_ASSOC);
+                $query->execute();
+                $data = $query->fetch();
+                $hoogstebod = $data['bodbedrag'];
+            } catch (PDOException $e) {
+                echo '<script type="text/javascript">alert("Gegevens niet goed ingevuld")</script>';
+            }
+            try {
+                if ($bodbedrag < 50) {
+                    if ($bodbedrag >= $hoogstebod + 0.5) {
+                        $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
+                        $query->execute();
+                    } else throw new PDOException ("Bedrag te laag!");
+                }
+                if ($bodbedrag > 50 && $bodbedrag < 500) {
+                    if ($bodbedrag >= $hoogstebod + 1) {
+                        $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
+                        $query->execute();
+                    } else throw new PDOException ($e);
+                }
+                if ($bodbedrag > 500 && $bodbedrag < 1000) {
+                    if ($bodbedrag >= $hoogstebod + 5) {
+                        $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
+                        $query->execute();
+                    } else throw new PDOException ($e);
+                }
+                if ($bodbedrag > 1000 && $bodbedrag < 5000) {
+                    if ($bodbedrag >= $hoogstebod + 10) {
+                        $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
+                        $query->execute();
+                    } else throw new PDOException ($e);
+                }
+                if ($bodbedrag > 5000) {
+                    if ($bodbedrag >= $hoogstebod + 50) {
+                        $query = $dbh->prepare("INSERT INTO Bod
+                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
+                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
+                        $query->execute();
+                    } else throw new PDOException ($e);
+                }
+            } catch (PDOException $e) {
+                echo '<script type="text/javascript">alert("Bedrag te laag!")</script>';
+            }
+        }
     }
-    try{
-      if($bodbedrag < 50) {
-        if($bodbedrag >= $hoogstebod + 0.5) {
-          $query = $dbh->prepare("INSERT INTO Bod
-                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
-          $query->execute();
-        }
-        else throw new PDOException ("Bedrag te laag!");
-      }
-      if($bodbedrag > 50 && $bodbedrag < 500) {
-        if($bodbedrag >= $hoogstebod + 1) {
-          $query = $dbh->prepare("INSERT INTO Bod
-                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
-          $query->execute();
-        }
-        else throw new PDOException ($e);
-      }
-      if($bodbedrag > 500 && $bodbedrag < 1000) {
-        if($bodbedrag >= $hoogstebod + 5) {
-          $query = $dbh->prepare("INSERT INTO Bod
-                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
-          $query->execute();
-        }
-        else throw new PDOException ($e);
-      }
-      if($bodbedrag > 1000 && $bodbedrag < 5000) {
-        if($bodbedrag >= $hoogstebod + 10) {
-          $query = $dbh->prepare("INSERT INTO Bod
-                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
-          $query->execute();
-        }
-        else throw new PDOException ($e);
-      }
-      if($bodbedrag > 5000) {
-        if($bodbedrag >= $hoogstebod + 50) {
-          $query = $dbh->prepare("INSERT INTO Bod
-                                  (voorwerp,bodbedrag,gebruiker,boddag,bodtijdstip)
-                                  VALUES  ('$voorwerpnummer', '$bodbedrag', '$gebruiker','$boddag','$bodtijdstip')");
-          $query->execute();
-        }
-        else throw new PDOException ($e);
-      }
-    } catch(PDOException $e) {
-        echo '<script type="text/javascript">alert("Bedrag te laag!")</script>';
-    }
-  }
 }
+
 //Versturen van een mail (1 dag voor verloopdatum)
 function zendMailVerloopVeiling($dbh) {
     if(isset($_SESSION['login-token'])) {
