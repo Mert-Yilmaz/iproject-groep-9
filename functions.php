@@ -62,7 +62,7 @@ function hot_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     
-    $bestandQuery = $dbh->prepare("SELECT * FROM Bestand WHERE voorwerp = '$number'");
+    $bestandQuery = $dbh->prepare("SELECT TOP(1) * FROM Bestand WHERE voorwerp = '$number'");
     $bestandQuery->setFetchMode(PDO::FETCH_ASSOC);
     $bestandQuery->execute();
     while($bestandData = $bestandQuery->fetch()) {
@@ -108,7 +108,7 @@ function ending_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     
-      $bestandQuery = $dbh->prepare("SELECT * FROM Bestand WHERE voorwerp = '$number'");
+      $bestandQuery = $dbh->prepare("SELECT TOP(1) * FROM Bestand WHERE voorwerp = '$number'");
     $bestandQuery->setFetchMode(PDO::FETCH_ASSOC);
     $bestandQuery->execute();
     while($bestandData = $bestandQuery->fetch()) {
@@ -154,7 +154,7 @@ function cheap_items($dbh){
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
     
-      $bestandQuery = $dbh->prepare("SELECT * FROM Bestand WHERE voorwerp = '$number'");
+      $bestandQuery = $dbh->prepare("SELECT TOP(1) * FROM Bestand WHERE voorwerp = '$number'");
     $bestandQuery->setFetchMode(PDO::FETCH_ASSOC);
     $bestandQuery->execute();
     while($bestandData = $bestandQuery->fetch()) {
