@@ -83,7 +83,7 @@ $getLand = $data['land'];
     </div>
     <div class="input-group">
         <label>Land</label>
-        <select name="country" required>
+        <select name="country">
             <option value selected = '<?php echo $getLand; ?>'><?php echo $getLand; ?></option>
             <option value = "Afghanistan"> Afghanistan </option>
             <option value = "Albania"> Albanië </option>
