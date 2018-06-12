@@ -189,7 +189,7 @@ CREATE TABLE Verkoper (
 			--ON UPDATE,
 			--ON DELETE*/
 	CONSTRAINT ckGebruikerIsVerkoper CHECK (dbo.fControleerGebruikerIsVerkoper(gebruiker) = 1),
-	CONSTRAINT ckKaartgebruik CHECK (bankrekening IS NOT NULL AND creditcard IS NOT NULL),
+	--CONSTRAINT ckKaartgebruik CHECK (bankrekening IS NOT NULL AND creditcard IS NOT NULL),
 	CONSTRAINT ckControleOptie CHECK (controleoptie IN ('creditcard', 'post'))
 	--CONSTRAINT ckControleOptie CHECK (dbo.fControleoptieCreditcard(controleoptie))
 )
