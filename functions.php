@@ -61,7 +61,26 @@ function hot_items($dbh){
     $title = $row['titel'];
     $desc = $row['beschrijving'];
     $number = $row['voorwerpnummer'];
-    $file = "img/veilingen/" . $row['filenaam'];
+    
+    //$file = "img/veilingen/" . $row['filenaam'];
+
+      $bestandQuery = $dbh->prepare("SELECT * FROM Bestand WHERE voorwerp = '$number'");
+      $bestandQuery->setFetchMode(PDO::FETCH_ASSOC);
+      $bestandQuery->execute();
+      while($bestandData = $bestandQuery->fetch()) {
+          $directory = '';
+          $file1 = $bestandData['filenaam'];
+          if(substr( $file1, 0, 3 ) === "dt_") {
+              $directory = 'http://iproject9.icasites.nl/pics/';
+          } else {
+              $directory = 'img/veilingen/';
+          }
+          $file = $directory . $file1;
+
+          $illustratieArray['filenaam'] = $file;
+
+
+      
     $endtime = date_create($row['looptijdEindeTijdstip']);
     $endday = date_create($row['looptijdEindeDag']);
     $output .=
