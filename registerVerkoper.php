@@ -130,7 +130,7 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     </div>
     <div class="input-group">
         <label>Bank</label>
-        <select name="bank">
+        <select name="bank" required>
             <option value disabled selected>Selecteer uw bank</option>
             <option value="ABN AMRO">ABN AMRO</option>
             <option value="ASN BANK">ASN BANK</option>
@@ -145,7 +145,7 @@ if (isset($_GET['user_account']) && !empty($_GET['user_account'])) {
     </div>
     <div class="input-group">
         <label>Controle optie</label>
-        <select name="controle">
+        <select name="controle" required>
             <option value disabled selected>Selecteer een controle optie</option>
             <option value="post">Post</option>
             <option value="Creditcard">Creditcard</option>
