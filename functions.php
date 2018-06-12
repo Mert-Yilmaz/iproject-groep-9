@@ -321,7 +321,7 @@ function aantalItems($dbh, $rubrieknummer) {
                           ON r.rubrieknummer = v.rubriekOpHoogsteNiveau
                           INNER JOIN Voorwerp vv
                           ON v.voorwerp = vv.voorwerpnummer
-                          WHERE vv.isToegestaan = 1 AND rubriekOpHoogsteNiveau = :rubrieknummer");
+                          WHERE vv.isToegestaan = 1 AND vv.veilingGesloten = 0 AND rubriekOpHoogsteNiveau = :rubrieknummer");
   $query->bindParam(':rubrieknummer', $rubrieknummer);
   $query->execute();
   while($row = $query->fetch()) {
