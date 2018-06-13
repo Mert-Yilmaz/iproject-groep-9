@@ -85,7 +85,7 @@ function hot_items($dbh){
         ' . $title . '</a></h4>
         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
-        ' . date_format($endday, "d/m/Y") . '</strong><p>
+        ' . date_format($endday, "d/m/Y") . '</strong></p>
         <div class="homepage-items-img">
             <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
