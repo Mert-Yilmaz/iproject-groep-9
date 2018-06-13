@@ -753,7 +753,7 @@ function zendMailVerloopVeiling($dbh) {
         $day_before = strtotime("yesterday", $from_unix_time);
         $formatted = date("Y-m-d", $day_before);
         $today = date("Y-m-d");
-        if ($formatted >= $today && $isMailVerstuurd == 0) {
+        if ($today >= $formatted && $isMailVerstuurd == 0) {
             $to = $email;
             $from = 'noreply@eenmaalandermaal9.nl';
             $subject = 'Uw veiling verloopt morgen!';
