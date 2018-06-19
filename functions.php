@@ -83,7 +83,7 @@ function hot_items($dbh){
     '<div class="large-4 medium-4 small-12 cell">
         <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
-        <p>' . $desc . '</p>
+//         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong></p>
         <div class="homepage-items-img">
@@ -129,7 +129,7 @@ function ending_items($dbh){
     '<div class="large-4 medium-4 small-12 cell">
         <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
-        <p>' . $desc . '</p>
+//         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong></p>
         <div class="homepage-items-img">
@@ -175,7 +175,7 @@ function cheap_items($dbh){
     '<div class="large-4 medium-4 small-12 cell">
         <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
-        <p>' . $desc . '</p>
+//         <p>' . $desc . '</p>
         <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
         ' . date_format($endday, "d/m/Y") . '</strong></p>
         <div class="homepage-items-img">
