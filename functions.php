@@ -784,7 +784,7 @@ function zendMailVerloopVeiling($dbh) {
         }
     }
 }
-zendMailVerloopVeiling($dbh);
+//zendMailVerloopVeiling($dbh);
 
 
 
