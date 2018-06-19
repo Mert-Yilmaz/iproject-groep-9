@@ -768,19 +768,19 @@ function zendMailVerloopVeiling($dbh) {
             $sql->setFetchMode(PDO::FETCH_ASSOC);
             $sql->execute();
 
-            $getdata = $dbh->prepare("SELECT * FROM Voorwerp v inner join Gebruiker g on g.gebruikersnaam = v.koper WHERE v.veilingGesloten=1 AND v.isMailVerstuurdFeedback = 0");
-            $getdata->execute();
-            while ($row = $getdata->fetch()){
-            $to = $row['mailbox'];
-            $from = 'noreply@eenmaalandermaal9.nl';
-            $subject = 'Geef feedback op uw gewonnen veiling';
-            $message = 'Beste ' . $row['voornaam'] . ',
-            Gefeliciteerd met het winnen van de veiling ' . $row['titel'] . '! Met behulp van de onderstaande link kunt u feedback geven op de veiling.
-            http://iproject9.icasites.nl/feedback.php?item=' . $row['voorwerpnummer'] . '';
-            $headers = 'From: ' . $from . "\r\n";
-            mail($to, $subject, $message, $headers);
+//             $getdata = $dbh->prepare("SELECT * FROM Voorwerp v inner join Gebruiker g on g.gebruikersnaam = v.koper WHERE v.veilingGesloten=1 AND v.isMailVerstuurdFeedback = 0");
+//             $getdata->execute();
+//             while ($row = $getdata->fetch()){
+//             $to = $row['mailbox'];
+//             $from = 'noreply@eenmaalandermaal9.nl';
+//             $subject = 'Geef feedback op uw gewonnen veiling';
+//             $message = 'Beste ' . $row['voornaam'] . ',
+//             Gefeliciteerd met het winnen van de veiling ' . $row['titel'] . '! Met behulp van de onderstaande link kunt u feedback geven op de veiling.
+//             http://iproject9.icasites.nl/feedback.php?item=' . $row['voorwerpnummer'] . '';
+//             $headers = 'From: ' . $from . "\r\n";
+//             mail($to, $subject, $message, $headers);
 
-          }
+//           }
         }
     }
 }
