@@ -45,7 +45,7 @@ function search_item($dbh, $input){
   echo $output;
 }
 
-zendMailVerloopVeiling($dbh);
+//zendMailVerloopVeiling($dbh);
 
 //Hot Items (Selecteert 3 items met de meest recente biedingen)
 function hot_items($dbh){
