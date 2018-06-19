@@ -146,7 +146,7 @@ function cheap_items($dbh){
           INNER JOIN Bod b on b.voorwerp = v.voorwerpnummer
           INNER JOIN Bestand be on be.voorwerp = v.voorwerpnummer
           WHERE isToegestaan = 1 AND v.veilingGesloten = 0
-          ORDER BY startprijs-bodbedrag DESC";
+          ORDER BY startprijs+bodbedrag ASC";
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   while ($row = $stmt->fetch()) {
@@ -718,72 +718,72 @@ function biedOpItem($dbh) {
 }
 
 //Versturen van een mail (1 dag voor verloopdatum)
-function zendMailVerloopVeiling($dbh) {
-    if(isset($_SESSION['login-token'])) {
-        $logintoken = $_SESSION['login-token'];
-        $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
-        $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
-        $sqlquery->execute();
-        $sessionQueryData = $sqlquery->fetch();
-        $sessionGebruikersnaam = $sessionQueryData['gebruikersnaam'];
-        $getGebruikersnaamQuery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$sessionGebruikersnaam'");
-        $getGebruikersnaamQuery->setFetchMode(PDO::FETCH_ASSOC);
-        $getGebruikersnaamQuery->execute();
-        $getGebruikersnaamData = $getGebruikersnaamQuery->fetch();
-        $getGebruikersnaam = $getGebruikersnaamData['gebruikersnaam'];
-        $query = $dbh->prepare("SELECT V.voorwerpnummer, V.titel, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox
-                                 FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam
-                                 WHERE V.verkoper='$getGebruikersnaam'");
-        $query->setFetchMode(PDO::FETCH_ASSOC);
-        $query->execute();
-        $data = $query->fetch();
-        $voorwerpnummer = $data['voorwerpnummer'];
-        $titel = $data['titel'];
-        $enddate = $data['looptijdEindeDag'];
-        $endtime = $data['looptijdEindeTijdstip'];
-        $isMailVerstuurd = $data['isMailVerstuurd'];
-        $email = $data['mailbox'];
-        $day = date('d', strtotime($enddate));
-        $month = date('m', strtotime($enddate));
-        $year = date('Y', strtotime($enddate));
-        $hour = date('H', strtotime($endtime));
-        $minute = date('i', strtotime(($endtime)));
-        $seconds = date('s', strtotime($endtime));
-        $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
-        $day_before = strtotime("yesterday", $from_unix_time);
-        $formatted = date("Y-m-d", $day_before);
-        $today = date("Y-m-d");
-        if ($today >= $formatted && $isMailVerstuurd == 0) {
-            $to = $email;
-            $from = 'noreply@eenmaalandermaal9.nl';
-            $subject = 'Uw veiling verloopt morgen!';
-            $message = '
-            Beste ' . $getGebruikersnaam . ',
-            Je veiling ' . $titel . ' verloopt morgen!';
-            $headers = 'From: ' . $from . "\r\n";
-            mail($to, $subject, $message, $headers);
-            $sql = $dbh->prepare("UPDATE Voorwerp
-                                   SET isMailVerstuurd=1
-                                   WHERE voorwerpnummer=$voorwerpnummer");
-            $sql->setFetchMode(PDO::FETCH_ASSOC);
-            $sql->execute();
-
-//             $getdata = $dbh->prepare("SELECT * FROM Voorwerp v inner join Gebruiker g on g.gebruikersnaam = v.koper WHERE v.veilingGesloten=1 AND v.isMailVerstuurdFeedback = 0");
-//             $getdata->execute();
-//             while ($row = $getdata->fetch()){
-//             $to = $row['mailbox'];
+// function zendMailVerloopVeiling($dbh) {
+//     if(isset($_SESSION['login-token'])) {
+//         $logintoken = $_SESSION['login-token'];
+//         $sqlquery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$logintoken' OR mailbox = '$logintoken'");
+//         $sqlquery->setFetchMode(PDO::FETCH_ASSOC);
+//         $sqlquery->execute();
+//         $sessionQueryData = $sqlquery->fetch();
+//         $sessionGebruikersnaam = $sessionQueryData['gebruikersnaam'];
+//         $getGebruikersnaamQuery = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker WHERE gebruikersnaam = '$sessionGebruikersnaam'");
+//         $getGebruikersnaamQuery->setFetchMode(PDO::FETCH_ASSOC);
+//         $getGebruikersnaamQuery->execute();
+//         $getGebruikersnaamData = $getGebruikersnaamQuery->fetch();
+//         $getGebruikersnaam = $getGebruikersnaamData['gebruikersnaam'];
+//         $query = $dbh->prepare("SELECT V.voorwerpnummer, V.titel, V.looptijdEindeDag, V.looptijdEindeTijdstip, V.isMailVerstuurd, G.mailbox
+//                                  FROM Voorwerp V INNER JOIN Gebruiker G ON v.verkoper = G.gebruikersnaam
+//                                  WHERE V.verkoper='$getGebruikersnaam'");
+//         $query->setFetchMode(PDO::FETCH_ASSOC);
+//         $query->execute();
+//         $data = $query->fetch();
+//         $voorwerpnummer = $data['voorwerpnummer'];
+//         $titel = $data['titel'];
+//         $enddate = $data['looptijdEindeDag'];
+//         $endtime = $data['looptijdEindeTijdstip'];
+//         $isMailVerstuurd = $data['isMailVerstuurd'];
+//         $email = $data['mailbox'];
+//         $day = date('d', strtotime($enddate));
+//         $month = date('m', strtotime($enddate));
+//         $year = date('Y', strtotime($enddate));
+//         $hour = date('H', strtotime($endtime));
+//         $minute = date('i', strtotime(($endtime)));
+//         $seconds = date('s', strtotime($endtime));
+//         $from_unix_time = mktime($hour, $minute, $seconds, $month, $day, $year);
+//         $day_before = strtotime("yesterday", $from_unix_time);
+//         $formatted = date("Y-m-d", $day_before);
+//         $today = date("Y-m-d");
+//         if ($today >= $formatted && $isMailVerstuurd == 0) {
+//             $to = $email;
 //             $from = 'noreply@eenmaalandermaal9.nl';
-//             $subject = 'Geef feedback op uw gewonnen veiling';
-//             $message = 'Beste ' . $row['voornaam'] . ',
-//             Gefeliciteerd met het winnen van de veiling ' . $row['titel'] . '! Met behulp van de onderstaande link kunt u feedback geven op de veiling.
-//             http://iproject9.icasites.nl/feedback.php?item=' . $row['voorwerpnummer'] . '';
+//             $subject = 'Uw veiling verloopt morgen!';
+//             $message = '
+//             Beste ' . $getGebruikersnaam . ',
+//             Je veiling ' . $titel . ' verloopt morgen!';
 //             $headers = 'From: ' . $from . "\r\n";
 //             mail($to, $subject, $message, $headers);
+//             $sql = $dbh->prepare("UPDATE Voorwerp
+//                                    SET isMailVerstuurd=1
+//                                    WHERE voorwerpnummer=$voorwerpnummer");
+//             $sql->setFetchMode(PDO::FETCH_ASSOC);
+//             $sql->execute();
 
-//           }
-        }
-    }
-}
+// //             $getdata = $dbh->prepare("SELECT * FROM Voorwerp v inner join Gebruiker g on g.gebruikersnaam = v.koper WHERE v.veilingGesloten=1 AND v.isMailVerstuurdFeedback = 0");
+// //             $getdata->execute();
+// //             while ($row = $getdata->fetch()){
+// //             $to = $row['mailbox'];
+// //             $from = 'noreply@eenmaalandermaal9.nl';
+// //             $subject = 'Geef feedback op uw gewonnen veiling';
+// //             $message = 'Beste ' . $row['voornaam'] . ',
+// //             Gefeliciteerd met het winnen van de veiling ' . $row['titel'] . '! Met behulp van de onderstaande link kunt u feedback geven op de veiling.
+// //             http://iproject9.icasites.nl/feedback.php?item=' . $row['voorwerpnummer'] . '';
+// //             $headers = 'From: ' . $from . "\r\n";
+// //             mail($to, $subject, $message, $headers);
+
+// //           }
+//         }
+//     }
+// }
 //zendMailVerloopVeiling($dbh);
 
 
