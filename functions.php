@@ -84,8 +84,7 @@ function hot_items($dbh){
         <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
 //         <p>' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
-        ' . date_format($endday, "d/m/Y") . '</strong></p>
+        <p>Veiling eindigt:' . date_format($endtime, "H:i:s") . ' ' . date_format($endday, "d/m/Y") . '</p>
         <div class="homepage-items-img">
             <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
@@ -130,8 +129,7 @@ function ending_items($dbh){
         <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
 //         <p>' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
-        ' . date_format($endday, "d/m/Y") . '</strong></p>
+        <p>Veiling eindigt:' . date_format($endtime, "H:i:s") . ' ' . date_format($endday, "d/m/Y") . '</p>
         <div class="homepage-items-img">
             <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
@@ -176,8 +174,7 @@ function cheap_items($dbh){
         <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . $title . '</a></h4>
 //         <p>' . $desc . '</p>
-        <p>Veiling eindigt om: <strong>' . date_format($endtime, "H:i:s") . '</strong> op: <strong>
-        ' . date_format($endday, "d/m/Y") . '</strong></p>
+        <p>Veiling eindigt:' . date_format($endtime, "H:i:s") . ' ' . date_format($endday, "d/m/Y") . '</p>
         <div class="homepage-items-img">
             <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
         </div>
