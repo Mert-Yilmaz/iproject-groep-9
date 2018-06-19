@@ -247,7 +247,7 @@ function zoekRubriek($dbh, $zoekWoord, $order, $keywords, $minprijs, $maxprijs) 
    //for ($i=0; $i < count($parts); $i++) {
      //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
 
-     $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+     $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0 AND isToegestaan = 1) ";
 
 foreach($parts as $k){
     $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
@@ -274,7 +274,7 @@ foreach($parts as $k){
      //for ($i=0; $i < count($parts); $i++) {
        //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
 
-       $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+       $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0 AND isToegestaan = 1) ";
 
   foreach($parts as $k){
       $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
@@ -302,7 +302,7 @@ foreach($parts as $k){
          //for ($i=0; $i < count($parts); $i++) {
            //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
 
-           $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+           $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0 AND isToegestaan = 1) ";
 
       foreach($parts as $k){
           $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
@@ -330,7 +330,7 @@ foreach($parts as $k){
                 //for ($i=0; $i < count($parts); $i++) {
                   //$query = $dbh->query("SELECT * FROM	Voorwerp WHERE titel LIKE '%$parts[$i]%' OR beschrijving LIKE '%$parts[$i]%' ");
 
-                  $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0) ";
+                  $sql = "SELECT * FROM Voorwerp WHERE (veilingGesloten = 0 AND isToegestaan = 1) ";
 
              foreach($parts as $k){
                  $sql .= " AND (titel LIKE '%$k%' OR beschrijving LIKE '%$k%') ";
