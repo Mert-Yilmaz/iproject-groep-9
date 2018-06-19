@@ -173,7 +173,7 @@ function cheap_items($dbh){
     '<div class="large-4 medium-4 small-12 cell">
         <h4 style="margin: 0;"><a href="detailpagina.php?item=' . $number . '">
         ' . htmlspecialchars($title) . '</a></h4>
-//         <p>' . htmlspecialchars($desc) . '</p>
+         <p>' . htmlspecialchars($desc) . '</p>
         <p>Veiling eindigt:' . date_format($endtime, "H:i:s") . ' ' . date_format($endday, "d/m/Y") . '</p>
         <div class="homepage-items-img">
             <a href="detailpagina.php?item=' . $number . '"><img src=' . $file . '></a>
